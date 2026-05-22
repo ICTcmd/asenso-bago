@@ -9,6 +9,29 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="assets/css/app.css" />
   <title>Asenso Bago — City of Bago</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Asenso Bago",
+    "description": "Official app of the City of Bago, Negros Occidental. Access all city programs and government services at your fingertips.",
+    "url": "https://asenso-bago.vercel.app",
+    "applicationCategory": "GovernmentApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "PHP" },
+    "author": {
+      "@type": "GovernmentOrganization",
+      "name": "Local Government Unit of Bago City",
+      "url": "https://lgu-bago-portal.vercel.app",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bago City",
+        "addressRegion": "Negros Occidental",
+        "addressCountry": "PH"
+      }
+    }
+  }
+  </script>
 </head>
 <body id="app">
 
@@ -154,7 +177,7 @@
       <div class="news-scroll">
 
         <div class="news-card" data-url="https://heart-warriors.vercel.app">
-          <img src="assets/images/hw-cover.png" alt="Heart Warriors" />
+          <img src="assets/images/hw-cover.png" alt="Heart Warriors" loading="lazy" />
           <div class="news-card-body">
             <p class="news-card-title">Heart Warriors Conducts Free Cardiac Screening</p>
             <p class="news-card-date">May 14, 2026</p>
@@ -162,7 +185,7 @@
         </div>
 
         <div class="news-card" data-url="https://wheels-of-love.vercel.app">
-          <img src="assets/images/wol-cover.png" alt="Wheels of Love" />
+          <img src="assets/images/wol-cover.png" alt="Wheels of Love" loading="lazy" />
           <div class="news-card-body">
             <p class="news-card-title">Wheels of Love Distributes 200 Wheelchairs</p>
             <p class="news-card-date">May 10, 2026</p>
@@ -170,7 +193,7 @@
         </div>
 
         <div class="news-card" data-url="https://smile-bright-bago.vercel.app">
-          <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago" />
+          <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago" loading="lazy" />
           <div class="news-card-body">
             <p class="news-card-title">Smile Bright Bago Reaches 5,000 Beneficiaries</p>
             <p class="news-card-date">May 5, 2026</p>
@@ -648,10 +671,61 @@
 </body>
 
 <script>
-  // ─── Service Worker Registration ───────────────────────────────────────────
+  // ─── Service Worker Registration + Update Notification ────────────────────
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        // Check for updates every time the page loads
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available — show update banner
+              showUpdateBanner(newWorker);
+            }
+          });
+        });
+      }).catch(() => {});
+    });
+  }
+
+  function showUpdateBanner(worker) {
+    // Create update notification bar
+    const bar = document.createElement('div');
+    bar.id = 'update-bar';
+    bar.style.cssText = `
+      position:fixed; top:0; left:50%; transform:translateX(-50%);
+      width:100%; max-width:430px; z-index:9999;
+      background:#1a2a4a; color:#fff;
+      display:flex; align-items:center; gap:12px;
+      padding:12px 16px; font-family:inherit;
+      box-shadow:0 4px 16px rgba(0,0,0,0.2);
+    `;
+    bar.innerHTML = `
+      <span style="flex:1;font-size:13px;font-weight:600;">
+        🆕 A new version of Asenso Bago is available.
+      </span>
+      <button onclick="applyUpdate()" style="
+        background:#c0392b;color:#fff;border:none;border-radius:8px;
+        padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;
+        font-family:inherit;white-space:nowrap;
+      ">Update Now</button>
+      <button onclick="this.parentElement.remove()" style="
+        background:none;border:none;color:rgba(255,255,255,0.6);
+        font-size:18px;cursor:pointer;padding:0 4px;line-height:1;
+      ">×</button>
+    `;
+    document.body.prepend(bar);
+    // Store reference to new worker for activation
+    window._pendingWorker = worker;
+  }
+
+  function applyUpdate() {
+    if (window._pendingWorker) {
+      window._pendingWorker.postMessage('SKIP_WAITING');
+    }
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload();
     });
   }
 
