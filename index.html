@@ -118,7 +118,6 @@
           </div>
           <p class="service-label">Tourism</p>
         </button>
-
         <button class="service-item" data-action="emergency">
           <div class="service-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444);">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
@@ -484,7 +483,7 @@
           </div>
           <h3>Tourism</h3>
           <p>Discover Bago City tourist spots.</p>
-          <span class="coming-soon-badge">Coming Soon</span>
+          <button onclick="navigateTo('page-tourism')" style="background:#8b5cf6;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">View Now →</button>
         </div>
 
         <div class="service-card">
@@ -501,6 +500,202 @@
       </div>
 
     </div><!-- /page-services -->
+
+    <!-- ─── PAGE: TOURISM ─── -->
+    <div class="page" id="page-tourism">
+
+      <div class="screen-header safe-top">
+        <h1>Visit <span>Bago City</span></h1>
+        <p>Home of Historical and Natural Treasures</p>
+      </div>
+
+      <!-- Best Time to Visit -->
+      <div class="tourism-banner">
+        <div class="tourism-banner-icon" aria-hidden="true">☀️</div>
+        <div>
+          <p class="tourism-banner-title">Best Time to Visit</p>
+          <p class="tourism-banner-desc">November to April — dry season, cooler and comfortable. Avoid June–October (heavy rains).</p>
+        </div>
+      </div>
+
+      <!-- Tourist Spots -->
+      <div class="section-header">
+        <span class="section-title">Tourist Spots</span>
+      </div>
+
+      <div class="tourism-spots">
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#059669,#10b981);" aria-hidden="true">⛪</div>
+          <div class="tourism-card-body">
+            <h3>Bago City Cathedral (San Sebastian)</h3>
+            <span class="tourism-tag">Heritage · Religious</span>
+            <p>A prominent Spanish-colonial cathedral offering daily services and remarkable ecclesiastical architecture. One of the oldest landmarks in the city.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#0284c7,#0ea5e9);" aria-hidden="true">🌊</div>
+          <div class="tourism-card-body">
+            <h3>Kipot Twin Falls</h3>
+            <span class="tourism-tag">Nature · Waterfalls</span>
+            <p>A stunning pair of waterfalls nestled in the mountains of Bago City. A popular destination for nature lovers and adventure seekers.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);" aria-hidden="true">🏔️</div>
+          <div class="tourism-card-body">
+            <h3>Buenos Aires Mountain Resort</h3>
+            <span class="tourism-tag">Nature · Mountain</span>
+            <p>A scenic mountain resort offering breathtaking views of Bago City and the surrounding landscape. Perfect for hiking and relaxation.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#d97706,#f59e0b);" aria-hidden="true">🌿</div>
+          <div class="tourism-card-body">
+            <h3>Rafael Salas Park and Nature Center</h3>
+            <span class="tourism-tag">Nature · Park</span>
+            <p>Named after the late Rafael Salas, this nature center is a green sanctuary for families and nature enthusiasts within the city.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#c0392b,#e74c3c);" aria-hidden="true">🏛️</div>
+          <div class="tourism-card-body">
+            <h3>Bantayan Park</h3>
+            <span class="tourism-tag">Heritage · Park</span>
+            <p>A historic park along the Bago River where General Juan A. Araneta led the bloodless revolution against the Spanish in 1898. A symbol of Bagonhon pride.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#0f766e,#14b8a6);" aria-hidden="true">🏠</div>
+          <div class="tourism-card-body">
+            <h3>Balay ni Tan Juan</h3>
+            <span class="tourism-tag">Heritage · Museum</span>
+            <p>A well-preserved ancestral house that offers a glimpse into the rich cultural heritage and history of Bago City and its founding families.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#be185d,#ec4899);" aria-hidden="true">🌋</div>
+          <div class="tourism-card-body">
+            <h3>Mambukal Mountain Resort</h3>
+            <span class="tourism-tag">Day Trip · Hot Springs</span>
+            <p>A nearby mountain resort featuring hot springs, seven waterfalls, and nature trails. A popular day trip destination from Bago City.</p>
+          </div>
+        </div>
+
+        <div class="tourism-card">
+          <div class="tourism-card-icon" style="background:linear-gradient(135deg,#92400e,#d97706);" aria-hidden="true">🏭</div>
+          <div class="tourism-card-body">
+            <h3>Sugar Mill Heritage Sites</h3>
+            <span class="tourism-tag">Heritage · Industry</span>
+            <p>Remnants of the sugar industry that shaped Bago City's identity. The Ma-ao Sugar Central and other sites illustrate the region's plantation history.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Festivals & Events -->
+      <div class="section-header" style="margin-top:8px;">
+        <span class="section-title">Festivals &amp; Events</span>
+      </div>
+
+      <div class="tourism-events">
+
+        <div class="tourism-event-card">
+          <div class="tourism-event-month">FEB 19</div>
+          <div class="tourism-event-body">
+            <h3>Babaylan Festival</h3>
+            <p>Bago City's biggest annual celebration marking its Charter Anniversary. Features street dancing, cultural shows, and community events honoring the city's history and the babaylan (traditional healers).</p>
+          </div>
+        </div>
+
+        <div class="tourism-event-card">
+          <div class="tourism-event-month">NOV 5</div>
+          <div class="tourism-event-body">
+            <h3>Al Cinco de Noviembre / Cannon Festival</h3>
+            <p>Commemorates the historic bloodless revolution of November 5, 1898, when General Juan Araneta led Bagonhons in overthrowing Spanish rule. Celebrated with cannon firing and historical reenactments.</p>
+          </div>
+        </div>
+
+        <div class="tourism-event-card">
+          <div class="tourism-event-month">APR</div>
+          <div class="tourism-event-body">
+            <h3>Panaad sa Negros Festival</h3>
+            <p>A province-wide festival held in Bacolod showcasing the culture, products, and traditions of all cities and municipalities in Negros Occidental, including Bago City.</p>
+          </div>
+        </div>
+
+        <div class="tourism-event-card">
+          <div class="tourism-event-month">JAN</div>
+          <div class="tourism-event-body">
+            <h3>Feast of San Sebastian</h3>
+            <p>The annual fiesta of Bago City's patron saint, San Sebastian, celebrated with religious processions, community gatherings, and traditional Filipino festivities.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- How to Get There -->
+      <div class="section-header" style="margin-top:8px;">
+        <span class="section-title">How to Get There</span>
+      </div>
+
+      <div class="tourism-transport">
+
+        <div class="tourism-transport-card">
+          <div class="tourism-transport-icon" aria-hidden="true">✈️</div>
+          <div>
+            <h3>By Air</h3>
+            <p>Fly into <strong>Bacolod-Silay Airport (BCD)</strong>. Take a taxi or van to Bago City — about 30–45 minutes. Fare is approximately ₱300–500 by taxi.</p>
+          </div>
+        </div>
+
+        <div class="tourism-transport-card">
+          <div class="tourism-transport-icon" aria-hidden="true">🚌</div>
+          <div>
+            <h3>From Bacolod City</h3>
+            <p>Ride a <strong>bus, jeepney, or van</strong> from Bacolod City. Travel time is about 30–45 minutes. Very affordable fares. Terminals are located within Bacolod City.</p>
+          </div>
+        </div>
+
+        <div class="tourism-transport-card">
+          <div class="tourism-transport-icon" aria-hidden="true">⛴️</div>
+          <div>
+            <h3>From Manila</h3>
+            <p>Take an <strong>18-hour ferry</strong> from Manila to Bacolod, then a bus or van to Bago City. Alternatively, fly to Bacolod-Silay Airport for a faster trip.</p>
+          </div>
+        </div>
+
+        <div class="tourism-transport-card">
+          <div class="tourism-transport-icon" aria-hidden="true">🛺</div>
+          <div>
+            <h3>Getting Around Bago</h3>
+            <p>The city center is walkable. Use <strong>tricycles</strong> for short hops and <strong>jeepneys</strong> for longer routes. Fares are very affordable.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Map Link -->
+      <a class="tourism-map-btn" href="https://maps.google.com/?q=Bago+City+Negros+Occidental+Philippines" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0z"/>
+        </svg>
+        Open in Google Maps
+      </a>
+
+      <p class="version-text" style="margin-top:16px;">
+        Information sourced from official tourism records.<br>
+        Content may be rephrased for compliance with licensing restrictions.
+      </p>
+
+    </div><!-- /page-tourism -->
 
     <!-- ─── PAGE: PROFILE ─── -->
     <div class="page" id="page-profile">
@@ -797,6 +992,9 @@
       switch (action) {
         case 'health':
           navigateTo('page-programs');
+          break;
+        case 'tourism':
+          navigateTo('page-tourism');
           break;
         case 'about':
           navigateTo('page-profile');
