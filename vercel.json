@@ -1,22 +1,29 @@
 {
+  "buildCommand": "node build.js",
   "headers": [
     {
       "source": "/sw.js",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "Service-Worker-Allowed", "value": "/" }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options",  "value": "nosniff" },
-        { "key": "X-Frame-Options",          "value": "DENY" },
-        { "key": "X-XSS-Protection",         "value": "1; mode=block" },
-        { "key": "Referrer-Policy",          "value": "strict-origin-when-cross-origin" },
-        { "key": "Strict-Transport-Security","value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Permissions-Policy",       "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()" },
-        { "key": "Content-Security-Policy",  "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://heart-warriors.vercel.app https://wheels-of-love.vercel.app https://smile-bright-bago.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;" }
+        { "key": "X-Content-Type-Options",   "value": "nosniff" },
+        { "key": "X-Frame-Options",           "value": "DENY" },
+        { "key": "X-XSS-Protection",          "value": "1; mode=block" },
+        { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()" },
+        { "key": "Content-Security-Policy",   "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://heart-warriors.vercel.app https://wheels-of-love.vercel.app https://smile-bright-bago.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;" }
       ]
     }
   ]
