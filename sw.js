@@ -1,7 +1,7 @@
-// Asenso Bago — Service Worker
-// Cache version is auto-generated at deploy time via vercel.json headers
-// Single-page app: only index.html exists, not separate page files
-const CACHE = 'asenso-bago-__CACHE_VERSION__';
+// Asenso Bago — Service Worker v20260526
+// Version timestamp ensures cache busts on every deploy
+const CACHE = 'asenso-bago-20260526-005';
+
 const ASSETS = [
   '/',
   '/index.html',
@@ -21,11 +21,10 @@ const ASSETS = [
   '/assets/images/Buenos_Aires_Mountain_Resort_in_Bago_City.jpg',
   '/assets/images/javellana mansion.jpg',
   '/assets/images/rafael salas.jpg',
-  '/assets/images/sugar central.jpg',
+  '/assets/images/sugar.png',
   '/assets/images/tan juan balay.jpg',
 ];
 
-// Install — pre-cache all real assets
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
@@ -34,32 +33,23 @@ self.addEventListener('install', e => {
   );
 });
 
-// Activate — clean up ALL old caches automatically
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE).map(k => {
-          console.log('[SW] Deleting old cache:', k);
-          return caches.delete(k);
-        })
+        keys.filter(k => k !== CACHE).map(k => caches.delete(k))
       ))
       .then(() => self.clients.claim())
   );
 });
 
-// Fetch strategy:
-// - Same-origin HTML/CSS/JS/images: network-first, cache fallback
-// - External requests: network-only
-// - Failed navigation: serve offline page
+// Network-first: always fetch fresh, cache as fallback
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
   e.respondWith(
-    // Network-first: always try to get fresh content
     fetch(e.request)
       .then(res => {
         if (res && res.status === 200 && res.type === 'basic') {
@@ -68,20 +58,13 @@ self.addEventListener('fetch', e => {
         }
         return res;
       })
-      .catch(() => {
-        // Network failed — serve from cache
-        return caches.match(e.request).then(cached => {
-          if (cached) return cached;
-          // Navigation fallback
-          if (e.request.mode === 'navigate') {
-            return caches.match('/offline.html');
-          }
-        });
-      })
+      .catch(() => caches.match(e.request)
+        .then(cached => cached || (e.request.mode === 'navigate'
+          ? caches.match('/offline.html') : null))
+      )
   );
 });
 
-// Listen for SKIP_WAITING message from update notification
 self.addEventListener('message', e => {
   if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
