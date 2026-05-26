@@ -1,6 +1,6 @@
 // Asenso Bago — Service Worker
 // Single-page app: only index.html exists, not separate page files
-const CACHE = 'asenso-bago-v3';
+const CACHE = 'asenso-bago-v4';
 const ASSETS = [
   '/',
   '/index.html',
