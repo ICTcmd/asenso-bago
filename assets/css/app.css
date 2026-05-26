@@ -789,7 +789,11 @@ body {
   #splash {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    min-height: 100vh; max-width: 100%;
+    min-height: 100vh;
+    max-width: 100%;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
   }
   .splash-body { padding: 80px 60px; justify-content: center; }
   .splash-seal  { width: 96px; height: 96px; }
@@ -803,6 +807,9 @@ body {
   .splash-actions .btn-link { color: rgba(255,255,255,0.6); }
   .splash-actions .btn-link span { color: #fff; }
   .splash-illustration { display: none; }
+
+  /* Hide sidebar and topbar while splash is showing */
+  body:has(#splash:not([style*="display: none"])) .desktop-sidebar { display: none !important; }
 }
 
 /* ── Extra wide ── */

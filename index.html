@@ -1086,6 +1086,7 @@
     const splash = document.getElementById('splash');
     const mainApp = document.getElementById('main-app');
     const bottomNav = document.getElementById('bottom-nav');
+    const sidebar = document.querySelector('.desktop-sidebar');
 
     splash.style.opacity = '0';
     splash.style.transition = 'opacity 0.4s ease';
@@ -1093,6 +1094,7 @@
       splash.style.display = 'none';
       mainApp.style.display = 'flex';
       bottomNav.style.display = 'flex';
+      if (sidebar) sidebar.style.display = 'flex';
       updateGreeting();
     }, 400);
   });
