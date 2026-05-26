@@ -795,20 +795,108 @@ body {
     inset: 0;
     z-index: 9999;
   }
-  .splash-body { padding: 80px 60px; justify-content: center; }
-  .splash-seal  { width: 96px; height: 96px; }
-  .splash-title { font-size: 68px; }
-  .splash-actions {
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 60px;
-    background: linear-gradient(135deg, #1a2a4a 0%, #243660 100%);
+  .splash-body {
+    padding: 60px 60px 40px;
+    justify-content: flex-start;
+    background: linear-gradient(160deg, #fff8f5 0%, #fff3ee 60%, #ffeee8 100%);
+    position: relative;
+    overflow: hidden;
   }
-  .splash-actions .btn-primary { background: #c0392b; box-shadow: 0 8px 24px rgba(192,57,43,0.4); }
-  .splash-actions .btn-link { color: rgba(255,255,255,0.6); }
-  .splash-actions .btn-link span { color: #fff; }
-  .splash-illustration { display: none; }
+  .splash-body::before {
+    content: '';
+    position: absolute; bottom: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(192,57,43,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .splash-seal  { width: 80px; height: 80px; margin-bottom: 24px; position: relative; z-index: 1; }
+  .splash-title { font-size: 64px; position: relative; z-index: 1; }
+  .splash-tagline { font-size: 15px; max-width: 300px; position: relative; z-index: 1; margin-bottom: 40px; }
 
-  /* Hide sidebar and topbar while splash is showing */
+  /* Stats row on splash */
+  .splash-stats {
+    display: flex; gap: 24px; margin-bottom: 40px;
+    position: relative; z-index: 1;
+  }
+  .splash-stat { text-align: left; }
+  .splash-stat .n { font-size: 28px; font-weight: 900; color: #c0392b; line-height: 1; }
+  .splash-stat .l { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+  .splash-stat-div { width: 1px; background: #e5e7eb; align-self: stretch; }
+
+  /* Program logos on splash */
+  .splash-programs {
+    display: flex; gap: 12px; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .splash-programs p { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+  .splash-prog-logo {
+    width: 40px; height: 40px; border-radius: 20px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    object-fit: cover;
+  }
+
+  /* Right panel */
+  .splash-actions {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 60px;
+    background: linear-gradient(160deg, #1a2a4a 0%, #0f1a30 60%, #0a1020 100%);
+    position: relative; overflow: hidden;
+  }
+  .splash-actions::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .splash-actions::after {
+    content: '';
+    position: absolute; bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,140,0,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .splash-right-content { position: relative; z-index: 1; }
+  .splash-right-badge {
+    display: inline-block;
+    background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4);
+    color: rgba(255,255,255,0.8); border-radius: 50px;
+    padding: 6px 16px; font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .splash-right-title {
+    font-size: 36px; font-weight: 900; color: #fff;
+    line-height: 1.2; margin-bottom: 16px;
+  }
+  .splash-right-title span { color: #ff8c00; }
+  .splash-right-desc {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    line-height: 1.7; margin-bottom: 36px; max-width: 340px;
+  }
+  .splash-actions .btn-primary {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    box-shadow: 0 8px 24px rgba(192,57,43,0.4);
+    border-radius: 14px; font-size: 16px; padding: 18px;
+    position: relative; z-index: 1;
+  }
+  .splash-actions .btn-link { color: rgba(255,255,255,0.5); position: relative; z-index: 1; }
+  .splash-actions .btn-link span { color: rgba(255,255,255,0.9); }
+
+  /* Feature pills */
+  .splash-features {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+  .splash-feature-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px; padding: 6px 14px;
+    font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 500;
+  }
+  .splash-feature-pill span { font-size: 14px; }
+
+  .splash-illustration { display: none; }
   body:has(#splash:not([style*="display: none"])) .desktop-sidebar { display: none !important; }
 }
 
