@@ -581,3 +581,14 @@ body {
   transition: opacity 0.2s;
 }
 .tourism-map-btn:active { opacity: 0.85; }
+
+.tourism-map-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7c3aed;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.tourism-map-link:active { opacity: 0.7; }
