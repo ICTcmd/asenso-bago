@@ -39,62 +39,63 @@
        SPLASH SCREEN
   ═══════════════════════════════════════════════════════════ -->
   <div id="splash">
-    <!-- Left panel — branding + stats -->
-    <div class="splash-body safe-top">
-      <img class="splash-seal" src="assets/images/bago-city-logo.png" alt="Bago City Seal" />
-      <img class="splash-illustration" src="assets/images/bago-city-logo.png" alt="Bago City" />
-      <div class="splash-title">
-        <span class="red">Asenso</span> <span class="gold">Bago</span>
-      </div>
-      <p class="splash-tagline">City Services to Bagonhons, Right at Your Fingertips</p>
 
-      <!-- Stats — desktop only -->
-      <div class="splash-stats" style="display:none;">
-        <div class="splash-stat"><div class="n">48</div><div class="l">Barangays</div></div>
-        <div class="splash-stat-div"></div>
-        <div class="splash-stat"><div class="n">3</div><div class="l">Programs</div></div>
-        <div class="splash-stat-div"></div>
-        <div class="splash-stat"><div class="n">10K+</div><div class="l">Served</div></div>
-      </div>
-
-      <!-- Program logos — desktop only -->
-      <div class="splash-programs" style="display:none;">
-        <p>Programs</p>
-        <img class="splash-prog-logo" src="assets/images/hw-logo.png" alt="Heart Warriors" />
-        <img class="splash-prog-logo" src="assets/images/wol-logo.png" alt="Wheels of Love" />
-        <img class="splash-prog-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago" />
-      </div>
-    </div>
-
-    <!-- Right panel — CTA -->
-    <div class="splash-actions">
-      <div class="splash-right-content" style="display:none;">
-        <div class="splash-right-badge">🏛️ Official City App</div>
-        <h2 class="splash-right-title">
-          Your City,<br><span>At Your Fingertips</span>
-        </h2>
-        <p class="splash-right-desc">
-          Access all Bago City government programs, services, tourism, and news — all in one place. Designed for every Bagonhon.
-        </p>
-
-        <!-- Feature pills -->
-        <div class="splash-features">
-          <div class="splash-feature-pill"><span>❤️</span> Health Programs</div>
-          <div class="splash-feature-pill"><span>✈️</span> Tourism</div>
-          <div class="splash-feature-pill"><span>📰</span> City News</div>
-          <div class="splash-feature-pill"><span>🏙️</span> City Services</div>
+    <!-- ── MOBILE SPLASH (shown below 900px) ── -->
+    <div class="splash-mobile">
+      <div class="splash-mobile-body safe-top">
+        <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" class="splash-seal" />
+        <div class="splash-title">
+          <span class="red">Asenso</span>
+          <span class="gold">Bago</span>
         </div>
-
-        <button class="btn-primary" id="get-started-btn">Get Started →</button>
-        <button class="btn-link">Already have an Account? <span>Sign in</span></button>
+        <p class="splash-tagline">City Services to Bagonhons,<br>Right at Your Fingertips</p>
       </div>
-
-      <!-- Mobile buttons (always visible) -->
-      <div class="splash-mobile-actions">
-        <button class="btn-primary" id="get-started-btn-mobile">Get Started</button>
+      <div class="splash-mobile-footer">
+        <button class="btn-primary" id="get-started-btn">Get Started</button>
         <button class="btn-link">Already have an Account? <span>Sign in</span></button>
       </div>
     </div>
+
+    <!-- ── DESKTOP SPLASH (shown at 900px+) ── -->
+    <div class="splash-desktop">
+      <!-- Left: branding -->
+      <div class="splash-desktop-left">
+        <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" class="splash-seal" />
+        <div class="splash-title">
+          <span class="red">Asenso</span>
+          <span class="gold">Bago</span>
+        </div>
+        <p class="splash-tagline">City Services to Bagonhons, Right at Your Fingertips</p>
+        <div class="splash-stats">
+          <div class="splash-stat"><div class="n">48</div><div class="l">Barangays</div></div>
+          <div class="splash-stat-div"></div>
+          <div class="splash-stat"><div class="n">3</div><div class="l">Programs</div></div>
+          <div class="splash-stat-div"></div>
+          <div class="splash-stat"><div class="n">10K+</div><div class="l">Served</div></div>
+        </div>
+        <div class="splash-programs">
+          <p>Programs</p>
+          <img class="splash-prog-logo" src="assets/images/hw-logo.png" alt="Heart Warriors" />
+          <img class="splash-prog-logo" src="assets/images/wol-logo.png" alt="Wheels of Love" />
+          <img class="splash-prog-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago" />
+        </div>
+      </div>
+      <!-- Right: CTA -->
+      <div class="splash-desktop-right">
+        <div class="splash-right-badge" aria-hidden="true">🏛️ Official City App</div>
+        <h2 class="splash-right-title">Your City,<br><span>At Your Fingertips</span></h2>
+        <p class="splash-right-desc">Access all Bago City government programs, services, tourism, and news — all in one place. Designed for every Bagonhon.</p>
+        <div class="splash-features">
+          <div class="splash-feature-pill"><span aria-hidden="true">❤️</span> Health Programs</div>
+          <div class="splash-feature-pill"><span aria-hidden="true">✈️</span> Tourism</div>
+          <div class="splash-feature-pill"><span aria-hidden="true">📰</span> City News</div>
+          <div class="splash-feature-pill"><span aria-hidden="true">🏙️</span> City Services</div>
+        </div>
+        <button class="btn-primary" id="get-started-btn-desktop">Get Started →</button>
+        <button class="btn-link">Already have an Account? <span>Sign in</span></button>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -1143,11 +1144,10 @@
   // ─── Splash Screen ─────────────────────────────────────────────────────────
   // ─── Splash Screen ─────────────────────────────────────────────────────────
   function dismissSplash() {
-    const splash   = document.getElementById('splash');
-    const mainApp  = document.getElementById('main-app');
+    const splash    = document.getElementById('splash');
+    const mainApp   = document.getElementById('main-app');
     const bottomNav = document.getElementById('bottom-nav');
-    const sidebar  = document.querySelector('.desktop-sidebar');
-
+    const sidebar   = document.querySelector('.desktop-sidebar');
     splash.style.opacity = '0';
     splash.style.transition = 'opacity 0.4s ease';
     setTimeout(() => {
@@ -1160,21 +1160,13 @@
     }, 400);
   }
 
-  // Desktop Get Started button
-  const desktopBtn = document.getElementById('get-started-btn');
-  if (desktopBtn) desktopBtn.addEventListener('click', dismissSplash);
-
-  // Mobile Get Started button
-  const mobileBtn = document.getElementById('get-started-btn-mobile');
+  // Mobile button
+  const mobileBtn = document.getElementById('get-started-btn');
   if (mobileBtn) mobileBtn.addEventListener('click', dismissSplash);
 
-  // Show desktop-only splash elements on wide screens
-  if (window.innerWidth >= 900) {
-    document.querySelectorAll('.splash-stats, .splash-programs, .splash-right-content')
-      .forEach(el => el.style.display = '');
-    const mobileActions = document.querySelector('.splash-mobile-actions');
-    if (mobileActions) mobileActions.style.display = 'none';
-  }
+  // Desktop button
+  const desktopBtn = document.getElementById('get-started-btn-desktop');
+  if (desktopBtn) desktopBtn.addEventListener('click', dismissSplash);
 
   // ─── See All Buttons ────────────────────────────────────────────────────────
   document.querySelectorAll('.see-all').forEach(btn => {
