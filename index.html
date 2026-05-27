@@ -1036,7 +1036,9 @@
 </body>
 
 <script>
-  // ─── Service Worker Registration + Update Notification ────────────────────
+  // ─── Platform detection — run immediately ──────────────────────────────────
+  const isDesktop = window.innerWidth >= 900;
+  document.body.classList.add(isDesktop ? 'is-desktop' : 'is-mobile');
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').then(reg => {
@@ -1154,8 +1156,12 @@
       splash.style.display = 'none';
       splash.style.pointerEvents = 'none';
       mainApp.style.display = 'flex';
-      bottomNav.style.display = 'flex';
-      if (sidebar) sidebar.style.display = 'flex';
+      // Only show bottom nav on mobile, sidebar on desktop
+      if (isDesktop) {
+        if (sidebar) sidebar.style.display = 'flex';
+      } else {
+        bottomNav.style.display = 'flex';
+      }
       updateGreeting();
     }, 400);
   }
