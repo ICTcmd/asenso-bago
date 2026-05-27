@@ -1145,6 +1145,7 @@
     splash.style.transition = 'opacity 0.4s ease';
     setTimeout(() => {
       splash.style.display = 'none';
+      splash.style.pointerEvents = 'none';
       mainApp.style.display = 'flex';
       bottomNav.style.display = 'flex';
       if (sidebar) sidebar.style.display = 'flex';

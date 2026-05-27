@@ -897,6 +897,7 @@ body {
   .splash-feature-pill span { font-size: 14px; }
 
   .splash-illustration { display: none; }
+  #splash[style*="display: none"] { pointer-events: none !important; z-index: -1 !important; }
   body:has(#splash:not([style*="display: none"])) .desktop-sidebar { display: none !important; }
 }
 
