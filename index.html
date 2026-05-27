@@ -49,7 +49,7 @@
       <p class="splash-tagline">City Services to Bagonhons, Right at Your Fingertips</p>
 
       <!-- Stats — desktop only -->
-      <div class="splash-stats">
+      <div class="splash-stats" style="display:none;">
         <div class="splash-stat"><div class="n">48</div><div class="l">Barangays</div></div>
         <div class="splash-stat-div"></div>
         <div class="splash-stat"><div class="n">3</div><div class="l">Programs</div></div>
@@ -58,7 +58,7 @@
       </div>
 
       <!-- Program logos — desktop only -->
-      <div class="splash-programs">
+      <div class="splash-programs" style="display:none;">
         <p>Programs</p>
         <img class="splash-prog-logo" src="assets/images/hw-logo.png" alt="Heart Warriors" />
         <img class="splash-prog-logo" src="assets/images/wol-logo.png" alt="Wheels of Love" />
@@ -68,7 +68,7 @@
 
     <!-- Right panel — CTA -->
     <div class="splash-actions">
-      <div class="splash-right-content">
+      <div class="splash-right-content" style="display:none;">
         <div class="splash-right-badge">🏛️ Official City App</div>
         <h2 class="splash-right-title">
           Your City,<br><span>At Your Fingertips</span>
@@ -86,6 +86,12 @@
         </div>
 
         <button class="btn-primary" id="get-started-btn">Get Started →</button>
+        <button class="btn-link">Already have an Account? <span>Sign in</span></button>
+      </div>
+
+      <!-- Mobile buttons (always visible) -->
+      <div class="splash-mobile-actions">
+        <button class="btn-primary" id="get-started-btn-mobile">Get Started</button>
         <button class="btn-link">Already have an Account? <span>Sign in</span></button>
       </div>
     </div>
@@ -1135,11 +1141,12 @@
   });
 
   // ─── Splash Screen ─────────────────────────────────────────────────────────
-  document.getElementById('get-started-btn').addEventListener('click', () => {
-    const splash = document.getElementById('splash');
-    const mainApp = document.getElementById('main-app');
+  // ─── Splash Screen ─────────────────────────────────────────────────────────
+  function dismissSplash() {
+    const splash   = document.getElementById('splash');
+    const mainApp  = document.getElementById('main-app');
     const bottomNav = document.getElementById('bottom-nav');
-    const sidebar = document.querySelector('.desktop-sidebar');
+    const sidebar  = document.querySelector('.desktop-sidebar');
 
     splash.style.opacity = '0';
     splash.style.transition = 'opacity 0.4s ease';
@@ -1151,7 +1158,23 @@
       if (sidebar) sidebar.style.display = 'flex';
       updateGreeting();
     }, 400);
-  });
+  }
+
+  // Desktop Get Started button
+  const desktopBtn = document.getElementById('get-started-btn');
+  if (desktopBtn) desktopBtn.addEventListener('click', dismissSplash);
+
+  // Mobile Get Started button
+  const mobileBtn = document.getElementById('get-started-btn-mobile');
+  if (mobileBtn) mobileBtn.addEventListener('click', dismissSplash);
+
+  // Show desktop-only splash elements on wide screens
+  if (window.innerWidth >= 900) {
+    document.querySelectorAll('.splash-stats, .splash-programs, .splash-right-content')
+      .forEach(el => el.style.display = '');
+    const mobileActions = document.querySelector('.splash-mobile-actions');
+    if (mobileActions) mobileActions.style.display = 'none';
+  }
 
   // ─── See All Buttons ────────────────────────────────────────────────────────
   document.querySelectorAll('.see-all').forEach(btn => {

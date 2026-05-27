@@ -815,7 +815,7 @@ body {
 
   /* Stats row on splash */
   .splash-stats {
-    display: flex; gap: 24px; margin-bottom: 40px;
+    display: flex !important; gap: 24px; margin-bottom: 40px;
     position: relative; z-index: 1;
   }
   .splash-stat { text-align: left; }
