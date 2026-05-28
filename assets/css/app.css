@@ -902,3 +902,40 @@ html.is-desktop #page-home .home-topbar { display: none !important; }
 html.is-desktop #page-home .search-row  { display: none !important; }
 html.is-desktop #page-home > .section-header { display: none !important; }
 html.is-desktop #page-home > .news-scroll    { display: none !important; }
+
+/* ── Facebook Page Embed ── */
+.fb-embed-wrap {
+  margin: 0 16px 16px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.fb-embed-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px; border-bottom: 1px solid #f1f5f9;
+}
+.fb-embed-name { font-size: 14px; font-weight: 800; color: #0f172a; }
+.fb-embed-sub  { font-size: 11px; color: #64748b; margin-top: 1px; }
+.fb-embed-follow {
+  margin-left: auto;
+  background: #1877f2; color: #fff;
+  border-radius: 8px; padding: 7px 14px;
+  font-size: 12px; font-weight: 700;
+  text-decoration: none; white-space: nowrap;
+}
+.fb-embed-container {
+  width: 100%;
+  min-height: 500px;
+  overflow: hidden;
+}
+.fb-embed-container iframe {
+  width: 100% !important;
+  border: none !important;
+}
+.fb-embed-fallback {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px; font-size: 13px; font-weight: 600;
+  color: #1877f2; text-decoration: none;
+  border-top: 1px solid #f1f5f9;
+}
