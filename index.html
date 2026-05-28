@@ -9,6 +9,10 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="assets/css/app.css" />
   <title>Asenso Bago — City of Bago</title>
+  <script>
+    // Set platform class before page renders to prevent layout flash
+    document.documentElement.className = window.innerWidth >= 900 ? 'is-desktop' : 'is-mobile';
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -1038,7 +1042,8 @@
 <script>
   // ─── Platform detection — run immediately ──────────────────────────────────
   const isDesktop = window.innerWidth >= 900;
-  document.body.classList.add(isDesktop ? 'is-desktop' : 'is-mobile');
+  // Class already set on <html> in head script — just read it
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').then(reg => {

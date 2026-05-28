@@ -887,18 +887,18 @@ body {
 
 /* ── Body class based platform rules ── */
 /* Mobile: hide desktop-only elements */
-body.is-mobile .desktop-sidebar { display: none !important; }
-body.is-mobile .desktop-topbar  { display: none !important; }
-body.is-mobile .desktop-home-grid { display: block !important; }
-body.is-mobile .splash-desktop  { display: none !important; }
-body.is-mobile .splash-mobile   { display: flex !important; }
-body.is-mobile #main-app        { margin-left: 0 !important; }
+html.is-mobile .desktop-sidebar { display: none !important; }
+html.is-mobile .desktop-topbar  { display: none !important; }
+html.is-mobile .desktop-home-grid { display: block !important; }
+html.is-mobile .splash-desktop  { display: none !important; }
+html.is-mobile .splash-mobile   { display: flex !important; }
+html.is-mobile #main-app        { margin-left: 0 !important; }
 
 /* Desktop: hide mobile-only elements */
-body.is-desktop .splash-mobile  { display: none !important; }
-body.is-desktop .splash-desktop { display: grid !important; }
-body.is-desktop .bottom-nav     { display: none !important; }
-body.is-desktop #page-home .home-topbar { display: none !important; }
-body.is-desktop #page-home .search-row  { display: none !important; }
-body.is-desktop #page-home > .section-header { display: none !important; }
-body.is-desktop #page-home > .news-scroll    { display: none !important; }
+html.is-desktop .splash-mobile  { display: none !important; }
+html.is-desktop .splash-desktop { display: grid !important; }
+html.is-desktop .bottom-nav     { display: none !important; }
+html.is-desktop #page-home .home-topbar { display: none !important; }
+html.is-desktop #page-home .search-row  { display: none !important; }
+html.is-desktop #page-home > .section-header { display: none !important; }
+html.is-desktop #page-home > .news-scroll    { display: none !important; }
