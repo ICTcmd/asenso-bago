@@ -91,7 +91,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, #0f1a30 0%, #1a2a4a 50%, #0f1a30 100%);
+  background: linear-gradient(160deg, #3d1400 0%, #6b2200 50%, #3d1400 100%);
 }
 
 /* Animated background glow */
@@ -100,7 +100,7 @@ body {
   position: absolute; top: -100px; left: 50%;
   transform: translateX(-50%);
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(255,140,0,0.2) 0%, transparent 65%);
   pointer-events: none; z-index: 0;
 }
 .splash-mobile::after {
@@ -108,7 +108,7 @@ body {
   position: absolute; bottom: 80px; left: 50%;
   transform: translateX(-50%);
   width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(255,200,0,0.1) 0%, transparent 65%);
   pointer-events: none; z-index: 0;
 }
 
@@ -187,7 +187,7 @@ body {
   position: relative; z-index: 1;
 }
 .splash-mobile-footer .btn-primary {
-  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  background: linear-gradient(135deg, #e05000, #ff6b00);
   box-shadow: 0 8px 24px rgba(192,57,43,0.4);
 }
 .splash-mobile-footer .btn-link { color: rgba(255,255,255,0.5); }
@@ -213,7 +213,7 @@ body {
 .splash-body { display: none; } /* old class — hidden */
 
 .btn-primary {
-  background: linear-gradient(135deg, #1a2a4a 0%, #243660 100%);
+  background: linear-gradient(135deg, #c0392b 0%, #e05000 100%);
   color: #fff; border: none; border-radius: 14px;
   padding: 17px; font-size: 16px; font-weight: 700;
   cursor: pointer; letter-spacing: 0.3px;
@@ -307,7 +307,7 @@ body {
 /* CTA Banner */
 .cta-banner {
   margin: 8px 16px 8px;
-  background: linear-gradient(135deg, #1a2a4a 0%, #243660 60%, #1e3a5f 100%);
+  background: linear-gradient(135deg, #7a2800 0%, #a03800 60%, #8b3200 100%);
   border-radius: 20px;
   padding: 22px 20px;
   display: flex; align-items: center; gap: 14px;
@@ -327,7 +327,7 @@ body {
 .cta-btn {
   background: #fff; border: none; border-radius: 10px;
   padding: 10px 16px; font-size: 13px; font-weight: 700;
-  color: #1a2a4a; cursor: pointer; width: 100%;
+  color: #7a2800; cursor: pointer; width: 100%;
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.15s;
   font-family: inherit;
@@ -498,7 +498,7 @@ body {
 .profile-card {
   display: flex; align-items: center; gap: 14px;
   margin: 0 16px 12px;
-  background: linear-gradient(135deg, #1a2a4a 0%, #243660 100%);
+  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
   border-radius: 20px; padding: 20px;
   box-shadow: 0 8px 24px rgba(26,42,74,0.2);
 }
@@ -513,7 +513,7 @@ body {
 .profile-info h3 { font-size: 16px; font-weight: 800; color: #fff; }
 .profile-info p  { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; font-weight: 500; }
 .signin-btn {
-  background: #fff; color: #1a2a4a; border: none;
+  background: #fff; color: #7a2800; border: none;
   border-radius: 10px; padding: 9px 16px;
   font-size: 13px; font-weight: 700; cursor: pointer;
   -webkit-tap-highlight-color: transparent; font-family: inherit;
@@ -568,7 +568,7 @@ body {
   display: none;
   position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 32px); max-width: 398px;
-  background: linear-gradient(135deg, #1a2a4a 0%, #243660 100%);
+  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
   color: #fff;
   border-radius: 18px; padding: 16px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.25);
@@ -654,7 +654,7 @@ body {
 .tourism-map-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   margin: 8px 16px 8px;
-  background: linear-gradient(135deg, #1a2a4a, #243660);
+  background: linear-gradient(135deg, #7a2800, #a03800);
   color: #fff; text-decoration: none;
   border-radius: 14px; padding: 14px;
   font-size: 14px; font-weight: 700;
@@ -710,7 +710,7 @@ body {
     flex-direction: column;
     width: 240px;
     min-height: 100vh;
-    background: linear-gradient(180deg, #1a2a4a 0%, #0f1a30 100%);
+    background: linear-gradient(180deg, #6b2200 0%, #3d1400 100%);
     position: fixed;
     top: 0; left: 0;
     z-index: 200;
@@ -750,8 +750,8 @@ body {
   }
   .sidebar-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
   .sidebar-link.active {
-    background: rgba(192,57,43,0.2); color: #fff;
-    border-left: 3px solid #c0392b; padding-left: 9px;
+    background: rgba(255,140,0,0.2); color: #fff;
+    border-left: 3px solid #ff8c00; padding-left: 9px;
   }
   .sidebar-link svg { width: 17px; height: 17px; flex-shrink: 0; }
 
@@ -901,7 +901,7 @@ body {
   .splash-desktop-right {
     display: flex; flex-direction: column; justify-content: center;
     padding: 60px;
-    background: linear-gradient(160deg, #1a2a4a 0%, #0f1a30 60%, #0a1020 100%);
+    background: linear-gradient(160deg, #6b2200 0%, #3d1400 60%, #2a0e00 100%);
     position: relative; overflow: hidden;
   }
   .splash-desktop-right::before {
@@ -1025,7 +1025,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 /* ── News Page Redesign ── */
 .news-hero {
-  background: linear-gradient(135deg, #1a2a4a 0%, #243660 100%);
+  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
   padding: 28px 20px 24px;
   position: relative; overflow: hidden;
 }
