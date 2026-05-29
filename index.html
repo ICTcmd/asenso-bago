@@ -47,9 +47,30 @@
     <!-- ── MOBILE SPLASH (shown below 900px) ── -->
     <div class="splash-mobile">
       <div class="splash-mobile-body safe-top">
-        <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" class="splash-seal" />
-        <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="Asenso Bago" class="splash-app-logo" />
-        <p class="splash-tagline">City Services to Bagonhons,<br>Right at Your Fingertips</p>
+
+        <!-- Dual logo lockup — centered and synchronized -->
+        <div class="splash-logo-lockup">
+          <!-- Background watermark logos -->
+          <div class="splash-logo-bg">
+            <img src="assets/images/bago-city-logo.png" alt="" aria-hidden="true" class="splash-bg-seal" />
+            <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="" aria-hidden="true" class="splash-bg-app" />
+          </div>
+          <!-- Foreground logos -->
+          <div class="splash-logos-row">
+            <img src="assets/images/bago-city-logo.png" alt="City of Bago Seal" class="splash-logo-seal" />
+            <div class="splash-logo-divider"></div>
+            <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="May Gugma nga Panghimanwa" class="splash-logo-app" />
+          </div>
+        </div>
+
+        <!-- Text content -->
+        <div class="splash-text-block">
+          <h1 class="splash-city-name">City of Bago</h1>
+          <p class="splash-city-sub">Negros Occidental, Philippines</p>
+          <div class="splash-divider-line"></div>
+          <p class="splash-tagline">City Services to Bagonhons,<br>Right at Your Fingertips</p>
+        </div>
+
       </div>
       <div class="splash-mobile-footer">
         <button class="btn-primary" id="get-started-btn">Get Started</button>

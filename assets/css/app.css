@@ -84,32 +84,114 @@ body {
 }
 #splash[style*="display: none"] { pointer-events: none !important; z-index: -1 !important; }
 
-/* Mobile splash — full screen, simple */
+/* Mobile splash — full screen, elegant */
 .splash-mobile {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(160deg, #0f1a30 0%, #1a2a4a 50%, #0f1a30 100%);
 }
+
+/* Animated background glow */
 .splash-mobile::before {
   content: '';
-  position: absolute; top: -80px; right: -80px;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(192,57,43,0.07) 0%, transparent 70%);
-  pointer-events: none;
+  position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
 }
+.splash-mobile::after {
+  content: '';
+  position: absolute; bottom: 80px; left: 50%;
+  transform: translateX(-50%);
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
 .splash-mobile-body {
   flex: 1;
   display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
   padding: 60px 32px 32px;
   position: relative; z-index: 1;
+  text-align: center;
 }
+
+/* Logo lockup */
+.splash-logo-lockup {
+  position: relative;
+  margin-bottom: 36px;
+  width: 100%;
+}
+
+/* Background watermark */
+.splash-logo-bg {
+  position: absolute; inset: -40px;
+  display: flex; align-items: center; justify-content: center; gap: 40px;
+  opacity: 0.06; pointer-events: none;
+  filter: blur(2px);
+}
+.splash-bg-seal { width: 160px; height: 160px; }
+.splash-bg-app  { width: 160px; height: 160px; }
+
+/* Foreground logos side by side */
+.splash-logos-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 20px; position: relative; z-index: 1;
+}
+.splash-logo-seal {
+  width: 90px; height: 90px; object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.15));
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  padding: 4px;
+}
+.splash-logo-divider {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent);
+}
+.splash-logo-app {
+  width: 90px; height: 90px; object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(192,57,43,0.3));
+}
+
+/* Text block */
+.splash-text-block { position: relative; z-index: 1; }
+.splash-city-name {
+  font-size: 28px; font-weight: 900; color: #fff;
+  letter-spacing: 1px; margin-bottom: 4px;
+}
+.splash-city-sub {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
+}
+.splash-divider-line {
+  width: 48px; height: 2px;
+  background: linear-gradient(90deg, transparent, #c0392b, transparent);
+  margin: 0 auto 20px; border-radius: 2px;
+}
+.splash-tagline {
+  font-size: 15px; color: rgba(255,255,255,0.65);
+  line-height: 1.7; max-width: 280px; margin: 0 auto;
+}
+
+/* Footer buttons */
 .splash-mobile-footer {
   padding: 0 24px max(40px, env(safe-area-inset-bottom, 40px));
   display: flex; flex-direction: column; gap: 12px;
   position: relative; z-index: 1;
 }
+.splash-mobile-footer .btn-primary {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  box-shadow: 0 8px 24px rgba(192,57,43,0.4);
+}
+.splash-mobile-footer .btn-link { color: rgba(255,255,255,0.5); }
+.splash-mobile-footer .btn-link span { color: rgba(255,255,255,0.85); }
 
 /* Desktop splash — hidden on mobile */
 .splash-desktop { display: none; }
