@@ -1033,3 +1033,12 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   transition: opacity 0.2s;
 }
 .news-open-fb:active { opacity: 0.85; }
+
+.news-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: 0 16px 12px;
+  background: rgba(24,119,242,0.06);
+  border: 1px solid rgba(24,119,242,0.15);
+  border-radius: 12px; padding: 12px 14px;
+}
+.news-notice p { font-size: 12px; color: #475569; line-height: 1.5; }
