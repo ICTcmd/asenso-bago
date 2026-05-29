@@ -1015,13 +1015,14 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 }
 .news-notice p { font-size: 12px; color: #475569; line-height: 1.5; }
 
-/* Embed wrapper — no margin on mobile so it fills edge to edge */
+/* Embed wrapper — seamless, no border, no scrollbar */
 .fb-embed-wrap {
   margin: 0;
   background: #fff;
   border-top: 1px solid #f1f5f9;
   min-height: 300px;
   position: relative;
+  overflow: hidden;
 }
 .fb-loading {
   display: flex; flex-direction: column;
@@ -1038,8 +1039,22 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.fb-embed-container { width: 100%; min-height: 700px; }
-.fb-embed-container iframe { width: 100% !important; border: none !important; }
+.fb-embed-container {
+  width: 100%;
+  overflow: hidden;
+}
+/* Force iframe to fill width and hide internal scrollbar */
+.fb-embed-container iframe {
+  width: 100% !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+.fb-embed-container .fb-page,
+.fb-embed-container .fb-page span,
+.fb-embed-container .fb-page iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+}
 
 /* Open in Facebook — full width, prominent */
 .news-open-fb {
