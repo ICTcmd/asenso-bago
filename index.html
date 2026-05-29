@@ -517,14 +517,14 @@
         <a href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer" class="news-source-btn">Follow</a>
       </div>
 
-      <!-- Facebook embed — no border, no scrollbar, seamless -->
-      <div class="fb-embed-wrap">
-        <div class="fb-loading" id="fb-loading">
-          <div class="fb-loading-spinner"></div>
-          <p>Loading latest posts...</p>
-        </div>
+      <!-- Facebook embed — header clipped, seamless -->
+      <div class="fb-loading" id="fb-loading">
+        <div class="fb-loading-spinner"></div>
+        <p>Loading latest posts...</p>
+      </div>
+      <div class="fb-embed-wrap" id="fb-embed-wrap" style="display:none;">
         <div id="fb-root"></div>
-        <div class="fb-embed-container" id="fb-embed-container" style="opacity:0;transition:opacity 0.4s ease;">
+        <div class="fb-embed-container" id="fb-embed-container">
           <div class="fb-page"
             data-href="https://www.facebook.com/TheCityBridge"
             data-tabs="timeline"
@@ -1039,20 +1039,19 @@
     fbSdkLoaded = true;
     window.fbAsyncInit = function() {
       FB.init({ xfbml: true, version: 'v19.0' });
-      // Once FB renders, hide spinner and show embed
       FB.Event.subscribe('xfbml.render', function() {
         const loading = document.getElementById('fb-loading');
-        const container = document.getElementById('fb-embed-container');
+        const wrap = document.getElementById('fb-embed-wrap');
         if (loading) loading.style.display = 'none';
-        if (container) container.style.opacity = '1';
+        if (wrap) wrap.style.display = 'block';
       });
     };
-    // Fallback: hide spinner after 8 seconds regardless
+    // Fallback: show embed after 8 seconds regardless
     setTimeout(() => {
       const loading = document.getElementById('fb-loading');
-      const container = document.getElementById('fb-embed-container');
+      const wrap = document.getElementById('fb-embed-wrap');
       if (loading) loading.style.display = 'none';
-      if (container) container.style.opacity = '1';
+      if (wrap) wrap.style.display = 'block';
     }, 8000);
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/sdk.js';
