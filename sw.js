@@ -1,6 +1,6 @@
 // Asenso Bago — Service Worker v20260526
 // Version timestamp ensures cache busts on every deploy
-const CACHE = 'asenso-bago-20260526-005';
+const CACHE = 'asenso-bago-20260529-001';
 
 const ASSETS = [
   '/',
