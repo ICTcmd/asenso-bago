@@ -496,41 +496,59 @@
     <!-- ─── PAGE: NEWS ─── -->
     <div class="page" id="page-news">
 
-      <div class="screen-header safe-top">
-        <h1>Latest <span>News</span></h1>
-        <p>Official updates from the City of Bago</p>
+      <!-- News hero header -->
+      <div class="news-hero safe-top">
+        <div class="news-hero-content">
+          <div class="news-hero-badge" aria-hidden="true">📰 Live Updates</div>
+          <h1>City News</h1>
+          <p>Official announcements and updates from the Local Government Unit of Bago City</p>
+        </div>
       </div>
 
-      <!-- Facebook Page Plugin — full live feed from The Citybridge -->
-      <div class="fb-embed-wrap">
-        <div class="fb-embed-header">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#1877f2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-          <div>
-            <p class="fb-embed-name">The Citybridge</p>
-            <p class="fb-embed-sub">Official Bago City Government Page · Live Feed</p>
+      <!-- Citybridge info card -->
+      <div class="news-source-card">
+        <div class="news-source-left">
+          <div class="news-source-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
           </div>
-          <a href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer" class="fb-embed-follow">Follow</a>
+          <div>
+            <p class="news-source-name">The Citybridge</p>
+            <p class="news-source-desc">Official Facebook page of the Bago City Government</p>
+          </div>
+        </div>
+        <a href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer" class="news-source-btn">
+          Follow Page
+        </a>
+      </div>
+
+      <!-- Facebook embed with loading state -->
+      <div class="fb-embed-wrap">
+        <!-- Loading spinner shown while FB loads -->
+        <div class="fb-loading" id="fb-loading">
+          <div class="fb-loading-spinner"></div>
+          <p>Loading latest posts from The Citybridge...</p>
         </div>
 
         <div id="fb-root"></div>
-        <div class="fb-embed-container">
+        <div class="fb-embed-container" id="fb-embed-container" style="opacity:0;transition:opacity 0.4s ease;">
           <div class="fb-page"
             data-href="https://www.facebook.com/TheCityBridge"
             data-tabs="timeline"
             data-width=""
-            data-height="800"
+            data-height="900"
             data-small-header="true"
             data-adapt-container-width="true"
             data-hide-cover="false"
             data-show-facepile="false">
           </div>
         </div>
-
-        <a class="fb-embed-fallback" href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-          Open The Citybridge on Facebook
-        </a>
       </div>
+
+      <!-- Open in Facebook button -->
+      <a class="news-open-fb" href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        View All Posts on Facebook
+      </a>
 
     </div><!-- /page-news -->
 
@@ -1021,14 +1039,27 @@
   // Class already set on <html> in head script — just read it
 
   // ─── Facebook Page Plugin SDK ───────────────────────────────────────────────
-  // Load only when user navigates to News page to avoid slowing initial load
   let fbSdkLoaded = false;
   function loadFbSdk() {
     if (fbSdkLoaded) return;
     fbSdkLoaded = true;
     window.fbAsyncInit = function() {
       FB.init({ xfbml: true, version: 'v19.0' });
+      // Once FB renders, hide spinner and show embed
+      FB.Event.subscribe('xfbml.render', function() {
+        const loading = document.getElementById('fb-loading');
+        const container = document.getElementById('fb-embed-container');
+        if (loading) loading.style.display = 'none';
+        if (container) container.style.opacity = '1';
+      });
     };
+    // Fallback: hide spinner after 8 seconds regardless
+    setTimeout(() => {
+      const loading = document.getElementById('fb-loading');
+      const container = document.getElementById('fb-embed-container');
+      if (loading) loading.style.display = 'none';
+      if (container) container.style.opacity = '1';
+    }, 8000);
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/sdk.js';
     script.async = true;
