@@ -1254,3 +1254,35 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   font-family: inherit;
 }
 .home-fb-viewall:active { background: #f0f4ff; }
+
+/* ── News page open card ── */
+.news-fb-open-card {
+  margin: 0 16px 16px;
+  background: #fff; border-radius: 20px;
+  padding: 28px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  text-align: center;
+}
+.news-fb-open-icon {
+  width: 64px; height: 64px; border-radius: 32px;
+  background: rgba(24,119,242,0.1);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.news-fb-open-card h3 {
+  font-size: 17px; font-weight: 800; color: #0f172a;
+  margin-bottom: 10px; line-height: 1.3;
+}
+.news-fb-open-card p {
+  font-size: 13px; color: #64748b; line-height: 1.65;
+  margin-bottom: 20px;
+}
+.news-fb-stats {
+  display: flex; justify-content: center; align-items: center; gap: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid #f1f5f9;
+}
+.news-fb-stat { flex: 1; text-align: center; }
+.news-fb-stat .n { display: block; font-size: 15px; font-weight: 900; color: #1877f2; }
+.news-fb-stat .l { display: block; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.news-fb-stat-div { width: 1px; height: 32px; background: #f1f5f9; }
