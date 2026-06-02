@@ -1179,3 +1179,34 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   margin-bottom: 16px;
   display: block;
 }
+
+/* ── Home News Card — Facebook teaser ── */
+.home-news-card {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 0 16px 16px;
+  background: #fff; border-radius: 16px; padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s;
+  border-left: 4px solid #1877f2;
+}
+.home-news-card:active { transform: scale(0.98); }
+.home-news-card-left { display: flex; align-items: center; gap: 12px; }
+.home-news-fb-icon {
+  width: 40px; height: 40px; border-radius: 20px;
+  background: #1877f2;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.home-news-name { font-size: 14px; font-weight: 800; color: #0f172a; }
+.home-news-sub  { font-size: 11px; color: #64748b; margin-top: 1px; }
+.home-news-card-right { display: flex; align-items: center; gap: 6px; color: #94a3b8; }
+.home-news-live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #22c55e;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
