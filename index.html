@@ -299,26 +299,47 @@
         <img class="cta-img" src="assets/images/bago-city-logo.png" alt="Bago City" />
       </div>
 
-      <!-- Latest News — links to The Citybridge Facebook page -->
+      <!-- Latest News — Facebook mini feed -->
       <div class="section-header">
         <span class="section-title">Latest News &amp; Updates</span>
         <button class="see-all" data-target="page-news">See all</button>
       </div>
 
-      <div class="home-news-card" onclick="navigateTo('page-news')" role="button" tabindex="0">
-        <div class="home-news-card-left">
+      <!-- Mini Facebook feed on home -->
+      <div class="home-fb-feed" id="home-fb-feed">
+        <div class="home-fb-header">
           <div class="home-news-fb-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#fff"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
           </div>
           <div>
             <p class="home-news-name">The Citybridge</p>
-            <p class="home-news-sub">Official Bago City Government Page · Live</p>
+            <p class="home-news-sub">Official Bago City Government Page</p>
+          </div>
+          <div class="home-news-live-dot" style="margin-left:auto;margin-right:4px;"></div>
+        </div>
+
+        <!-- Mini FB embed — shows 2-3 posts -->
+        <div id="home-fb-root"></div>
+        <div class="home-fb-loading" id="home-fb-loading">
+          <div class="fb-loading-spinner" style="width:24px;height:24px;border-width:2px;"></div>
+          <span>Loading posts...</span>
+        </div>
+        <div class="home-fb-embed" id="home-fb-embed" style="display:none;">
+          <div class="fb-page"
+            data-href="https://www.facebook.com/TheCityBridge"
+            data-tabs="timeline"
+            data-width=""
+            data-height="400"
+            data-small-header="true"
+            data-adapt-container-width="true"
+            data-hide-cover="true"
+            data-show-facepile="false">
           </div>
         </div>
-        <div class="home-news-card-right">
-          <div class="home-news-live-dot"></div>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
-        </div>
+
+        <button class="home-fb-viewall" onclick="navigateTo('page-news')">
+          View all posts →
+        </button>
       </div>
 
       <!-- Health Programs -->
@@ -1036,8 +1057,41 @@
   const isDesktop = window.innerWidth >= 900;
   // Class already set on <html> in head script — just read it
 
-  // ─── Facebook Page Plugin SDK ───────────────────────────────────────────────
-  let fbSdkLoaded = false;
+  // ─── Facebook SDK for home mini feed ────────────────────────────────────────
+  let homeFbSdkLoaded = false;
+  function loadHomeFbSdk() {
+    if (homeFbSdkLoaded || fbSdkLoaded) { showHomeFbEmbed(); return; }
+    homeFbSdkLoaded = true;
+    fbSdkLoaded = true;
+    window.fbAsyncInit = function() {
+      FB.init({ xfbml: true, version: 'v19.0' });
+      FB.Event.subscribe('xfbml.render', function() {
+        showHomeFbEmbed();
+        // Also show news page embed if needed
+        const loading = document.getElementById('fb-loading');
+        const wrap = document.getElementById('fb-embed-wrap');
+        if (loading) loading.style.display = 'none';
+        if (wrap) wrap.style.display = 'block';
+      });
+    };
+    setTimeout(showHomeFbEmbed, 8000);
+    const script = document.createElement('script');
+    script.src = 'https://connect.facebook.net/en_US/sdk.js';
+    script.async = true; script.defer = true; script.crossOrigin = 'anonymous';
+    document.body.appendChild(script);
+  }
+
+  function showHomeFbEmbed() {
+    const loading = document.getElementById('home-fb-loading');
+    const embed = document.getElementById('home-fb-embed');
+    if (loading) loading.style.display = 'none';
+    if (embed) embed.style.display = 'block';
+  }
+
+  // Load FB on initial home page view
+  window.addEventListener('load', () => {
+    setTimeout(loadHomeFbSdk, 1000);
+  });
   function loadFbSdk() {
     if (fbSdkLoaded) return;
     fbSdkLoaded = true;
@@ -1154,6 +1208,8 @@
 
     // Load Facebook SDK when News page is opened
     if (pageId === 'page-news') loadFbSdk();
+    // Also load when home page shown (for mini feed)
+    if (pageId === 'page-home') loadHomeFbSdk();
   }
 
   // Bottom nav clicks
