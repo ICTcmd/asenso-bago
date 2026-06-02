@@ -192,18 +192,39 @@
       <div class="desktop-home-grid" style="display:block;">
         <div class="desktop-home-main">
 
-      <!-- Top Bar -->
-      <div class="home-topbar safe-top">
-        <div class="greeting-text">
-          <h2 id="greeting-text">Maayong Aga,</h2>
-          <span>Bagonhon 👋</span>
-        </div>
-        <div class="app-brand">
-          <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="Asenso Bago" class="app-brand-logo" />
+      <!-- ── HERO BANNER ── -->
+      <div class="home-hero safe-top">
+        <div class="home-hero-bg" aria-hidden="true"></div>
+        <div class="home-hero-content">
+          <div class="home-hero-top">
+            <div>
+              <p class="home-hero-label">Republic of the Philippines</p>
+              <h2 class="home-hero-greeting" id="greeting-text">Maayong Aga,</h2>
+              <p class="home-hero-sub">Bagonhon <span aria-hidden="true">👋</span></p>
+            </div>
+            <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="Asenso Bago" class="app-brand-logo home-hero-logo" />
+          </div>
+          <!-- Animated stats strip -->
+          <div class="home-stats-strip">
+            <div class="home-stat-item">
+              <span class="home-stat-n" data-target="48">0</span>
+              <span class="home-stat-l">Barangays</span>
+            </div>
+            <div class="home-stat-div"></div>
+            <div class="home-stat-item">
+              <span class="home-stat-n" data-target="3">0</span>
+              <span class="home-stat-l">Programs</span>
+            </div>
+            <div class="home-stat-div"></div>
+            <div class="home-stat-item">
+              <span class="home-stat-n" data-target="10" data-suffix="K+">0</span>
+              <span class="home-stat-l">Served</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Search Row -->
+      <!-- ── SEARCH ── -->
       <div class="search-row">
         <div class="search-box">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
@@ -218,7 +239,7 @@
         </button>
       </div>
 
-      <!-- Services Grid -->
+      <!-- ── QUICK SERVICES ── -->
       <div class="services-section">
         <p class="services-section-title">Quick Services</p>
         <div class="services-grid">
@@ -249,6 +270,7 @@
           </div>
           <p class="service-label">Tourism</p>
         </button>
+
         <button class="service-item" data-action="emergency">
           <div class="service-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444);">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
@@ -289,17 +311,29 @@
         </div>
       </div>
 
-      <!-- CTA Banner -->
+      <!-- ── MAYOR'S MESSAGE ── -->
+      <div class="mayor-card">
+        <div class="mayor-card-left">
+          <img src="assets/images/bago-city-logo.png" alt="City of Bago" class="mayor-seal" />
+        </div>
+        <div class="mayor-card-right">
+          <p class="mayor-quote">"Asenso Bago — bringing government services closer to every Bagonhon."</p>
+          <p class="mayor-name">Mayor Mayette Javellana Yao</p>
+          <p class="mayor-title">City Mayor, Bago City</p>
+        </div>
+      </div>
+
+      <!-- ── CTA BANNER ── -->
       <div class="cta-banner">
         <div class="cta-content">
           <h3>Bago City, at your fingertips</h3>
-          <p>Sign up to access a full suite of digital government services designed for <strong>Bagonhons</strong></p>
+          <p>Access all city programs and services designed for <strong>Bagonhons</strong></p>
           <button class="cta-btn">Create an Account</button>
         </div>
         <img class="cta-img" src="assets/images/bago-city-logo.png" alt="Bago City" />
       </div>
 
-      <!-- Latest News — Facebook teaser card -->
+      <!-- ── LATEST NEWS ── -->
       <div class="section-header">
         <span class="section-title">Latest News &amp; Updates</span>
         <button class="see-all" data-target="page-news">See all</button>
@@ -312,7 +346,7 @@
           </div>
           <div>
             <p class="home-news-name">The Citybridge</p>
-            <p class="home-news-sub">Official Bago City Government Page · Tap to view latest posts</p>
+            <p class="home-news-sub">Official Bago City Government Page · Tap to view posts</p>
           </div>
         </div>
         <div class="home-news-card-right">
@@ -1139,6 +1173,21 @@
     if (elDesktop) elDesktop.textContent = greeting + ' Bagonhon';
   }
 
+  // ─── Animated stat counters ─────────────────────────────────────────────────
+  function animateCounters() {
+    document.querySelectorAll('.home-stat-n[data-target]').forEach(el => {
+      const target = parseInt(el.getAttribute('data-target'));
+      const suffix = el.getAttribute('data-suffix') || '';
+      let current = 0;
+      const step = Math.ceil(target / 30);
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = current + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 40);
+    });
+  }
+
   // ─── Navigation ────────────────────────────────────────────────────────────
   function navigateTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1197,6 +1246,7 @@
         bottomNav.style.display = 'flex';
       }
       updateGreeting();
+      animateCounters();
     }, 400);
   }
 

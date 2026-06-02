@@ -1287,3 +1287,60 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 .news-fb-stat .n { display: block; font-size: 15px; font-weight: 900; color: #1877f2; }
 .news-fb-stat .l { display: block; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
 .news-fb-stat-div { width: 1px; height: 32px; background: #f1f5f9; }
+
+/* ── Home Hero Banner ── */
+.home-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #6b2200 0%, #a03800 50%, #7a2800 100%);
+  padding: 0 20px 0;
+}
+.home-hero-bg {
+  position: absolute; inset: 0;
+  background: url('assets/images/bago-city-logo.png') right -30px center / 180px no-repeat;
+  opacity: 0.06; pointer-events: none;
+}
+.home-hero-content { position: relative; z-index: 1; }
+.home-hero-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding-top: 20px;
+}
+.home-hero-label { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.home-hero-greeting { font-size: 26px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 4px; }
+.home-hero-sub { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 500; }
+.home-hero-logo { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; margin-top: 4px; }
+
+/* Stats strip inside hero */
+.home-stats-strip {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 12px 16px;
+  margin: 16px 0 20px; gap: 0;
+}
+.home-stat-item { flex: 1; text-align: center; }
+.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #fff; line-height: 1; }
+.home-stat-l { display: block; font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; font-weight: 600; }
+.home-stat-div { width: 1px; height: 36px; background: rgba(255,255,255,0.2); }
+
+/* Mayor's message card */
+.mayor-card {
+  display: flex; align-items: center; gap: 14px;
+  margin: 8px 16px 8px;
+  background: linear-gradient(135deg, #fffbf5 0%, #fff8ee 100%);
+  border-radius: 18px; padding: 16px 18px;
+  border-left: 4px solid #e8820c;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.mayor-seal { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+.mayor-quote { font-size: 12px; color: #475569; font-style: italic; line-height: 1.6; margin-bottom: 8px; }
+.mayor-name { font-size: 12px; font-weight: 800; color: #7a2800; }
+.mayor-title { font-size: 11px; color: #94a3b8; }
+
+/* Hide old home topbar */
+.home-topbar { display: none !important; }
+
+/* Update desktop to use new hero */
+@media (min-width: 900px) {
+  .home-hero { display: none; }
+  .home-topbar { display: none !important; }
+  .mayor-card { margin: 8px 0 8px; border-radius: 18px; }
+}
