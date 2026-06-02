@@ -521,35 +521,25 @@
         <a href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer" class="news-source-btn">Follow</a>
       </div>
 
-      <!-- News cards — clean, no SDK needed -->
-      <div class="news-fb-open-card">
-        <div class="news-fb-open-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="#1877f2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        </div>
-        <h3>Read the latest from The Citybridge</h3>
-        <p>The Citybridge is the official Facebook page of the Bago City Government. All announcements, events, and updates are posted there in real time.</p>
-        <div class="news-fb-stats">
-          <div class="news-fb-stat">
-            <span class="n">Daily</span>
-            <span class="l">Posts</span>
-          </div>
-          <div class="news-fb-stat-div"></div>
-          <div class="news-fb-stat">
-            <span class="n">Official</span>
-            <span class="l">Source</span>
-          </div>
-          <div class="news-fb-stat-div"></div>
-          <div class="news-fb-stat">
-            <span class="n">Live</span>
-            <span class="l">Updates</span>
-          </div>
+      <!-- Facebook live feed -->
+      <div id="fb-root"></div>
+      <div class="fb-embed-wrap">
+        <div class="fb-page"
+          data-href="https://www.facebook.com/TheCityBridge"
+          data-tabs="timeline"
+          data-width=""
+          data-height="1000"
+          data-small-header="true"
+          data-adapt-container-width="true"
+          data-hide-cover="true"
+          data-show-facepile="false">
         </div>
       </div>
 
       <!-- Open Facebook button -->
       <a class="news-open-fb" href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        Open The Citybridge on Facebook
+        View All Posts on Facebook
       </a>
 
     </div><!-- /page-news -->
@@ -1040,8 +1030,19 @@
   const isDesktop = window.innerWidth >= 900;
   // Class already set on <html> in head script — just read it
 
-  // ─── Facebook SDK — removed (requires App ID for reliable mobile use) ────────
-  // News page uses direct Facebook link instead
+  // ─── Facebook SDK ────────────────────────────────────────────────────────────
+  let fbSdkLoaded = false;
+  function loadFbSdk() {
+    if (fbSdkLoaded) return;
+    fbSdkLoaded = true;
+    window.fbAsyncInit = function() {
+      FB.init({ xfbml: true, version: 'v19.0' });
+    };
+    const script = document.createElement('script');
+    script.src = 'https://connect.facebook.net/en_US/sdk.js';
+    script.async = true; script.defer = true; script.crossOrigin = 'anonymous';
+    document.body.appendChild(script);
+  }
   function loadFbSdk() {
     if (fbSdkLoaded) return;
     fbSdkLoaded = true;
