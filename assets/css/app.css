@@ -1344,3 +1344,78 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   .home-topbar { display: none !important; }
   .mayor-card { margin: 8px 0 8px; border-radius: 18px; }
 }
+
+/* ── Barangays Page ── */
+#page-barangays { background: #f0f2f5; }
+
+.brgy-legend {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 0 16px 12px;
+}
+.brgy-badge {
+  font-size: 11px; font-weight: 700; border-radius: 50px;
+  padding: 4px 10px; letter-spacing: 0.3px;
+}
+.brgy-badge.urban { background: rgba(192,57,43,0.1); color: #c0392b; }
+.brgy-badge.rural { background: rgba(5,150,105,0.1); color: #059669; }
+.brgy-badge.attraction { background: rgba(217,119,6,0.1); color: #d97706; }
+
+.brgy-list {
+  padding: 0 16px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.brgy-card {
+  background: #fff; border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  transition: transform 0.15s;
+}
+.brgy-card:active { transform: scale(0.99); }
+
+.brgy-card-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+}
+.brgy-number {
+  font-size: 11px; font-weight: 900; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.15); border-radius: 8px;
+  padding: 4px 8px; flex-shrink: 0;
+}
+.brgy-card-header h3 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+
+.brgy-card-body { padding: 14px 16px 16px; }
+.brgy-card-body p { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 10px; }
+
+.brgy-fact {
+  font-size: 11px; font-weight: 700; color: #0284c7;
+  background: rgba(2,132,199,0.08); border-radius: 8px;
+  padding: 5px 10px; margin-bottom: 6px; display: inline-block;
+}
+.brgy-spot {
+  font-size: 11px; font-weight: 700; color: #d97706;
+  background: rgba(217,119,6,0.08); border-radius: 8px;
+  padding: 5px 10px; margin-bottom: 6px; display: block;
+}
+
+.brgy-map-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 8px; font-size: 12px; font-weight: 700;
+  color: #7c3aed; text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.brgy-map-btn:active { opacity: 0.7; }
+
+/* Desktop barangays */
+@media (min-width: 900px) {
+  #page-barangays .screen-header { padding: 24px 28px 16px; }
+  .brgy-legend { padding: 0 28px 12px; }
+  .brgy-list {
+    padding: 0 28px 16px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+@media (min-width: 1400px) {
+  .brgy-list { grid-template-columns: repeat(3, 1fr); }
+}
