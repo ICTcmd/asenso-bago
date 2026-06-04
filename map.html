@@ -178,7 +178,7 @@ const BARANGAYS = [
   // SOUTH ROW
   {num:'19',name:'Pacol',              type:'r',lng:122.8673,lat:10.4968,dist:'7.20 km', area:'—',       pop:'3,999', fiesta:'December 12',                     desc:'A rural barangay near the city center with the Pacol Gym and health center.',spots:''},
   {num:'10',name:'Caridad',            type:'u',lng:122.9062,lat:10.4835,dist:'12 km',   area:'—',       pop:'4,901', fiesta:'Dinagaw Festival (2nd Sat Mar)',   desc:'An urban barangay forming part of the Bago City urban core.',spots:''},
-  {num:'11',name:'Don Jorge L. Araneta',type:'u',lng:122.9494,lat:10.4772,dist:'16.90 km',area:'2,143 ha',pop:'9,457',fiesta:'Manupak-tapas Festival (Dec 8)',  desc:'Named after Gen. Juan A. Araneta who led the bloodless revolution of November 5, 1898.',spots:'⭐ Araneta Heritage Site'},
+  {num:'11',name:'Don Jorge L. Araneta',type:'u',lng:122.9470,lat:10.4793,dist:'16.90 km',area:'2,143 ha',pop:'9,457',fiesta:'Manupak-tapas Festival (Dec 8)',  desc:'Named after Gen. Juan A. Araneta who led the bloodless revolution of November 5, 1898.',spots:'⭐ Araneta Heritage Site'},
   {num:'02',name:'Alianza',            type:'r',lng:122.9307,lat:10.4753,dist:'15 km',   area:'365 ha',  pop:'3,211', fiesta:'February 2',                      desc:'A rural barangay known for agricultural lands and rice production.',spots:''},
   {num:'05',name:'Bagroy',             type:'r',lng:122.872,lat:10.4788,dist:'11 km',   area:'399 ha',  pop:'1,694', fiesta:'February 11',                     desc:'Smallest population (1,694). A coastal barangay along the Guimaras Strait.',spots:''},
   {num:'21',name:'Sagasa',             type:'r',lng:122.8929,lat:10.4717,dist:'—',       area:'—',       pop:'—',     fiesta:'—',                               desc:'A coastal rural barangay along the Guimaras Strait known for fishing and mangrove forests.',spots:''},
@@ -187,17 +187,21 @@ const BARANGAYS = [
 ];
 // Tourist landmarks
 const SPOTS = [
-  {name:'Bantayan Park',             icon:'🏛️',lng:122.8342,lat:10.4982,desc:'Historic riverside park — site of the November 5, 1898 bloodless revolution led by Gen. Juan Araneta against Spanish rule.',spots:'⭐ Al Cinco de Noviembre annual celebration'},
-  {name:'Bago City Cathedral',       icon:'⛪',lng:122.8330,lat:10.4972,desc:'Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City. One of the oldest landmarks in the city.',spots:'⭐ Religious heritage landmark'},
-  {name:'Javellana Mansion (Balay Daku)',icon:'🏰',lng:122.8298,lat:10.4948,desc:'Built in 1920 on a 440-ha sugar plantation by the Javellana family, designed by an Italian architect. One of Bago Citys most prized heritage landmarks.',spots:'⭐ Heritage ancestral house tour'},
-  {name:'Balay ni Tan Juan',         icon:'🏡',lng:122.8315,lat:10.4960,desc:'A well-preserved ancestral house that offers a glimpse into the rich cultural heritage and history of Bago City and its founding families.',spots:'⭐ Heritage museum & cultural site'},
-  {name:'Ma-ao Sugar Central (MSC)', icon:'🏭',lng:122.8952,lat:10.4598,desc:'Historic sugar mill — the Ma-ao Sugar Central. A heritage industrial landmark in the most populated barangay of Bago City.',spots:'⭐ MSC Heritage site|⭐ Lacson Mansion ruins'},
-  {name:'Kipot Twin Falls',          icon:'💧',lng:122.8980,lat:10.3978,desc:'Stunning twin waterfalls in Brgy. Mailum at the foot of Mt. Kanlaon. Reached via 220 steps. Cold, refreshing water — perfect for family trips and nature lovers.',spots:'⭐ Nature ecotourism destination'},
-  {name:'Pataan Mountain Resort',    icon:'🏔️',lng:122.9120,lat:10.3950,desc:'Mountain getaway near Kanlaon Volcano with scenic views, fresh mountain air and proximity to Kipot Twin Falls.',spots:'⭐ Mountain resort & eco-adventure'},
-  {name:'Buenos Aires Mtn Resort',   icon:'⛰️',lng:122.8482,lat:10.5428,desc:'Scenic mountain resort in Brgy. Busay with breathtaking panoramic views of Bago City and the surrounding landscape.',spots:'⭐ Mountain resort & hiking'},
-  {name:'Kinutkot Resort',           icon:'🌊',lng:122.8320,lat:10.5200,desc:'Popular resort destination in Bago City known for its spring water and recreational facilities.',spots:'⭐ Swimming resort & recreation'},
-  {name:'Hundred Hills Nature Resort',icon:'🌿',lng:122.8362,lat:10.4742,desc:'Nature resort with rolling hills and lush greenery south of the city proper. A relaxing nature getaway for families.',spots:'⭐ Nature resort & scenic hills'},
-  {name:'Rafael Salas Park',         icon:'🌳',lng:122.8340,lat:10.4985,desc:'Named after Rafael Salas — UN Under-Secretary General and native son of Bago City. A nature center and green sanctuary for families.',spots:'⭐ Nature park & city green space'},
+  {name:'Bago City Hall',        icon:'🏛️',lng:122.8351,lat:10.5383,desc:'Seat of the local government of Bago City. Home to the City Mayor and all city departments.',spots:'⭐ Official government center of Bago City'},
+  {name:'Bago City Hospital',    icon:'🏥',lng:122.8471,lat:10.5355,desc:'Primary government hospital serving Bago City and surrounding municipalities in Negros Occidental.',spots:'⭐ Main public health facility'},
+  {name:'Bago City Cathedral',   icon:'⛪',lng:122.8344,lat:10.5372,desc:'Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City. One of the oldest landmarks.',spots:'⭐ Religious heritage landmark'},
+  {name:'Bantayan Park',         icon:'🌳',lng:122.8317,lat:10.5368,desc:'Historic riverside park — site of the November 5, 1898 bloodless revolution led by Gen. Juan Araneta against Spanish rule.',spots:'⭐ Al Cinco de Noviembre annual celebration'},
+  {name:'Balay ni Tan Juan',     icon:'🏡',lng:122.8348,lat:10.5345,desc:'Well-preserved ancestral house offering a glimpse into the rich cultural heritage and history of Bago City.',spots:'⭐ Heritage museum & cultural site'},
+  {name:'Javellana Mansion',     icon:'🏰',lng:122.8361,lat:10.5369,desc:'Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect. One of Bago Citys most prized heritage landmarks.',spots:'⭐ Heritage ancestral house tour'},
+  {name:'Ma-ao Sugar Central',   icon:'🏭',lng:122.9506,lat:10.4770,desc:'Historic sugar mill — heritage industrial landmark in the most populated barangay of Bago City.',spots:'⭐ Heritage industrial site'},
+  {name:'Kipot Twin Falls',      icon:'💧',lng:123.0706,lat:10.4788,desc:'Stunning twin waterfalls in Brgy. Mailum at the foot of Mt. Kanlaon. Reached via 220 steps. Cold, refreshing water.',spots:'⭐ Nature ecotourism destination'},
+  {name:'Pataan Mountain Resort',icon:'🏔️',lng:123.0906,lat:10.4808,desc:'Mountain getaway near Kanlaon Volcano with scenic views and fresh mountain air.',spots:'⭐ Mountain resort & eco-adventure'},
+  {name:'Buenos Aires Resort',   icon:'⛰️',lng:123.0474,lat:10.4552,desc:'Scenic mountain resort in Brgy. Busay with breathtaking panoramic views of Bago City.',spots:'⭐ Mountain resort & hiking'},
+  {name:'Rafael Salas Park',     icon:'🌳',lng:123.0555,lat:10.4486,desc:'Named after Rafael Salas — UN Under-Secretary General and native son of Bago City. A nature center and green sanctuary.',spots:'⭐ Nature park & city green space'},
+  {name:'Bago City Market',      icon:'🏪',lng:122.8374,lat:10.5396,desc:'Main public market of Bago City — the commercial heart of the city center.',spots:'⭐ Fresh produce, goods & local products'},
+  {name:'Bago Bus Terminal',     icon:'🚌',lng:122.9920,lat:10.4876,desc:'Main bus and jeepney terminal with routes to Bacolod and surrounding municipalities.',spots:'⭐ Main transport hub'},
+  {name:'Bago City Police',      icon:'🚔',lng:122.8414,lat:10.5264,desc:'Bago City Police Station — Philippine National Police. Serving and protecting the community.',spots:'⭐ Emergency: 911'},
+  {name:'Bago City Library',     icon:'📚',lng:122.8343,lat:10.5350,desc:'Bago City Public Library providing educational resources and community programs for Bagonhons.',spots:'⭐ Public library & educational center'},
 ];
 
 // City of Bago boundary polygon (from OSM data)
