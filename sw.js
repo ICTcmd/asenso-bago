@@ -1,6 +1,6 @@
 // Asenso Bago — Service Worker v20260526
 // Version timestamp ensures cache busts on every deploy
-const CACHE = 'asenso-bago-20260604-001';
+const CACHE = 'asenso-bago-20260604-002';
 
 const ASSETS = [
   '/',
@@ -49,6 +49,14 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
+
+  // Never cache map.html or index.html — always fetch fresh
+  if (url.pathname === '/map.html' || url.pathname === '/index.html' || url.pathname === '/') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match(e.request))
+    );
+    return;
+  }
 
   e.respondWith(
     fetch(e.request)
