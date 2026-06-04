@@ -291,12 +291,68 @@ map.on('load', () => {
     'star-intensity': 0.4
   });
 
-  // Add barangay polygon source
-  map.addSource('barangays', { type: 'geojson', data: polyGeoJSON });
+  // Fetch REAL barangay boundaries from OpenStreetMap Overpass API
+  const overpassQuery = `
+    [out:json][timeout:60];
+    relation["boundary"="administrative"]["admin_level"="10"]
+      (10.30,122.65,10.65,123.05);
+    out geom;
+  `;
+  fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    body: 'data=' + encodeURIComponent(overpassQuery)
+  })
+  .then(r => r.json())
+  .then(data => {
+    const features = [];
+    data.elements.forEach(el => {
+      if (el.type !== 'relation') return;
+      const name = el.tags && el.tags.name;
+      if (!name) return;
+      // Find the barangay data entry
+      const b = barangays.find(x =>
+        x.name.toLowerCase() === name.toLowerCase() ||
+        name.toLowerCase().includes(x.name.toLowerCase().split(' ')[0].toLowerCase())
+      );
+      // Build polygon from members
+      const outerWays = (el.members || []).filter(m => m.role === 'outer');
+      outerWays.forEach(way => {
+        if (!way.geometry) return;
+        const coords = way.geometry.map(pt => [pt.lon, pt.lat]);
+        if (coords.length < 3) return;
+        // Close ring
+        if (coords[0][0] !== coords[coords.length-1][0]) coords.push(coords[0]);
+        features.push({
+          type: 'Feature',
+          id: name,
+          properties: b ? { ...b, fillColor: clr[b.type] } : { name, type:'r', fillColor:'#27ae60', desc: name + ' barangay', dist:'', pop:'', area:'', fiesta:'', spots:'' },
+          geometry: { type: 'Polygon', coordinates: [coords] }
+        });
+      });
+    });
+
+    if (features.length > 0) {
+      addBarangayLayers({ type:'FeatureCollection', features });
+    } else {
+      // Fallback to approximate polygons if OSM data unavailable
+      addBarangayLayers({ type:'FeatureCollection', features: polyGeoJSON.features });
+    }
+  })
+  .catch(() => {
+    // Fallback to approximate polygons
+    addBarangayLayers({ type:'FeatureCollection', features: polyGeoJSON.features });
+  });
+});  // end map.on('load')
+
+function addBarangayLayers(geojsonData) {
+  if (map.getSource('barangays')) {
+    map.getSource('barangays').setData(geojsonData);
+    return;
+  }
+  map.addSource('barangays', { type: 'geojson', data: geojsonData, generateId: true });
 
   // Fill layer
   map.addLayer({
-    id: 'brgy-fill',
     type: 'fill',
     source: 'barangays',
     paint: {
@@ -393,7 +449,7 @@ map.on('load', () => {
       .setLngLat([lm.lng, lm.lat])
       .addTo(map);
   });
-});
+}  // end addBarangayLayers
 
 function toggle3D() {
   is3D = !is3D;
