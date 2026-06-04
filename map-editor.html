@@ -3,332 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Barangay Position Editor</title>
+<title>Bago City Map Editor</title>
 <link rel="preconnect" href="https://api.mapbox.com">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, sans-serif; background:#111; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
-
-.top-bar {
-  background: linear-gradient(135deg,#6b2200,#a03800);
-  padding: 12px 16px;
-  color: #fff;
-  display: flex; align-items: center; gap: 12px;
-  flex-shrink: 0;
-}
-.top-bar h1 { font-size: 15px; font-weight: 800; flex:1; }
-.top-bar p  { font-size: 10px; color: rgba(255,255,255,.65); }
-
-.layout { display:flex; flex:1; overflow:hidden; }
-
-/* Left panel — barangay list */
-.side {
-  width: 200px;
-  background: #1a1a1a;
-  border-right: 1px solid #333;
-  overflow-y: auto;
-  flex-shrink: 0;
-}
-.side-title { font-size: 10px; font-weight: 800; color: #888; padding: 10px 12px 6px; text-transform: uppercase; letter-spacing: 0.8px; }
-.brgy-item {
-  padding: 8px 12px;
-  font-size: 12px; font-weight: 700;
-  cursor: pointer;
-  border-left: 3px solid transparent;
-  transition: all .15s;
-  display: flex; align-items: center; gap: 8px;
-}
-.brgy-item:hover { background: #252525; }
-.brgy-item.selected { background: #2a1500; border-left-color: #a03800; color: #f39c12; }
-.brgy-item.placed { color: #27ae60; }
-.brgy-item.selected.placed { color: #f39c12; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
-.num { font-size: 9px; color: #666; margin-left: auto; }
-
-/* Map */
-#map { flex: 1; }
-
-/* Bottom bar */
-.bottom {
-  background: #111;
-  border-top: 1px solid #333;
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 10px;
-  flex-shrink: 0;
-}
-.status { flex:1; font-size: 12px; color: #aaa; }
-.status strong { color: #f39c12; }
-.btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: 700; }
-.btn-export { background: linear-gradient(135deg,#059669,#10b981); color: #fff; }
-.btn-reset  { background: #333; color: #aaa; }
-
-/* Crosshair cursor when placing */
-.placing #map { cursor: crosshair !important; }
-
-/* Marker styles */
-.brgy-pin {
-  width: 36px; height: 36px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 900; color: #fff;
-  border: 2.5px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.5);
-  cursor: move;
-}
-.brgy-pin.u { background: linear-gradient(135deg,#e74c3c,#c0392b); }
-.brgy-pin.r { background: linear-gradient(135deg,#27ae60,#1e8449); }
-.brgy-pin.t { background: linear-gradient(135deg,#f39c12,#e67e22); }
-.brgy-pin.active { box-shadow: 0 0 0 4px rgba(243,156,18,.6), 0 2px 8px rgba(0,0,0,.5); transform: scale(1.2); }
-
-/* Instructions overlay */
-.instructions {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  background: rgba(0,0,0,.75);
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-size: 13px;
-  text-align: center;
-  pointer-events: none;
-  z-index: 10;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(243,156,18,.4);
-  transition: opacity .3s;
-}
-.instructions.hide { opacity: 0; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:#111;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{background:linear-gradient(135deg,#6b2200,#a03800);padding:12px 16px;color:#fff;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.top-bar h1{font-size:15px;font-weight:800;flex:1}
+.top-bar p{font-size:10px;color:rgba(255,255,255,.65)}
+.layout{display:flex;flex:1;overflow:hidden}
+.side{width:210px;background:#1a1a1a;border-right:1px solid #333;overflow-y:auto;flex-shrink:0}
+.side-title{font-size:10px;font-weight:800;color:#888;padding:10px 12px 6px;text-transform:uppercase;letter-spacing:.8px;background:#111;position:sticky;top:0}
+.item{padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;border-left:3px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;color:#ccc}
+.item:hover{background:#252525}
+.item.selected{background:#2a1500;border-left-color:#a03800;color:#f39c12}
+.item.placed{color:#27ae60}
+.item.selected.placed{color:#f39c12}
+.num{font-size:9px;color:#555;margin-left:auto;flex-shrink:0}
+#map{flex:1}
+.bottom{background:#1a1a1a;border-top:1px solid #333;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.status{flex:1;font-size:12px;color:#aaa}
+.status strong{color:#f39c12}
+.btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:700}
+.btn-exp{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+.btn-rst{background:#2a2a2a;color:#888}
+.placing #map{cursor:crosshair!important}
+.pin{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:move}
+.pin.u{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.pin.r{background:linear-gradient(135deg,#27ae60,#1e8449)}
+.pin.t{background:linear-gradient(135deg,#f39c12,#e67e22)}
+.pin.lm{background:linear-gradient(135deg,#6b2200,#a03800)}
+.pin.active{box-shadow:0 0 0 4px rgba(243,156,18,.6),0 2px 8px rgba(0,0,0,.5);transform:scale(1.2)}
+.hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);color:#fff;padding:14px 20px;border-radius:12px;font-size:13px;text-align:center;pointer-events:none;z-index:10;backdrop-filter:blur(4px);border:1px solid rgba(243,156,18,.4);transition:opacity .3s}
+.hint.hide{opacity:0}
 </style>
 </head>
 <body>
-
 <div class="top-bar">
   <div>
-    <h1>🗺️ Barangay Position Editor</h1>
-    <p>Click a barangay → tap its location on the map</p>
+    <h1>🗺️ Bago City Map Editor</h1>
+    <p>Click item → tap location on map → drag to fine-tune</p>
   </div>
 </div>
-
 <div class="layout">
-  <div class="side">
-    <div class="side-title">24 Barangays</div>
-    <div id="brgy-list"></div>
-  </div>
-  <div style="position:relative;flex:1;display:flex;flex-direction:column;">
+  <div class="side" id="side"></div>
+  <div style="position:relative;flex:1;display:flex;flex-direction:column" id="map-container">
     <div id="map"></div>
-    <div class="instructions" id="instructions">
-      👈 Select a barangay from the list,<br>then tap its location on the map
-    </div>
+    <div class="hint" id="hint">👈 Select an item from the list,<br>then tap its location on the map</div>
   </div>
 </div>
-
 <div class="bottom">
-  <div class="status" id="status">Select a barangay to start placing</div>
-  <button class="btn btn-reset" onclick="resetAll()">Reset All</button>
-  <button class="btn btn-export" onclick="exportCoords()">📋 Copy Coordinates</button>
+  <div class="status" id="status">Select an item to start placing</div>
+  <button class="btn btn-rst" onclick="resetAll()">Reset All</button>
+  <button class="btn btn-exp" onclick="exportAll()">📋 Copy All Coordinates</button>
 </div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow';
+mapboxgl.accessToken='pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow';
 
-const BARANGAYS = [
-  {num:'01', name:'Abuanan',              type:'u'},
-  {num:'02', name:'Alianza',              type:'r'},
-  {num:'03', name:'Atipuluan',            type:'u'},
-  {num:'04', name:'Bacong-Montilla',      type:'r'},
-  {num:'05', name:'Bagroy',               type:'r'},
-  {num:'06', name:'Balingasag',           type:'u'},
-  {num:'07', name:'Binubuhan',            type:'r'},
-  {num:'08', name:'Busay',               type:'t'},
-  {num:'09', name:'Calumangan',           type:'r'},
-  {num:'10', name:'Caridad',              type:'u'},
-  {num:'11', name:'Don Jorge L. Araneta', type:'u'},
-  {num:'12', name:'Dulao',               type:'r'},
-  {num:'13', name:'Ilijan',              type:'t'},
-  {num:'14', name:'Lag-Asan',            type:'r'},
-  {num:'15', name:'Ma-ao',              type:'t'},
-  {num:'16', name:'Mailum',              type:'t'},
-  {num:'17', name:'Malingin',            type:'r'},
-  {num:'18', name:'Napoles',             type:'r'},
-  {num:'19', name:'Pacol',               type:'r'},
-  {num:'20', name:'Poblacion',           type:'t'},
-  {num:'21', name:'Sagasa',              type:'r'},
-  {num:'22', name:'Sampinit',            type:'r'},
-  {num:'23', name:'Tabunan',             type:'r'},
-  {num:'24', name:'Taloc',               type:'u'},
+const BARANGAYS=[
+  {num:'01',name:'Abuanan',type:'u'},{num:'02',name:'Alianza',type:'r'},
+  {num:'03',name:'Atipuluan',type:'u'},{num:'04',name:'Bacong-Montilla',type:'r'},
+  {num:'05',name:'Bagroy',type:'r'},{num:'06',name:'Balingasag',type:'u'},
+  {num:'07',name:'Binubuhan',type:'r'},{num:'08',name:'Busay',type:'t'},
+  {num:'09',name:'Calumangan',type:'r'},{num:'10',name:'Caridad',type:'u'},
+  {num:'11',name:'Don Jorge L. Araneta',type:'u'},{num:'12',name:'Dulao',type:'r'},
+  {num:'13',name:'Ilijan',type:'t'},{num:'14',name:'Lag-Asan',type:'r'},
+  {num:'15',name:'Ma-ao',type:'t'},{num:'16',name:'Mailum',type:'t'},
+  {num:'17',name:'Malingin',type:'r'},{num:'18',name:'Napoles',type:'r'},
+  {num:'19',name:'Pacol',type:'r'},{num:'20',name:'Poblacion',type:'t'},
+  {num:'21',name:'Sagasa',type:'r'},{num:'22',name:'Sampinit',type:'r'},
+  {num:'23',name:'Tabunan',type:'r'},{num:'24',name:'Taloc',type:'u'},
 ];
 
-const clr = {u:'#e74c3c', r:'#27ae60', t:'#f39c12'};
-const positions = {}; // name -> {lng, lat}
-const markers = {};   // name -> mapboxgl.Marker
-let selected = null;
+const LANDMARKS=[
+  {num:'L01',name:'Bago City Hall',icon:'🏛️',cat:'Government'},
+  {num:'L02',name:'Bago City Hospital',icon:'🏥',cat:'Hospital'},
+  {num:'L03',name:'Bago City Cathedral',icon:'⛪',cat:'Religious'},
+  {num:'L04',name:'Bantayan Park',icon:'🌳',cat:'Heritage'},
+  {num:'L05',name:'Balay ni Tan Juan',icon:'🏡',cat:'Heritage'},
+  {num:'L06',name:'Javellana Mansion',icon:'🏰',cat:'Heritage'},
+  {num:'L07',name:'Ma-ao Sugar Central',icon:'🏭',cat:'Heritage'},
+  {num:'L08',name:'MSC Ruins (Lacson)',icon:'🏚️',cat:'Heritage'},
+  {num:'L09',name:'Kipot Twin Falls',icon:'💧',cat:'Tourist Spot'},
+  {num:'L10',name:'Pataan Mountain Resort',icon:'🏔️',cat:'Tourist Spot'},
+  {num:'L11',name:'Buenos Aires Resort',icon:'⛰️',cat:'Tourist Spot'},
+  {num:'L12',name:'Hundred Hills Resort',icon:'🌿',cat:'Tourist Spot'},
+  {num:'L13',name:'Kipot Summer Resort',icon:'🌊',cat:'Tourist Spot'},
+  {num:'L14',name:'Kinutkot Resort',icon:'💦',cat:'Tourist Spot'},
+  {num:'L15',name:'Rafael Salas Park',icon:'🌳',cat:'Park'},
+  {num:'L16',name:'Bago City Market',icon:'🏪',cat:'Commercial'},
+  {num:'L17',name:'Bago Bus Terminal',icon:'🚌',cat:'Transport'},
+  {num:'L18',name:'Bago City Police Station',icon:'🚔',cat:'Government'},
+  {num:'L19',name:'Mt. Kanlaon Natural Park',icon:'🌋',cat:'Nature'},
+  {num:'L20',name:'Bago City Library',icon:'📚',cat:'Government'},
+];
 
-// Load saved positions
-const saved = localStorage.getItem('bago_positions');
-if (saved) Object.assign(positions, JSON.parse(saved));
+// Pre-loaded barangay coordinates from previous editor session
+const SAVED_BRGY={
+  'Abuanan':{lng:122.9928,lat:10.5269},'Alianza':{lng:122.9307,lat:10.4753},
+  'Atipuluan':{lng:122.9562,lat:10.5127},'Bacong-Montilla':{lng:123.0345,lat:10.5213},
+  'Bagroy':{lng:122.872,lat:10.4788},'Balingasag':{lng:122.8423,lat:10.5343},
+  'Binubuhan':{lng:123.0067,lat:10.4592},'Busay':{lng:122.8885,lat:10.5389},
+  'Calumangan':{lng:122.8767,lat:10.5579},'Caridad':{lng:122.9062,lat:10.4835},
+  'Don Jorge L. Araneta':{lng:122.9494,lat:10.4772},'Dulao':{lng:122.9514,lat:10.5504},
+  'Ilijan':{lng:123.0549,lat:10.4545},'Lag-Asan':{lng:122.8378,lat:10.5318},
+  'Ma-ao':{lng:122.9915,lat:10.4914},'Mailum':{lng:123.0494,lat:10.4636},
+  'Malingin':{lng:122.9182,lat:10.4951},'Napoles':{lng:122.8981,lat:10.5141},
+  'Pacol':{lng:122.8673,lat:10.4968},'Poblacion':{lng:122.8348,lat:10.5429},
+  'Sagasa':{lng:122.8929,lat:10.4717},'Sampinit':{lng:122.8534,lat:10.5459},
+  'Tabunan':{lng:122.9373,lat:10.5775},'Taloc':{lng:122.9094,lat:10.5887},
+};
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v12',
-  center: [122.838, 10.510],
-  zoom: 11.5,
-  maxBounds: [[122.60, 10.28], [123.10, 10.68]],
+const positions={...SAVED_BRGY};
+const saved=localStorage.getItem('bago_pos_v2');
+if(saved) Object.assign(positions,JSON.parse(saved));
+const markers={};
+let selected=null;
+
+// Build sidebar
+const side=document.getElementById('side');
+function makeTitle(t){const d=document.createElement('div');d.className='side-title';d.textContent=t;side.appendChild(d);}
+function makeItem(item,icon,label){
+  const el=document.createElement('div');
+  el.className='item'+(positions[item.name]?' placed':'');
+  el.id='item-'+item.num;
+  el.innerHTML=`<span style="font-size:13px">${icon}</span><span style="flex:1">${label}</span><span class="num">${item.num}</span>`;
+  el.onclick=()=>selectItem({...item});
+  side.appendChild(el);
+}
+
+makeTitle('Barangays (24)');
+BARANGAYS.forEach(b=>makeItem(b,b.type==='u'?'🔴':b.type==='t'?'🟠':'🟢',b.name));
+makeTitle('Landmarks & POIs');
+LANDMARKS.forEach(lm=>makeItem(lm,lm.icon,lm.name));
+
+const map=new mapboxgl.Map({
+  container:'map',
+  style:'mapbox://styles/mapbox/streets-v12',
+  center:[122.90,10.520],
+  zoom:11.2,
+  maxBounds:[[122.60,10.25],[123.15,10.70]],
 });
+map.addControl(new mapboxgl.NavigationControl(),'bottom-right');
 
-map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-
-// Build barangay list
-const listEl = document.getElementById('brgy-list');
-BARANGAYS.forEach(b => {
-  const el = document.createElement('div');
-  el.className = 'brgy-item' + (positions[b.name] ? ' placed' : '');
-  el.id = 'item-' + b.num;
-  el.innerHTML = `<div class="dot" style="background:${clr[b.type]}"></div>${b.name}<span class="num">${b.num}</span>`;
-  el.onclick = () => selectBarangay(b);
-  listEl.appendChild(el);
-});
-
-map.on('load', () => {
-  // Restore saved markers
-  BARANGAYS.forEach(b => {
-    if (positions[b.name]) addMarker(b, positions[b.name].lng, positions[b.name].lat);
-  });
+map.on('load',()=>{
+  // Restore all saved positions
+  BARANGAYS.forEach(b=>{if(positions[b.name])addPin(b,positions[b.name].lng,positions[b.name].lat);});
+  LANDMARKS.forEach(lm=>{if(positions[lm.name])addPin({...lm,isLandmark:true},positions[lm.name].lng,positions[lm.name].lat);});
   updateStatus();
 });
 
-// Click on map to place selected barangay
-map.on('click', e => {
-  if (!selected) return;
-  const {lng, lat} = e.lngLat;
-  placeBarangay(selected, lng, lat);
+map.on('click',e=>{
+  if(!selected)return;
+  const{lng,lat}=e.lngLat;
+  const rLng=Math.round(lng*10000)/10000;
+  const rLat=Math.round(lat*10000)/10000;
+  positions[selected.name]={lng:rLng,lat:rLat};
+  localStorage.setItem('bago_pos_v2',JSON.stringify(positions));
+  addPin(selected,rLng,rLat);
+  document.getElementById('item-'+selected.num).classList.add('placed');
+  document.getElementById('item-'+selected.num).classList.remove('selected');
+  // Auto-next unplaced
+  const allItems=[...BARANGAYS,...LANDMARKS.map(lm=>({...lm,isLandmark:true}))];
+  const next=allItems.find(x=>!positions[x.name]&&x.num!==selected.num);
+  if(next)selectItem(next);
+  else{selected=null;document.getElementById('map-container').classList.remove('placing');}
+  updateStatus();
 });
 
-function selectBarangay(b) {
-  // Deselect previous
-  if (selected) {
-    const prev = document.getElementById('item-' + selected.num);
-    if (prev) prev.classList.remove('selected');
-    if (markers[selected.name]) {
-      markers[selected.name].getElement().classList.remove('active');
-    }
+function selectItem(item){
+  if(selected){
+    document.getElementById('item-'+selected.num)?.classList.remove('selected');
+    if(markers[selected.name])markers[selected.name].getElement().classList.remove('active');
   }
-
-  selected = b;
-  document.getElementById('map').parentElement.classList.add('placing');
-  document.getElementById('instructions').classList.add('hide');
-
-  const item = document.getElementById('item-' + b.num);
-  item.classList.add('selected');
-  item.scrollIntoView({behavior:'smooth', block:'nearest'});
-
-  // Highlight existing marker if any
-  if (markers[b.name]) {
-    markers[b.name].getElement().classList.add('active');
-    map.flyTo({center:[positions[b.name].lng, positions[b.name].lat], zoom:13, duration:600});
+  selected=item;
+  document.getElementById('map-container').classList.add('placing');
+  document.getElementById('hint').classList.add('hide');
+  const el=document.getElementById('item-'+item.num);
+  if(el){el.classList.add('selected');el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(markers[item.name]){
+    markers[item.name].getElement().classList.add('active');
+    map.flyTo({center:[positions[item.name].lng,positions[item.name].lat],zoom:13,duration:600});
   }
-
-  document.getElementById('status').innerHTML = `
-    <strong>Placing: ${b.num} - ${b.name}</strong> — tap its location on the map
-  `;
+  document.getElementById('status').innerHTML=`<strong>Placing: ${item.num} — ${item.name}</strong> &nbsp;Tap its location on the map`;
 }
 
-function placeBarangay(b, lng, lat) {
-  positions[b.name] = {lng, lat};
-  localStorage.setItem('bago_positions', JSON.stringify(positions));
-
-  addMarker(b, lng, lat);
-
-  const item = document.getElementById('item-' + b.num);
-  item.classList.add('placed');
-  item.classList.remove('selected');
-
-  // Auto-select next unplaced
-  const nextUnplaced = BARANGAYS.find(x => !positions[x.name] && x.num !== b.num);
-  if (nextUnplaced) {
-    selectBarangay(nextUnplaced);
-  } else {
-    selected = null;
-    document.getElementById('map').parentElement.classList.remove('placing');
-    document.getElementById('status').innerHTML = `✅ <strong>All ${Object.keys(positions).length} barangays placed!</strong> Click Export to copy coordinates.`;
+function addPin(item,lng,lat){
+  if(markers[item.name])markers[item.name].remove();
+  const el=document.createElement('div');
+  if(item.isLandmark){
+    el.style.cssText='width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6b2200,#c0392b);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:move;box-shadow:0 2px 8px rgba(0,0,0,.5)';
+    el.textContent=item.icon;
+  }else{
+    el.className='pin '+item.type;
+    el.textContent=item.num;
   }
-
-  updateStatus();
-}
-
-function addMarker(b, lng, lat) {
-  // Remove existing
-  if (markers[b.name]) markers[b.name].remove();
-
-  const el = document.createElement('div');
-  el.className = `brgy-pin ${b.type}`;
-  el.textContent = b.num;
-  el.title = b.name;
-
-  const marker = new mapboxgl.Marker({element:el, anchor:'center', draggable:true})
-    .setLngLat([lng, lat])
-    .addTo(map);
-
-  // Update position when dragged
-  marker.on('dragend', () => {
-    const {lng:newLng, lat:newLat} = marker.getLngLat();
-    positions[b.name] = {lng: Math.round(newLng*10000)/10000, lat: Math.round(newLat*10000)/10000};
-    localStorage.setItem('bago_positions', JSON.stringify(positions));
+  el.title=item.name;
+  const m=new mapboxgl.Marker({element:el,anchor:'center',draggable:true}).setLngLat([lng,lat]).addTo(map);
+  m.on('dragend',()=>{
+    const{lng:nl,lat:nlt}=m.getLngLat();
+    positions[item.name]={lng:Math.round(nl*10000)/10000,lat:Math.round(nlt*10000)/10000};
+    localStorage.setItem('bago_pos_v2',JSON.stringify(positions));
     updateStatus();
   });
-
-  markers[b.name] = marker;
+  markers[item.name]=m;
 }
 
-function updateStatus() {
-  const placed = Object.keys(positions).length;
-  const total = BARANGAYS.length;
-  if (!selected) {
-    document.getElementById('status').innerHTML = `Placed: <strong>${placed}/${total}</strong> barangays — ${total-placed} remaining`;
-  }
+function updateStatus(){
+  const total=BARANGAYS.length+LANDMARKS.length;
+  const placed=Object.keys(positions).length;
+  if(!selected)document.getElementById('status').innerHTML=`Placed: <strong>${placed}/${total}</strong> &nbsp;(${BARANGAYS.length} barangays + ${LANDMARKS.length} landmarks)`;
 }
 
-function resetAll() {
-  if (!confirm('Reset all positions? This cannot be undone.')) return;
-  Object.values(markers).forEach(m => m.remove());
-  Object.keys(markers).forEach(k => delete markers[k]);
-  Object.keys(positions).forEach(k => delete positions[k]);
-  localStorage.removeItem('bago_positions');
-  document.querySelectorAll('.brgy-item').forEach(el => el.classList.remove('placed','selected'));
-  selected = null;
-  document.getElementById('map').parentElement.classList.remove('placing');
-  document.getElementById('instructions').classList.remove('hide');
+function resetAll(){
+  if(!confirm('Reset ALL positions?'))return;
+  Object.values(markers).forEach(m=>m.remove());
+  Object.keys(markers).forEach(k=>delete markers[k]);
+  Object.keys(positions).forEach(k=>delete positions[k]);
+  localStorage.removeItem('bago_pos_v2');
+  document.querySelectorAll('.item').forEach(e=>e.classList.remove('placed','selected'));
+  selected=null;
+  document.getElementById('map-container').classList.remove('placing');
+  document.getElementById('hint').classList.remove('hide');
   updateStatus();
 }
 
-function exportCoords() {
-  if (Object.keys(positions).length === 0) {
-    alert('No positions placed yet!');
-    return;
-  }
-
-  const lines = BARANGAYS.map(b => {
-    const p = positions[b.name];
-    if (!p) return `  // ${b.name}: NOT PLACED`;
-    return `  {num:'${b.num}',name:'${b.name}',type:'${b.type}',lng:${p.lng},lat:${p.lat},...},`;
+function exportAll(){
+  const brgyLines=BARANGAYS.map(b=>{
+    const p=positions[b.name];
+    return p?`  {num:'${b.num}',name:'${b.name}',type:'${b.type}',lng:${p.lng},lat:${p.lat},...},`:`  // ${b.name}: NOT PLACED`;
   });
-
-  const output = lines.join('\n');
-
-  // Copy to clipboard
-  navigator.clipboard.writeText(output).then(() => {
-    alert('✅ Coordinates copied to clipboard!\n\nSend them to the developer to update the map.');
-  }).catch(() => {
-    // Fallback: show in textarea
-    const ta = document.createElement('textarea');
-    ta.value = output;
-    ta.style.cssText = 'position:fixed;top:10%;left:5%;width:90%;height:80%;z-index:9999;font-family:monospace;font-size:11px;padding:12px;background:#1a1a1a;color:#fff;border:1px solid #444;border-radius:8px';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-    alert('Coordinates copied!');
+  const lmLines=LANDMARKS.map(lm=>{
+    const p=positions[lm.name];
+    return p?`  {name:'${lm.name}',icon:'${lm.icon}',cat:'${lm.cat}',lng:${p.lng},lat:${p.lat}},`:`  // ${lm.name}: NOT PLACED`;
+  });
+  const out='=== BARANGAYS ===\n'+brgyLines.join('\n')+'\n\n=== LANDMARKS ===\n'+lmLines.join('\n');
+  navigator.clipboard.writeText(out).then(()=>alert('✅ Copied! Paste to the developer.')).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=out;ta.style.cssText='position:fixed;top:5%;left:2%;width:96%;height:90%;z-index:9999;font-family:monospace;font-size:11px;padding:12px;background:#1a1a1a;color:#fff;border:2px solid #a03800;border-radius:8px';
+    document.body.appendChild(ta);ta.select();
+    const btn=document.createElement('button');
+    btn.textContent='Close';btn.style.cssText='position:fixed;top:5%;right:2%;z-index:10000;padding:8px 16px;background:#a03800;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700';
+    btn.onclick=()=>{ta.remove();btn.remove();};
+    document.body.appendChild(btn);
   });
 }
 </script>
