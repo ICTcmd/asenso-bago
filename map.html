@@ -151,7 +151,7 @@
 </div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow';
+mapboxgl.accessToken = window.MAPBOX_TOKEN || 'MAPBOX_TOKEN_PLACEHOLDER';
 
 // Offset map top by header height
 const hdrH = document.getElementById('hdr').offsetHeight;
