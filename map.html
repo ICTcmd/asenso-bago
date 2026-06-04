@@ -192,41 +192,15 @@ map.on('load', () => {
   // First: add colored fill for each named barangay area using a custom GeoJSON
   // with PRECISE coords from OSM that we fetch ONCE and cache
 
-  const CACHE_KEY = 'bago_brgy_v3';
-  const cached = sessionStorage.getItem(CACHE_KEY);
+  // ── USE MAPBOX'S OWN ADMIN BOUNDARY DATA ──
+  // mapbox-streets-v8 has 'admin' source with place boundaries
+  // We query the rendered features at the current viewport to get real polygons
+  // Then color them based on our barangay lookup
 
-  if (cached) {
-    renderLayers(JSON.parse(cached));
-  } else {
-    // Show a "fetching boundaries" indicator
-    document.getElementById('loader').style.display = 'flex';
-    document.getElementById('loader').style.opacity = '1';
-    document.getElementById('loader').querySelector('p').textContent = 'Fetching real boundaries...';
-
-    const q = '[out:json][timeout:90];area["name"="City of Bago"]["admin_level"="6"]->.b;(relation["boundary"="administrative"]["admin_level"="10"](area.b););out geom qt;';
-    fetch('https://overpass-api.de/api/interpreter', {
-      method:'POST',
-      body:'data='+encodeURIComponent(q),
-      signal: AbortSignal.timeout(25000)
-    })
-    .then(r=>r.json())
-    .then(d=>{
-      const features = osmToGeoJSON(d.elements);
-      if (features.length > 0) {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify(features));
-        renderLayers({type:'FeatureCollection', features});
-      } else {
-        renderLayers(fallbackGeoJSON());
-      }
-      document.getElementById('loader').classList.add('done');
-      setTimeout(()=>document.getElementById('loader').style.display='none',400);
-    })
-    .catch(()=>{
-      renderLayers(fallbackGeoJSON());
-      document.getElementById('loader').classList.add('done');
-      setTimeout(()=>document.getElementById('loader').style.display='none',400);
-    });
-  }
+  // Wait for the map to be fully rendered, then extract barangay features
+  map.once('idle', () => {
+    colorMapboxAdminBoundaries();
+  });
 
   // Add landmark markers
   MARKS.forEach(m=>{
@@ -240,52 +214,125 @@ map.on('load', () => {
   });
 });
 
-function osmToGeoJSON(elements) {
-  const features = [];
-  elements.forEach(el=>{
-    if (el.type!=='relation') return;
-    const name = el.tags && (el.tags['name:en'] || el.tags.name);
-    if (!name) return;
-    const b = INFO[name] || INFO[Object.keys(INFO).find(k=>k.toLowerCase()===name.toLowerCase())];
-    const color = b ? CLR[b.type]||CLR.r : CLR.r;
-    // Assemble outer rings
-    const outerWays = (el.members||[]).filter(m=>m.role==='outer'&&m.geometry);
-    outerWays.forEach(way=>{
-      const coords = way.geometry.map(p=>[p.lon,p.lat]);
-      if (coords.length < 3) return;
-      if (coords[0][0]!==coords[coords.length-1][0]||coords[0][1]!==coords[coords.length-1][1]) coords.push(coords[0]);
-      features.push({
-        type:'Feature',
-        id: name + '_' + features.length,
-        properties:{name, ...(b||{type:'r',dist:'',area:'',pop:'',fiesta:'',desc:name+' barangay.',spots:''}), fillColor:color},
-        geometry:{type:'Polygon',coordinates:[coords]}
-      });
-    });
-  });
-  return features;
+function colorMapboxAdminBoundaries() {
+  // Query all rendered features from the admin fill layers in Mapbox Streets
+  // These are the actual boundary polygons Mapbox uses to render admin areas
+  const adminLayers = map.getStyle().layers
+    .filter(l => l['source-layer'] === 'place_label' || l['source-layer'] === 'admin')
+    .map(l => l.id);
+
+  // Query features within Bago City bounds
+  const bbox = map.project([122.67, 10.29]);
+  const bbox2 = map.project([123.02, 10.64]);
+
+  // Use queryRenderedFeatures to get actual polygon shapes from Mapbox tiles
+  const features = map.queryRenderedFeatures(
+    [[Math.min(bbox.x,bbox2.x), Math.min(bbox.y,bbox2.y)],
+     [Math.max(bbox.x,bbox2.x), Math.max(bbox.y,bbox2.y)]],
+    { layers: adminLayers.length ? adminLayers : undefined }
+  );
+
+  // Filter to Philippines admin level 10 (barangay level)
+  const brgyFeatures = features.filter(f =>
+    f.properties && (
+      f.properties.admin_level === 10 ||
+      f.properties.admin_level === '10' ||
+      (f.properties.type === 'boundary' && f.properties.name)
+    )
+  );
+
+  if (brgyFeatures.length > 0) {
+    const geojson = {
+      type: 'FeatureCollection',
+      features: brgyFeatures.map((f, i) => {
+        const name = f.properties.name || f.properties.name_en || '';
+        const b = INFO[name] || INFO[Object.keys(INFO).find(k => k.toLowerCase() === name.toLowerCase())] || {type:'r'};
+        return {
+          ...f,
+          id: name + '_' + i,
+          properties: { ...f.properties, name, ...(INFO[name]||{type:'r',dist:'',area:'',pop:'',fiesta:'',desc:name+' barangay.',spots:''}), fillColor: CLR[b.type]||CLR.r }
+        };
+      })
+    };
+    renderLayers(geojson);
+  } else {
+    // Mapbox Streets v12 uses a different approach — style existing admin layers
+    styleExistingAdminLayers();
+  }
 }
 
-// Fallback: rough polygons if OSM unavailable
-function fallbackGeoJSON() {
-  // Center-point based circles as last resort
-  const pts = [
-    ['Abuanan',122.960,10.548],['Alianza',122.800,10.470],['Atipuluan',122.898,10.510],
-    ['Bacong-Montilla',122.985,10.568],['Bagroy',122.693,10.487],['Balingasag',122.760,10.545],
-    ['Binubuhan',122.930,10.430],['Busay',122.848,10.548],['Calumangan',122.735,10.590],
-    ['Caridad',122.788,10.492],['Don Jorge L. Araneta',122.800,10.470],['Dulao',122.900,10.585],
-    ['Ilijan',122.838,10.395],['Lag-Asan',122.838,10.468],['Ma-ao',122.892,10.462],
-    ['Mailum',122.908,10.395],['Malingin',122.862,10.520],['Napoles',122.788,10.530],
-    ['Pacol',122.738,10.508],['Poblacion',122.833,10.497],['Sagasa',122.700,10.462],
-    ['Sampinit',122.948,10.478],['Tabunan',122.875,10.600],['Taloc',122.798,10.598],
-  ];
-  const R = 0.022; // ~2.4km radius
-  const features = pts.map(([name,lng,lat])=>{
-    const b = INFO[name]||{type:'r',dist:'',area:'',pop:'',fiesta:'',desc:name+' barangay.',spots:''};
-    const coords = [];
-    for(let i=0;i<=32;i++){const a=i/32*Math.PI*2;coords.push([lng+R*1.4*Math.cos(a),lat+R*Math.sin(a)]);}
-    return {type:'Feature',id:name,properties:{name,...b,fillColor:CLR[b.type]||CLR.r},geometry:{type:'Polygon',coordinates:[coords]}};
+function styleExistingAdminLayers() {
+  // Get all layers in the style
+  const style = map.getStyle();
+  const layers = style.layers;
+
+  // Find any fill layers that cover admin areas
+  // In Mapbox Streets, barangay-level data may be in 'place_label' source
+  // We'll add our own source with the Mapbox Boundaries tileset
+
+  // Use Mapbox's built-in boundaries tileset (available to all Mapbox accounts)
+  map.addSource('boundaries', {
+    type: 'vector',
+    url: 'mapbox://mapbox.boundaries-adm4-v4', // ADM4 = barangay level in Philippines
   });
-  return {type:'FeatureCollection',features};
+
+  map.addLayer({
+    id: 'b-fill',
+    type: 'fill',
+    source: 'boundaries',
+    'source-layer': 'boundaries_admin_4',
+    filter: ['all',
+      ['==', ['get', 'iso_3166_1'], 'PH'],
+      ['>=', ['to-number', ['get', 'longitude']], 122.67],
+      ['<=', ['to-number', ['get', 'longitude']], 123.02],
+      ['>=', ['to-number', ['get', 'latitude']], 10.29],
+      ['<=', ['to-number', ['get', 'latitude']], 10.64],
+    ],
+    paint: {
+      'fill-color': [
+        'match', ['get', 'name'],
+        'Abuanan',    CLR.u, 'Atipuluan',  CLR.u, 'Balingasag', CLR.u,
+        'Caridad',    CLR.u, 'Don Jorge L. Araneta', CLR.u, 'Ma-ao', CLR.t,
+        'Poblacion',  CLR.t, 'Taloc',      CLR.u, 'Busay',      CLR.t,
+        'Mailum',     CLR.t, 'Ilijan',     CLR.t, 'Lag-Asan',   CLR.r,
+        CLR.r
+      ],
+      'fill-opacity': 0.35,
+    }
+  }, 'road-label');
+
+  map.addLayer({
+    id: 'b-line',
+    type: 'line',
+    source: 'boundaries',
+    'source-layer': 'boundaries_admin_4',
+    filter: ['all',
+      ['==', ['get', 'iso_3166_1'], 'PH'],
+      ['>=', ['to-number', ['get', 'longitude']], 122.67],
+      ['<=', ['to-number', ['get', 'longitude']], 123.02],
+    ],
+    paint: {
+      'line-color': '#a03800',
+      'line-width': 1.5,
+      'line-opacity': 0.8,
+    }
+  }, 'road-label');
+
+  map.on('click', 'b-fill', e => {
+    const name = e.features[0].properties.name || '';
+    const b = INFO[name] || {type:'r', desc: name + ' barangay.', dist:'', pop:'', area:'', fiesta:'', spots:''};
+    showInfo({name, ...b});
+  });
+  map.on('mousemove', 'b-fill', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'b-fill', () => map.getCanvas().style.cursor = '');
+}
+
+function osmToGeoJSON(elements) {
+  return [];
+}
+
+function fallbackGeoJSON() {
+  return {type:'FeatureCollection',features:[]};
 }
 
 function renderLayers(geojson) {
