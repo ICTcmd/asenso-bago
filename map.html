@@ -3,464 +3,610 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Bago City Map</title>
+<title>Bago City Interactive Map</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#111;min-height:100vh;overflow-x:hidden}
-.hdr{background:linear-gradient(135deg,#6b2200,#a03800);padding:max(16px,env(safe-area-inset-top)) 16px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
-.bk{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0}
-.hi{flex:1}.hi h1{font-size:16px;font-weight:800;color:#fff}.hi p{font-size:11px;color:rgba(255,255,255,.65)}
-.hdr img{width:36px;height:36px;border-radius:50%}
-.legbar{display:flex;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#1a1a1a;border-bottom:1px solid #2a2a2a;font-size:11px;font-weight:600}
-.leg{display:flex;align-items:center;gap:5px;color:#ccc}
-.ld{width:12px;height:12px;border-radius:3px}
-.mw{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#1a2a40}
-.mw svg{display:block;width:100%;height:auto;min-width:360px}
-/* 3D polygon styles */
-.bg{cursor:pointer}
-.bt{
-  transition:filter .22s ease, transform .22s ease;
-  transform-box:fill-box;
-  transform-origin:center;
-  filter:drop-shadow(3px 5px 6px rgba(0,0,0,0.5));
-}
-.bg:hover .bt{
-  filter:brightness(1.6) saturate(1.5) drop-shadow(0 0 14px rgba(255,240,180,0.8)) drop-shadow(3px 5px 6px rgba(0,0,0,0.4));
-  transform:translate(-4px,-4px);
-}
-.bl{
-  font-size:8px;font-weight:800;fill:#fff;text-anchor:middle;dominant-baseline:middle;
-  paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round;
-  pointer-events:none;letter-spacing:0.4px;
-}
-.lp{cursor:pointer;transition:transform .2s ease;transform-box:fill-box;transform-origin:center}
-.lp:hover{transform:scale(1.45) translateY(-3px)}
-/* Map labels */
-.sea-lbl{font-size:12px;font-weight:800;fill:#5dade2;opacity:.55;font-style:italic;letter-spacing:1px}
-.bdr-lbl{font-size:9px;font-weight:700;fill:rgba(255,255,255,0.2);text-anchor:middle;letter-spacing:0.8px}
-.river{fill:none;stroke:#5dade2;stroke-width:3;opacity:.45;stroke-linecap:round}
-.land{fill:#1e3a28;stroke:#1e4d30;stroke-width:2}
-/* Panel */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:199;display:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.ov.on{display:block}
-.pn{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#1c1c1e;border-radius:24px 24px 0 0;padding:20px 20px 40px;box-shadow:0 -8px 48px rgba(0,0,0,.85);z-index:200;display:none;border-top:3px solid #a03800}
-.pn.on{display:block;animation:sup .32s cubic-bezier(.2,.8,.3,1)}
-@keyframes sup{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
-.ph{width:38px;height:4px;background:#3a3a3c;border-radius:2px;margin:0 auto 18px}
-.pc{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;background:#2c2c2e;border:none;color:#aaa;font-size:20px;cursor:pointer;line-height:32px;text-align:center}
-#pname{font-size:21px;font-weight:900;color:#fff;margin-bottom:5px;line-height:1.2}
-#ptype{display:inline-block;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:12px}
-#pdesc{font-size:13px;color:#999;line-height:1.65;margin-bottom:10px}
-.pr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.fp{background:#1a3050;color:#74b9ff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px}
-.sp{background:#3d1500;color:#fdcb6e;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px}
-.gm{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:14px;background:linear-gradient(135deg,#0369a1,#0ea5e9);color:#fff;border-radius:12px;font-size:13px;font-weight:700;text-decoration:none}
-.bot{display:block;margin:12px 14px 32px;padding:15px;background:linear-gradient(135deg,#6b2200,#a03800);color:#fff;text-align:center;border-radius:14px;font-weight:700;font-size:14px;text-decoration:none}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; overflow: hidden; height: 100vh; }
+
+  /* Header */
+  .hdr {
+    background: linear-gradient(135deg, #6b2200, #a03800);
+    padding: max(16px, env(safe-area-inset-top)) 16px 14px;
+    display: flex; align-items: center; gap: 12px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,.5);
+  }
+  .bk {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.15); border: none;
+    color: #fff; font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .hi { flex: 1; }
+  .hi h1 { font-size: 16px; font-weight: 800; color: #fff; }
+  .hi p  { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 1px; }
+  .hdr img { width: 36px; height: 36px; border-radius: 50%; }
+
+  /* Map */
+  #map {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* will be pushed down by header height via JS */
+  }
+
+  /* Mapbox overrides */
+  .mapboxgl-ctrl-bottom-right { bottom: 90px; }
+  .mapboxgl-ctrl-attrib { font-size: 9px; }
+
+  /* Legend */
+  .legend {
+    position: fixed;
+    bottom: 100px; left: 12px;
+    background: rgba(20,20,20,0.88);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 10px 14px;
+    z-index: 50;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .legend-title { font-size: 10px; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px; }
+  .leg { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; font-size: 11px; font-weight: 600; color: #ddd; }
+  .leg:last-child { margin-bottom: 0; }
+  .ld { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+
+  /* Info Panel */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 199; display: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .overlay.on { display: block; }
+
+  .panel {
+    position: fixed; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 520px;
+    background: #1c1c1e;
+    border-radius: 24px 24px 0 0;
+    padding: 20px 20px 40px;
+    box-shadow: 0 -8px 48px rgba(0,0,0,.8);
+    z-index: 200; display: none;
+    border-top: 3px solid #a03800;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .panel.on {
+    display: block;
+    animation: slideup .32s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes slideup {
+    from { transform: translateX(-50%) translateY(100%); }
+    to   { transform: translateX(-50%) translateY(0); }
+  }
+  .panel-handle {
+    width: 38px; height: 4px;
+    background: #3a3a3c; border-radius: 2px;
+    margin: 0 auto 18px;
+  }
+  .panel-close {
+    position: absolute; top: 18px; right: 18px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #2c2c2e; border: none;
+    color: #aaa; font-size: 20px; cursor: pointer;
+    line-height: 30px; text-align: center;
+  }
+  #pname { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 5px; line-height: 1.2; }
+  #ptype {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    padding: 4px 13px; border-radius: 20px; margin-bottom: 13px;
+  }
+  #pdesc { font-size: 13px; color: #999; line-height: 1.65; margin-bottom: 12px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .fp { background: #1a3050; color: #74b9ff; font-size: 10px; font-weight: 700; padding: 5px 11px; border-radius: 20px; }
+  .sp { background: #3d1500; color: #fdcb6e; font-size: 10px; font-weight: 700; padding: 5px 11px; border-radius: 20px; }
+  .gm-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 14px; padding: 14px;
+    background: linear-gradient(135deg, #0369a1, #0ea5e9);
+    color: #fff; border-radius: 12px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+  }
 </style>
 </head>
 <body>
-<div class="hdr">
+
+<div id="map"></div>
+
+<div class="hdr" id="hdr">
   <a href="javascript:history.back()" class="bk">&#8592;</a>
-  <div class="hi"><h1>Bago City Interactive Map</h1><p>Tap any barangay for details</p></div>
+  <div class="hi">
+    <h1>Bago City Interactive Map</h1>
+    <p>Tap any barangay for details</p>
+  </div>
   <img src="assets/images/bago-city-logo.png" alt="Bago City">
 </div>
-<div class="legbar">
-  <div class="leg"><div class="ld" style="background:#c0392b"></div>Urban (8)</div>
-  <div class="leg"><div class="ld" style="background:#27ae60"></div>Rural (16)</div>
-  <div class="leg"><div class="ld" style="background:#e67e22"></div>Tourist Spot</div>
-  <div class="leg"><div class="ld" style="background:#e74c3c;border-radius:50%"></div>Landmark</div>
-</div>
-<div class="mw">
-<svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <linearGradient id="seaG" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#0a2744"/>
-    <stop offset="100%" stop-color="#0d3b6e"/>
-  </linearGradient>
-  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-    <feGaussianBlur stdDeviation="5" result="b"/>
-    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-</defs>
 
-<!-- Ocean -->
-<rect width="960" height="720" fill="url(#seaG)"/>
-
-<!-- City land boundary -->
-<polygon class="land"
-  points="18,38 938,38 962,200 945,420 920,575 865,650 780,700 640,720 470,725 310,715 195,688 120,648 68,590 38,510 18,400 15,260 18,130"/>
-
-<!-- Bago River (flows NE to SW, west side) -->
-<path class="river" d="M 590,28 Q 570,90 550,148 Q 525,210 495,262 Q 460,318 420,360 Q 378,400 335,428 Q 290,456 248,470 Q 208,482 168,496 Q 138,510 112,530"/>
-
-<!-- Border labels -->
-<text x="480" y="20" class="bdr-lbl">── CITY OF BACOLOD ──</text>
-<text x="870" y="55" class="bdr-lbl" transform="rotate(12,870,55)">MUNICIPALITY OF MURCIA</text>
-<text x="220" y="700" class="bdr-lbl">CITY OF LA CARLOTA</text>
-<text x="680" y="715" class="bdr-lbl">CITY OF SAN CARLOS</text>
-<text x="18" y="480" class="bdr-lbl" transform="rotate(-90,18,480)">MUNICIPALITY OF PULUPANDAN</text>
-
-<!-- Sea label -->
-<text x="8" y="360" class="sea-lbl" transform="rotate(-90,8,360)">GUIMARAS STRAIT</text>
-
-
-<!-- Calumangan -->
-<defs><linearGradient id="gCalumangan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#f39c12" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#b7770d" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Calumangan','Rural','A rural barangay in the northwest of Bago City, known for rice mills and agricultural land.','📊 6.40 km from city • 1,007 ha • Pop. 7,979','')">
-  <polygon points="62,42 205,35 213,43 70,50" fill="#b7770d" opacity="0.95" stroke="none"/><polygon points="65,180 42,120 50,128 73,188" fill="#b7770d" opacity="0.95" stroke="none"/><polygon points="42,120 62,42 70,50 50,128" fill="#b7770d" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="62,42 205,35 225,115 210,170 130,195 65,180 42,120" fill="url(#gCalumangan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="134" y="122" class="bl">Calumangan</text>
-</g>
-
-<!-- Taloc -->
-<defs><linearGradient id="gTaloc" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#c0392b" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7b241c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Taloc','Urban','An urban barangay in the northern part of Bago City with schools and local commerce.','📊 Urban barangay • Borders Bacolod City','')">
-  <polygon points="205,35 325,32 333,40 213,43" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="225,155 210,115 218,123 233,163" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="210,115 205,35 213,43 218,123" fill="#7b241c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="205,35 325,32 345,105 320,160 225,155 210,115" fill="url(#gTaloc)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="272" y="100" class="bl">Taloc</text>
-</g>
-
-<!-- Tabunan -->
-<defs><linearGradient id="gTabunan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#27ae60" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#1a6b3c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Tabunan','Rural','A rural barangay in the north, known for mangrove forests and rice fields.','📊 Borders Bacolod City to the north','')">
-  <polygon points="325,32 450,28 458,36 333,40" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="345,145 320,105 328,113 353,153" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="320,105 325,32 333,40 328,113" fill="#1a6b3c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="325,32 450,28 470,95 450,150 345,145 320,105" fill="url(#gTabunan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="393" y="93" class="bl">Tabunan</text>
-</g>
-
-<!-- Dulao -->
-<defs><linearGradient id="gDulao" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#8e44ad" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#6c3483" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Dulao','Rural','A rural barangay traversed by Bago River tributaries with fertile agricultural land.','📊 17.8 km from city • 2,439 ha • Pop. 10,111','')">
-  <polygon points="450,28 590,25 598,33 458,36" fill="#6c3483" opacity="0.95" stroke="none"/><polygon points="470,148 450,95 458,103 478,156" fill="#6c3483" opacity="0.95" stroke="none"/><polygon points="450,95 450,28 458,36 458,103" fill="#6c3483" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="450,28 590,25 620,90 600,148 470,148 450,95" fill="url(#gDulao)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="530" y="89" class="bl">Dulao</text>
-</g>
-
-<!-- Abuanan -->
-<defs><linearGradient id="gAbuanan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#c0392b" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7b241c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Abuanan','Urban','An urban barangay in the northeast, known for its quarries and rice mills.','📊 25 km from city • 1,040 ha • Pop. 5,700','')">
-  <polygon points="590,25 730,28 738,36 598,33" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="620,158 600,90 608,98 628,166" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="600,90 590,25 598,33 608,98" fill="#7b241c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="590,25 730,28 762,100 738,162 620,158 600,90" fill="url(#gAbuanan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="673" y="94" class="bl">Abuanan</text>
-</g>
-
-<!-- Bacong-Montilla -->
-<defs><linearGradient id="gBacongMontilla" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#922b21" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Bacong-Montilla','Rural','The largest barangay in Bago City by land area, bordering Murcia with vast agricultural and forest lands.','📊 Largest area: 4,827 ha • 29.50 km • Pop. 7,844','')">
-  <polygon points="730,28 900,32 908,40 738,36" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="762,215 738,162 746,170 770,223" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="738,162 730,28 738,36 746,170" fill="#922b21" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="730,28 900,32 935,160 910,238 762,215 738,162" fill="url(#gBacongMontilla)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="829" y="139" class="bl">Bacong-Montilla</text>
-</g>
-
-<!-- Balingasag -->
-<defs><linearGradient id="gBalingasag" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#c0392b" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7b241c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Balingasag','Urban','An urban barangay with commercial establishments, bordering Calumangan, Napoles and Busay.','📊 1.25 km from city • 436 ha • Pop. 4,498','')">
-  <polygon points="42,180 130,195 138,203 50,188" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="48,305 30,245 38,253 56,313" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="30,245 42,180 50,188 38,253" fill="#7b241c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="42,180 130,195 145,260 120,310 48,305 30,245" fill="url(#gBalingasag)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="86" y="249" class="bl">Balingasag</text>
-</g>
-
-<!-- Napoles -->
-<defs><linearGradient id="gNapoles" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#16a085" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#0e6655" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Napoles','Rural','A rural barangay known for rice mills, rice fields and the Napoles Elementary School.','📊 9.26 km from city • 1,279 ha • Pop. 6,564','')">
-  <polygon points="130,195 210,170 218,178 138,203" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="210,170 225,155 233,163 218,178" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="225,155 250,175 258,183 233,163" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="145,280 128,245 136,253 153,288" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="128,245 130,195 138,203 136,253" fill="#0e6655" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="130,195 210,170 225,155 250,175 265,240 245,285 145,280 128,245" fill="url(#gNapoles)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="200" y="218" class="bl">Napoles</text>
-</g>
-
-<!-- Busay -->
-<defs><linearGradient id="gBusay" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e67e22" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#a04000" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Busay','Rural','A large rural barangay stretching from lowlands to upland areas with scenic mountain views.','📊 7.26 km from city • 1,463 ha • Pop. 6,896','⭐ Near Buenos Aires Mountain Resort')">
-  <polygon points="250,155 345,145 353,153 258,163" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="345,145 450,150 458,158 353,153" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="265,240 250,205 258,213 273,248" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="250,205 250,155 258,163 258,213" fill="#a04000" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="250,155 345,145 450,150 470,215 445,275 360,290 310,265 265,240 250,205" fill="url(#gBusay)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="349" y="216" class="bl">Busay</text>
-</g>
-
-<!-- Malingin -->
-<defs><linearGradient id="gMalingin" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#2980b9" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#1f618d" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Malingin','Rural','A rural barangay in the central area known for rice mills, quarry sites and farming communities.','📊 12.20 km from city • 1,495 ha • Pop. 6,649','')">
-  <polygon points="450,150 600,148 608,156 458,158" fill="#1f618d" opacity="0.95" stroke="none"/><polygon points="445,275 470,215 478,223 453,283" fill="#1f618d" opacity="0.95" stroke="none"/><polygon points="470,215 450,150 458,158 478,223" fill="#1f618d" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="450,150 600,148 620,195 600,268 500,278 445,275 470,215" fill="url(#gMalingin)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="526" y="218" class="bl">Malingin</text>
-</g>
-
-<!-- Atipuluan -->
-<defs><linearGradient id="gAtipuluan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#c0392b" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7b241c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Atipuluan','Urban','An urban barangay along the main highway — key commercial and residential area.','📊 17.46 km from city • 562 ha • Pop. 4,269','')">
-  <polygon points="600,148 738,162 746,170 608,156" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="600,268 620,195 628,203 608,276" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="620,195 600,148 608,156 628,203" fill="#7b241c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="600,148 738,162 762,215 740,278 660,292 600,268 620,195" fill="url(#gAtipuluan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="674" y="223" class="bl">Atipuluan</text>
-</g>
-
-<!-- Sampinit -->
-<defs><linearGradient id="gSampinit" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#1abc9c" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#17a589" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Sampinit','Rural','A rural barangay east of the city center, bordering Mt. Kanlaon Natural Park.','📊 11 km from city • 553 ha • Pop. 6,856','')">
-  <polygon points="738,162 910,238 918,246 746,170" fill="#17a589" opacity="0.95" stroke="none"/><polygon points="762,378 740,278 748,286 770,386" fill="#17a589" opacity="0.95" stroke="none"/><polygon points="740,278 738,162 746,170 748,286" fill="#17a589" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="738,162 910,238 935,330 908,400 840,415 762,378 740,278" fill="url(#gSampinit)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="833" y="314" class="bl">Sampinit</text>
-</g>
-
-<!-- Pacol -->
-<defs><linearGradient id="gPacol" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#27ae60" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#1a6b3c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Pacol','Rural','A rural barangay near the city center with rice fields and the Pacol Elementary School.','📊 7.20 km from city • Pop. 3,999','')">
-  <polygon points="30,305 120,310 128,318 38,313" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="38,415 22,362 30,370 46,423" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="22,362 30,305 38,313 30,370" fill="#1a6b3c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="30,305 120,310 138,372 115,420 38,415 22,362" fill="url(#gPacol)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="77" y="364" class="bl">Pacol</text>
-</g>
-
-<!-- Caridad -->
-<defs><linearGradient id="gCaridad" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#c0392b" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7b241c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Caridad','Urban','An urban barangay forming part of the Bago City urban core with schools and churches.','📊 12 km from city • Pop. 4,901','')">
-  <polygon points="120,310 145,280 153,288 128,318" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="145,280 245,285 253,293 153,288" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="138,398 118,368 126,376 146,406" fill="#7b241c" opacity="0.95" stroke="none"/><polygon points="118,368 120,310 128,318 126,376" fill="#7b241c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="120,310 145,280 245,285 262,358 238,405 138,398 118,368" fill="url(#gCaridad)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="181" y="343" class="bl">Caridad</text>
-</g>
-
-<!-- Poblacion -->
-<defs><linearGradient id="gPoblacion" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#f39c12" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#b7770d" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Poblacion','Rural','The main downtown barangay — seat of local government. Smallest land area (311 ha). Home to City Hall, the Cathedral, and key heritage landmarks.','📊 City center • Smallest area: 311 ha • Pop. 11,794','⭐ Bantayan Park (1898 Revolution site)|⭐ Balay ni Tan Juan|⭐ Bago City Cathedral|⭐ Javellana Mansion|⭐ Bago City Hall')">
-  <polygon points="265,240 360,230 368,238 273,248" fill="#b7770d" opacity="0.95" stroke="none"/><polygon points="360,230 445,248 453,256 368,238" fill="#b7770d" opacity="0.95" stroke="none"/><polygon points="265,340 265,240 273,248 273,348" fill="#b7770d" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="265,240 360,230 445,248 465,315 442,372 375,390 310,375 265,340" fill="url(#gPoblacion)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="366" y="314" class="bl">Poblacion</text>
-</g>
-
-<!-- Lag-Asan -->
-<defs><linearGradient id="gLagAsan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#9b59b6" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#7d3c98" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Lag-Asan','Rural','A rural barangay south of Poblacion, known for its health center and the Hundred Hills Nature Resort.','📊 1.60 km from city • 456 ha • Pop. 11,794','⭐ Hundred Hills Nature Resort')">
-  <polygon points="360,230 500,220 508,228 368,238" fill="#7d3c98" opacity="0.95" stroke="none"/><polygon points="500,220 600,240 608,248 508,228" fill="#7d3c98" opacity="0.95" stroke="none"/><polygon points="442,372 445,315 453,323 450,380" fill="#7d3c98" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="360,230 500,220 600,240 620,310 600,368 500,388 442,372 445,315" fill="url(#gLagAsan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="508" y="305" class="bl">Lag-Asan</text>
-</g>
-
-<!-- Don Jorge L. Araneta -->
-<defs><linearGradient id="gDonJorgeLAraneta" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#922b21" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Don Jorge L. Araneta','Urban','Named after Gen. Juan A. Araneta who led the bloodless revolution of November 5, 1898.','📊 16.90 km from city • 2,143 ha • Pop. 9,457','⭐ Araneta Family Heritage Site')">
-  <polygon points="238,405 310,375 318,383 246,413" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="310,375 375,390 383,398 318,383" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="235,498 220,455 228,463 243,506" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="220,455 238,405 246,413 228,463" fill="#922b21" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="238,405 310,375 375,390 380,465 345,510 235,498 220,455" fill="url(#gDonJorgeLAraneta)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="300" y="438.25" class="bl">Don Jorge</text><text x="300" y="447.75" class="bl">L. Araneta</text>
-</g>
-
-<!-- Ma-ao -->
-<defs><linearGradient id="gMaao" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e67e22" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#a04000" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Ma-ao','Rural','Most populated barangay (14,916 residents). Home to the historic Ma-ao Sugar Central.','📊 Most populated: 14,916 • 21.70 km • 5,998 ha','⭐ Ma-ao Sugar Central (Heritage site)|⭐ MSC Ruins (Lacson Mansion)')">
-  <polygon points="600,268 740,278 748,286 608,276" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="500,440 500,388 508,396 508,448" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="500,388 600,368 608,376 508,396" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="600,368 600,268 608,276 608,376" fill="#a04000" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="600,268 740,278 762,378 740,450 660,475 565,465 500,440 500,388 600,368" fill="url(#gMaao)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="630" y="390" class="bl">Ma-ao</text>
-</g>
-
-<!-- Binubuhan -->
-<defs><linearGradient id="gBinubuhan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#8e44ad" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#6c3483" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Binubuhan','Rural','A rural barangay in Cluster 8 with Ma-ao and Mailum. Known for rice production.','📊 29.50 km from city • 2,352 ha • Pop. 5,581','')">
-  <polygon points="762,378 840,415 848,423 770,386" fill="#6c3483" opacity="0.95" stroke="none"/><polygon points="840,415 908,400 916,408 848,423" fill="#6c3483" opacity="0.95" stroke="none"/><polygon points="762,540 740,450 748,458 770,548" fill="#6c3483" opacity="0.95" stroke="none"/><polygon points="740,450 762,378 770,386 748,458" fill="#6c3483" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="762,378 840,415 908,400 935,490 905,560 840,575 762,540 740,450" fill="url(#gBinubuhan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="837" y="476" class="bl">Binubuhan</text>
-</g>
-
-<!-- Bagroy -->
-<defs><linearGradient id="gBagroy" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#27ae60" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#1a6b3c" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Bagroy','Rural','Smallest population in Bago City (1,694). A coastal barangay along the Guimaras Strait.','📊 Smallest population: 1,694 • 399 ha • Coastal','')">
-  <polygon points="22,415 115,420 123,428 30,423" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="28,520 15,468 23,476 36,528" fill="#1a6b3c" opacity="0.95" stroke="none"/><polygon points="15,468 22,415 30,423 23,476" fill="#1a6b3c" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="22,415 115,420 125,482 98,525 28,520 15,468" fill="url(#gBagroy)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="67" y="472" class="bl">Bagroy</text>
-</g>
-
-<!-- Sagasa -->
-<defs><linearGradient id="gSagasa" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#16a085" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#0e6655" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Sagasa','Rural','A coastal rural barangay along the Guimaras Strait, known for fishing and mangrove forests.','📊 Coastal barangay • Borders Pulupandan','')">
-  <polygon points="125,482 235,498 243,506 133,490" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="98,590 95,528 103,536 106,598" fill="#0e6655" opacity="0.95" stroke="none"/><polygon points="95,528 125,482 133,490 103,536" fill="#0e6655" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="125,482 235,498 248,568 215,608 145,618 98,590 95,528" fill="url(#gSagasa)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="166" y="556" class="bl">Sagasa</text>
-</g>
-
-<!-- Alianza -->
-<defs><linearGradient id="gAlianza" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#2ecc71" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#1e8449" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Alianza','Rural','A rural barangay known for agricultural lands and rice production.','📊 15 km from city • 365 ha • Pop. 3,211','')">
-  <polygon points="345,510 380,465 388,473 353,518" fill="#1e8449" opacity="0.95" stroke="none"/><polygon points="380,465 500,440 508,448 388,473" fill="#1e8449" opacity="0.95" stroke="none"/><polygon points="350,560 345,510 353,518 358,568" fill="#1e8449" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="345,510 380,465 500,440 515,518 488,575 398,588 350,560" fill="url(#gAlianza)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="425" y="522" class="bl">Alianza</text>
-</g>
-
-<!-- Mailum -->
-<defs><linearGradient id="gMailum" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e67e22" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#a04000" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Mailum','Rural','Prime ecotourism destination at the foot of Kanlaon Volcano with Kipot Twin Falls and Pataan Mountain Resort.','📊 29.46 km from city • 3,200 ha • Pop. 8,844','⭐ Kipot Twin Falls (220 steps to twin cascades)|⭐ Pataan Mountain Resort')">
-  <polygon points="565,465 660,475 668,483 573,473" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="660,475 740,450 748,458 668,483" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="565,625 515,555 523,563 573,633" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="515,555 515,518 523,526 523,563" fill="#a04000" opacity="0.95" stroke="none"/><polygon points="515,518 565,465 573,473 523,526" fill="#a04000" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="565,465 660,475 740,450 762,540 740,615 660,638 565,625 515,555 515,518" fill="url(#gMailum)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="636" y="542" class="bl">Mailum</text>
-</g>
-
-<!-- Ilijan -->
-<defs><linearGradient id="gIlijan" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="#922b21" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Ilijan','Rural','Farthest barangay (36.99 km). Coastal barangay where President Quezon stayed in 1942 during WWII.','📊 Farthest barangay: 36.99 km • 1,489 ha • Pop. 5,581','⭐ WWII Historical Site (President Quezon 1942)|⭐ Coastal ecotourism')">
-  <polygon points="248,568 350,560 358,568 256,576" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="350,560 398,588 406,596 358,568" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="252,665 215,625 223,633 260,673" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="215,625 215,608 223,616 223,633" fill="#922b21" opacity="0.95" stroke="none"/><polygon points="215,608 248,568 256,576 223,616" fill="#922b21" opacity="0.95" stroke="none"/>
-  <polygon class="bt" points="248,568 350,560 398,588 408,650 348,678 252,665 215,625 215,608" fill="url(#gIlijan)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  <text x="304" y="618" class="bl">Ilijan</text>
-</g>
-
-<!-- Mt Kanlaon -->
-<defs><linearGradient id="mtG" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0%" stop-color="#d7ccc8"/>
-  <stop offset="45%" stop-color="#8d6e63"/>
-  <stop offset="100%" stop-color="#4e342e"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Mt. Kanlaon Natural Park','Landmark','Active stratovolcano — highest peak in Visayas at 2,465m. Mt. Kanlaon Natural Park covers 3,651 ha within Bago City territory.','📊 Highest in Visayas: 2,465m • 3,651 ha in Bago City','⭐ Mt. Kanlaon Natural Park|⭐ Mountaineering & hiking')">
-  <polygon points="908,406 945,398 960,460 948,540 910,560 885,490 890,428" fill="#3e2723" stroke="#2a1a16" stroke-width="1.5"/>
-  <polygon class="bt" points="900,398 937,390 952,452 940,532 902,552 877,482 882,420" fill="url(#mtG)" stroke="#5d4037" stroke-width="1.5"/>
-  <text x="912" y="478" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" paint-order="stroke" stroke="#000" stroke-width="3px" pointer-events="none">MT. KANLAON</text>
-  <text x="912" y="490" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.75)" paint-order="stroke" stroke="#000" stroke-width="2px" pointer-events="none">NATURAL PARK ▲ 2,465m</text>
-</g>
-
-<g class="lp" onclick="showInfo('City Hall & Bantayan Park','Landmark','Bago City Hall and historic Bantayan Park — site of the November 5, 1898 revolution by Gen. Juan Araneta.','','⭐ Al Cinco de Noviembre celebration site')">
-  <circle cx="405" cy="315" r="11" fill="#e74c3c" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="405" y="319" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">★</text>
-</g>
-<g class="lp" onclick="showInfo('Bago City Cathedral','Landmark','Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City.','','⭐ Religious heritage landmark')">
-  <circle cx="378" cy="330" r="11" fill="#9b59b6" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="378" y="334" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">✝</text>
-</g>
-<g class="lp" onclick="showInfo('Javellana Mansion (Balay Daku)','Landmark','Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect. One of Bago Citys most prized heritage landmarks.','','⭐ Heritage ancestral house tour')">
-  <circle cx="355" cy="348" r="11" fill="#8e44ad" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="355" y="352" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">⌂</text>
-</g>
-<g class="lp" onclick="showInfo('Ma-ao Sugar Central','Landmark','Historic sugar mill — Ma-ao Sugar Central (MSC). Heritage industrial landmark in the most populated barangay.','','⭐ MSC Ruins|⭐ Lacson Mansion ruins')">
-  <circle cx="665" cy="370" r="11" fill="#e67e22" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="665" y="374" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">⚙</text>
-</g>
-<g class="lp" onclick="showInfo('Kipot Twin Falls','Landmark','Stunning twin waterfalls in Brgy. Mailum. Reached via 220 steps. Cold refreshing water — perfect for family trips.','','⭐ Nature ecotourism destination')">
-  <circle cx="600" cy="530" r="11" fill="#3498db" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="600" y="534" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">★</text>
-</g>
-<g class="lp" onclick="showInfo('Buenos Aires Mountain Resort','Landmark','Scenic mountain resort in Brgy. Busay with breathtaking views of Bago City and surrounding landscape.','','⭐ Mountain resort & hiking')">
-  <circle cx="510" cy="248" r="11" fill="#27ae60" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="510" y="252" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">⛰</text>
-</g>
-<g class="lp" onclick="showInfo('Rafael Salas Park','Landmark','Named after Rafael Salas, UN Under-Secretary General from Bago City. A nature center and green sanctuary.','','⭐ Nature park & sanctuary')">
-  <circle cx="430" cy="340" r="11" fill="#16a085" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="430" y="344" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">🌿</text>
-</g>
-
-<!-- Compass -->
-<g transform="translate(918,62)">
-  <circle r="26" fill="rgba(0,0,0,0.65)" stroke="#444" stroke-width="1.5"/>
-  <polygon points="0,-20 5,0 0,-5 -5,0" fill="#e74c3c"/>
-  <polygon points="0,20 5,0 0,5 -5,0" fill="#666"/>
-  <polygon points="-20,0 0,5 -5,0 0,-5" fill="#666"/>
-  <polygon points="20,0 0,5 5,0 0,-5" fill="#666"/>
-  <text y="-21" text-anchor="middle" font-size="12" font-weight="900" fill="#e74c3c" dominant-baseline="auto">N</text>
-  <text y="30" text-anchor="middle" font-size="9" fill="#999" dominant-baseline="auto">S</text>
-  <text x="-24" y="4" text-anchor="middle" font-size="9" fill="#999">W</text>
-  <text x="24" y="4" text-anchor="middle" font-size="9" fill="#999">E</text>
-</g>
-
-<!-- Watermark -->
-<text x="480" y="688" text-anchor="middle" font-size="16" font-weight="900" fill="rgba(255,220,130,0.18)" letter-spacing="4">CITY OF BAGO</text>
-<text x="480" y="704" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.12)" letter-spacing="2">NEGROS OCCIDENTAL, PHILIPPINES</text>
-</svg>
+<div class="legend">
+  <div class="legend-title">Legend</div>
+  <div class="leg"><div class="ld" style="background:#e74c3c;opacity:0.85"></div>Urban Barangay</div>
+  <div class="leg"><div class="ld" style="background:#27ae60;opacity:0.85"></div>Rural Barangay</div>
+  <div class="leg"><div class="ld" style="background:#f39c12;opacity:0.85"></div>Has Tourist Spot</div>
 </div>
 
-<a class="bot" href="https://maps.google.com/?q=Bago+City+Negros+Occidental+Philippines" target="_blank" rel="noopener">📍 Explore on Google Maps</a>
-
-<div class="ov" id="ov" onclick="hide()"></div>
-<div class="pn" id="pn">
-  <button class="pc" onclick="hide()">&#215;</button>
-  <div class="ph"></div>
+<div class="overlay" id="overlay" onclick="hidePanel()"></div>
+<div class="panel" id="panel">
+  <button class="panel-close" onclick="hidePanel()">&#215;</button>
+  <div class="panel-handle"></div>
   <div id="pname"></div>
   <span id="ptype"></span>
   <p id="pdesc"></p>
-  <div class="pr" id="pfacts"></div>
-  <div class="pr" id="pspots"></div>
-  <a class="gm" id="pgm" href="#" target="_blank" rel="noopener">📍 View on Google Maps</a>
+  <div class="pill-row" id="pfacts"></div>
+  <div class="pill-row" id="pspots"></div>
+  <a class="gm-btn" id="pgm" href="#" target="_blank" rel="noopener">📍 View on Google Maps</a>
 </div>
 
 <script>
-function showInfo(name,type,desc,facts,spots){
-  document.getElementById('pname').textContent=name;
-  var t=document.getElementById('ptype');
-  var u=type==='Urban',r=type==='Rural';
-  t.textContent=u?'🏙️ Urban Barangay':r?'🌿 Rural Barangay':'📍 '+type;
-  t.style.background=u?'rgba(192,57,43,0.2)':r?'rgba(39,174,96,0.2)':'rgba(230,126,34,0.2)';
-  t.style.color=u?'#ff7675':r?'#55efc4':'#fdcb6e';
-  document.getElementById('pdesc').textContent=desc;
-  document.getElementById('pfacts').innerHTML=facts?facts.split('|').map(f=>'<span class="fp">'+f+'</span>').join(''):'';
-  document.getElementById('pspots').innerHTML=spots?spots.split('|').map(s=>'<span class="sp">'+s+'</span>').join(''):'';
-  document.getElementById('pgm').href='https://maps.google.com/?q='+encodeURIComponent(name+' Bago City Negros Occidental Philippines');
-  document.getElementById('pn').classList.add('on');
-  document.getElementById('ov').classList.add('on');
+mapboxgl.accessToken = 'pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow';
+
+// Offset map top by header height
+const hdrH = document.getElementById('hdr').offsetHeight;
+document.getElementById('map').style.top = hdrH + 'px';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/streets-v12',
+  center: [122.838, 10.535],
+  zoom: 11.5,
+  minZoom: 10,
+  maxZoom: 16,
+  attributionControl: true
+});
+
+// Bago City boundary (approximate outer boundary)
+const bagoBoundary = {
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Polygon',
+    coordinates: [[
+      [122.690,10.620],[122.750,10.625],[122.820,10.622],[122.880,10.618],
+      [122.940,10.612],[122.980,10.600],[123.000,10.575],[122.998,10.540],
+      [122.990,10.500],[122.975,10.455],[122.960,10.415],[122.940,10.380],
+      [122.910,10.350],[122.880,10.325],[122.850,10.310],[122.820,10.308],
+      [122.790,10.312],[122.760,10.325],[122.730,10.345],[122.705,10.370],
+      [122.688,10.400],[122.678,10.435],[122.672,10.470],[122.673,10.510],
+      [122.678,10.550],[122.683,10.585],[122.690,10.620]
+    ]]
+  }
+};
+
+// Barangay data with approximate GeoJSON polygons
+// Coordinates derived from real map layout (Google Maps + official map photos)
+const barangays = [
+  {
+    name: 'Calumangan', type: 'r',
+    desc: 'A rural barangay in the northwest, known for rice mills and the Bago River watershed.',
+    facts: '6.40 km from city • 1,007 ha • Pop. 7,979',
+    spots: '',
+    coords: [[
+      [122.690,10.620],[122.740,10.622],[122.780,10.610],[122.775,10.575],
+      [122.750,10.558],[122.710,10.560],[122.690,10.575],[122.688,10.600],[122.690,10.620]
+    ]]
+  },
+  {
+    name: 'Taloc', type: 'u',
+    desc: 'An urban barangay in the northwest with schools and local commerce, bordering Bacolod City.',
+    facts: 'Urban • Borders Bacolod City',
+    spots: '',
+    coords: [[
+      [122.780,10.610],[122.820,10.622],[122.855,10.615],[122.850,10.580],
+      [122.820,10.565],[122.790,10.562],[122.775,10.575],[122.780,10.610]
+    ]]
+  },
+  {
+    name: 'Tabunan', type: 'r',
+    desc: 'A rural barangay in the north with mangrove forests and rice fields.',
+    facts: 'Borders Bacolod City to the north',
+    spots: '',
+    coords: [[
+      [122.820,10.622],[122.880,10.618],[122.900,10.605],[122.895,10.575],
+      [122.865,10.562],[122.850,10.580],[122.855,10.615],[122.820,10.622]
+    ]]
+  },
+  {
+    name: 'Dulao', type: 'r',
+    desc: 'A rural barangay traversed by the Bago River with fertile agricultural land.',
+    facts: '17.8 km from city • 2,439 ha • Pop. 10,111',
+    spots: '',
+    coords: [[
+      [122.880,10.618],[122.940,10.612],[122.980,10.600],[122.975,10.570],
+      [122.940,10.558],[122.905,10.555],[122.895,10.575],[122.900,10.605],[122.880,10.618]
+    ]]
+  },
+  {
+    name: 'Abuanan', type: 'u',
+    desc: 'An urban barangay in the northeast, known for quarries, rice mills and the Abuanan Elementary School.',
+    facts: '25 km from city • 1,040 ha • Pop. 5,700',
+    spots: '',
+    coords: [[
+      [122.940,10.612],[122.998,10.540],[122.990,10.500],[122.960,10.490],
+      [122.930,10.498],[122.905,10.520],[122.905,10.555],[122.940,10.558],[122.975,10.570],[122.940,10.612]
+    ]]
+  },
+  {
+    name: 'Bacong-Montilla', type: 'r',
+    desc: 'The largest barangay in Bago City by land area, bordering Murcia with vast agricultural and forest lands.',
+    facts: 'Largest area: 4,827 ha • 29.50 km • Pop. 7,844',
+    spots: '',
+    coords: [[
+      [122.998,10.540],[123.000,10.575],[122.980,10.600],[122.940,10.612],
+      [122.975,10.570],[122.960,10.490],[122.990,10.500],[122.998,10.540]
+    ]]
+  },
+  {
+    name: 'Balingasag', type: 'u',
+    desc: 'An urban barangay with commercial establishments, west of Napoles along the coastal highway.',
+    facts: '1.25 km from city • 436 ha • Pop. 4,498',
+    spots: '',
+    coords: [[
+      [122.710,10.560],[122.750,10.558],[122.775,10.575],[122.770,10.545],
+      [122.748,10.530],[122.720,10.532],[122.710,10.548],[122.710,10.560]
+    ]]
+  },
+  {
+    name: 'Napoles', type: 'r',
+    desc: 'A rural barangay known for rice mills and rice fields in the central west of Bago City.',
+    facts: '9.26 km from city • 1,279 ha • Pop. 6,564',
+    spots: '',
+    coords: [[
+      [122.750,10.558],[122.790,10.562],[122.820,10.565],[122.818,10.535],
+      [122.800,10.518],[122.775,10.518],[122.758,10.525],[122.748,10.530],[122.770,10.545],[122.750,10.558]
+    ]]
+  },
+  {
+    name: 'Busay', type: 't',
+    desc: 'A large rural barangay stretching from lowlands to upland areas with the beautiful Buenos Aires Mountain Resort.',
+    facts: '7.26 km from city • 1,463 ha • Pop. 6,896',
+    spots: '⭐ Buenos Aires Mountain Resort',
+    coords: [[
+      [122.820,10.565],[122.850,10.580],[122.865,10.562],[122.895,10.575],
+      [122.890,10.548],[122.870,10.530],[122.848,10.520],[122.830,10.518],[122.818,10.535],[122.820,10.565]
+    ]]
+  },
+  {
+    name: 'Malingin', type: 'r',
+    desc: 'A rural barangay in the central area known for rice mills and farming communities.',
+    facts: '12.20 km from city • 1,495 ha • Pop. 6,649',
+    spots: '',
+    coords: [[
+      [122.865,10.562],[122.905,10.555],[122.930,10.498],[122.905,10.490],
+      [122.880,10.488],[122.860,10.498],[122.848,10.520],[122.870,10.530],[122.890,10.548],[122.865,10.562]
+    ]]
+  },
+  {
+    name: 'Atipuluan', type: 'u',
+    desc: 'An urban barangay along the main Negros South Road — key commercial and residential hub.',
+    facts: '17.46 km from city • 562 ha • Pop. 4,269',
+    spots: '',
+    coords: [[
+      [122.905,10.555],[122.930,10.498],[122.960,10.490],[122.955,10.468],
+      [122.930,10.460],[122.905,10.462],[122.885,10.475],[122.880,10.488],[122.905,10.490],[122.905,10.555]
+    ]]
+  },
+  {
+    name: 'Sampinit', type: 'r',
+    desc: 'A rural barangay east of the city center bordering Mt. Kanlaon Natural Park.',
+    facts: '11 km from city • 553 ha • Pop. 6,856',
+    spots: '',
+    coords: [[
+      [122.960,10.490],[122.998,10.540],[122.990,10.500],[122.975,10.455],
+      [122.960,10.445],[122.940,10.448],[122.930,10.460],[122.955,10.468],[122.960,10.490]
+    ]]
+  },
+  {
+    name: 'Pacol', type: 'r',
+    desc: 'A rural barangay near the city center along the coastal area.',
+    facts: '7.20 km from city • Pop. 3,999',
+    spots: '',
+    coords: [[
+      [122.700,10.548],[122.720,10.532],[122.748,10.530],[122.745,10.510],
+      [122.725,10.500],[122.705,10.502],[122.697,10.518],[122.700,10.548]
+    ]]
+  },
+  {
+    name: 'Caridad', type: 'u',
+    desc: 'An urban barangay forming part of the Bago City urban core with schools, churches and the Caridad Market.',
+    facts: '12 km from city • Pop. 4,901',
+    spots: '',
+    coords: [[
+      [122.748,10.530],[122.775,10.518],[122.800,10.518],[122.798,10.498],
+      [122.778,10.488],[122.755,10.490],[122.745,10.500],[122.745,10.510],[122.748,10.530]
+    ]]
+  },
+  {
+    name: 'Poblacion', type: 't',
+    desc: 'The main downtown barangay — seat of local government. Smallest land area (311 ha). Home to City Hall, the Cathedral, Bantayan Park, and key heritage sites.',
+    facts: 'City center • Smallest area: 311 ha • Pop. 11,794',
+    spots: '⭐ Bantayan Park (1898 Revolution site)|⭐ Balay ni Tan Juan|⭐ Bago City Cathedral|⭐ Javellana Mansion|⭐ Bago City Hall',
+    coords: [[
+      [122.800,10.518],[122.830,10.518],[122.848,10.520],[122.845,10.500],
+      [122.828,10.488],[122.808,10.488],[122.798,10.498],[122.800,10.518]
+    ]]
+  },
+  {
+    name: 'Lag-Asan', type: 'r',
+    desc: 'A rural barangay south of Poblacion, known for the Hundred Hills Nature Resort.',
+    facts: '1.60 km from city • 456 ha • Pop. 11,794',
+    spots: '⭐ Hundred Hills Nature Resort',
+    coords: [[
+      [122.830,10.518],[122.860,10.498],[122.880,10.488],[122.878,10.468],
+      [122.858,10.460],[122.838,10.460],[122.825,10.475],[122.828,10.488],[122.845,10.500],[122.830,10.518]
+    ]]
+  },
+  {
+    name: 'Don Jorge L. Araneta', type: 'u',
+    desc: 'Named after Gen. Juan A. Araneta who led the bloodless revolution of November 5, 1898.',
+    facts: '16.90 km from city • 2,143 ha • Pop. 9,457',
+    spots: '⭐ Araneta Family Heritage Site',
+    coords: [[
+      [122.755,10.490],[122.778,10.488],[122.798,10.498],[122.798,10.472],
+      [122.780,10.458],[122.758,10.458],[122.748,10.472],[122.755,10.490]
+    ]]
+  },
+  {
+    name: 'Alianza', type: 'r',
+    desc: 'A rural barangay known for agricultural lands and rice production.',
+    facts: '15 km from city • 365 ha • Pop. 3,211',
+    spots: '',
+    coords: [[
+      [122.778,10.488],[122.808,10.488],[122.828,10.488],[122.825,10.468],
+      [122.808,10.458],[122.788,10.458],[122.778,10.472],[122.778,10.488]
+    ]]
+  },
+  {
+    name: 'Binubuhan', type: 'r',
+    desc: 'A rural barangay in Cluster 8 with Ma-ao and Mailum. Known for rice production.',
+    facts: '29.50 km from city • 2,352 ha • Pop. 5,581',
+    spots: '',
+    coords: [[
+      [122.940,10.448],[122.975,10.455],[122.960,10.415],[122.940,10.400],
+      [122.915,10.402],[122.900,10.418],[122.905,10.440],[122.940,10.448]
+    ]]
+  },
+  {
+    name: 'Ma-ao', type: 't',
+    desc: 'Most populated barangay in Bago City (14,916 residents). Home to the historic Ma-ao Sugar Central.',
+    facts: 'Most populated: 14,916 • 21.70 km • 5,998 ha',
+    spots: '⭐ Ma-ao Sugar Central (Heritage site)|⭐ MSC Ruins (Lacson Mansion)',
+    coords: [[
+      [122.880,10.488],[122.905,10.490],[122.930,10.460],[122.905,10.440],[122.900,10.418],
+      [122.878,10.420],[122.858,10.432],[122.848,10.450],[122.858,10.460],[122.878,10.468],[122.880,10.488]
+    ]]
+  },
+  {
+    name: 'Bagroy', type: 'r',
+    desc: 'Smallest population in Bago City (1,694). A coastal barangay along the Guimaras Strait.',
+    facts: 'Smallest population: 1,694 • 399 ha • Coastal',
+    spots: '',
+    coords: [[
+      [122.697,10.518],[122.705,10.502],[122.725,10.500],[122.720,10.482],
+      [122.702,10.475],[122.690,10.480],[122.688,10.500],[122.690,10.518],[122.697,10.518]
+    ]]
+  },
+  {
+    name: 'Sagasa', type: 'r',
+    desc: 'A coastal rural barangay along the Guimaras Strait, known for fishing and mangrove forests.',
+    facts: 'Coastal • Borders Pulupandan',
+    spots: '',
+    coords: [[
+      [122.690,10.480],[122.702,10.475],[122.720,10.482],[122.720,10.462],
+      [122.705,10.452],[122.690,10.455],[122.685,10.468],[122.690,10.480]
+    ]]
+  },
+  {
+    name: 'Mailum', type: 't',
+    desc: 'Prime ecotourism destination at the foot of Kanlaon Volcano with Kipot Twin Falls and Pataan Mountain Resort.',
+    facts: '29.46 km from city • 3,200 ha • Pop. 8,844',
+    spots: '⭐ Kipot Twin Falls (220 steps to twin cascades)|⭐ Pataan Mountain Resort|⭐ Kipot Summer Resort',
+    coords: [[
+      [122.905,10.440],[122.940,10.448],[122.960,10.415],[122.940,10.380],
+      [122.915,10.368],[122.892,10.372],[122.878,10.390],[122.878,10.420],[122.905,10.440]
+    ]]
+  },
+  {
+    name: 'Ilijan', type: 't',
+    desc: 'Farthest barangay from city proper (36.99 km). Coastal barangay where President Quezon stayed in 1942 during WWII.',
+    facts: 'Farthest: 36.99 km • 1,489 ha • Pop. 5,581',
+    spots: '⭐ WWII Historical Site (Pres. Quezon 1942)|⭐ Coastal ecotourism',
+    coords: [[
+      [122.848,10.450],[122.858,10.432],[122.878,10.420],[122.878,10.390],
+      [122.858,10.375],[122.835,10.372],[122.820,10.382],[122.820,10.400],
+      [122.830,10.420],[122.838,10.440],[122.848,10.450]
+    ]]
+  },
+];
+
+// Color map
+const colors = {
+  u: { fill: '#e74c3c', outline: '#c0392b' },
+  r: { fill: '#27ae60', outline: '#1e8449' },
+  t: { fill: '#f39c12', outline: '#d68910' },
+};
+
+// Build GeoJSON feature collection
+const geojson = {
+  type: 'FeatureCollection',
+  features: barangays.map(b => ({
+    type: 'Feature',
+    properties: {
+      name: b.name,
+      type: b.type,
+      desc: b.desc,
+      facts: b.facts,
+      spots: b.spots,
+      fillColor:    colors[b.type].fill,
+      outlineColor: colors[b.type].outline,
+    },
+    geometry: { type: 'Polygon', coordinates: b.coords }
+  }))
+};
+
+// Tourist spot markers
+const landmarks = [
+  { name: 'Bantayan Park', lng: 122.834, lat: 10.498, icon: '🏛️', desc: 'Historic park — site of the November 5, 1898 revolution by Gen. Juan Araneta.', spots: '⭐ Al Cinco de Noviembre celebration' },
+  { name: 'Bago City Cathedral', lng: 122.833, lat: 10.497, icon: '⛪', desc: 'Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City.', spots: '⭐ Religious heritage landmark' },
+  { name: 'Javellana Mansion', lng: 122.830, lat: 10.495, icon: '🏰', desc: 'Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect.', spots: '⭐ Heritage ancestral house tour' },
+  { name: 'Ma-ao Sugar Central', lng: 122.895, lat: 10.460, icon: '🏭', desc: 'Historic sugar mill — heritage industrial landmark in the most populated barangay.', spots: '⭐ MSC Ruins|⭐ Lacson Mansion ruins' },
+  { name: 'Kipot Twin Falls', lng: 122.908, lat: 10.400, icon: '💧', desc: 'Stunning twin waterfalls in Brgy. Mailum, reached via 220 steps.', spots: '⭐ Nature ecotourism destination' },
+  { name: 'Buenos Aires Mountain Resort', lng: 122.850, lat: 10.540, icon: '⛰️', desc: 'Scenic mountain resort in Brgy. Busay with breathtaking views.', spots: '⭐ Mountain resort & hiking' },
+  { name: 'Kipot Summer Resort', lng: 122.920, lat: 10.412, icon: '🏖️', desc: 'Popular summer resort destination near Kipot Twin Falls in Mailum.', spots: '⭐ Resort & recreation' },
+  { name: 'Mambukal Resort', lng: 122.990, lat: 10.500, icon: '♨️', desc: 'Famous hot spring resort and wildlife sanctuary near Bago City.',  spots: '⭐ Hot springs & wildlife sanctuary' },
+];
+
+map.on('load', () => {
+
+  // Add boundary highlight
+  map.addSource('bago-boundary', { type: 'geojson', data: bagoBoundary });
+  map.addLayer({
+    id: 'bago-boundary-fill',
+    type: 'fill',
+    source: 'bago-boundary',
+    paint: { 'fill-color': '#fff', 'fill-opacity': 0.04 }
+  });
+  map.addLayer({
+    id: 'bago-boundary-line',
+    type: 'line',
+    source: 'bago-boundary',
+    paint: { 'line-color': '#a03800', 'line-width': 2.5, 'line-dasharray': [4,2] }
+  });
+
+  // Add barangay polygons
+  map.addSource('barangays', { type: 'geojson', data: geojson });
+
+  map.addLayer({
+    id: 'barangay-fill',
+    type: 'fill',
+    source: 'barangays',
+    paint: {
+      'fill-color': ['get', 'fillColor'],
+      'fill-opacity': 0.38,
+    }
+  });
+
+  map.addLayer({
+    id: 'barangay-fill-hover',
+    type: 'fill',
+    source: 'barangays',
+    paint: {
+      'fill-color': ['get', 'fillColor'],
+      'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.72, 0],
+    }
+  });
+
+  map.addLayer({
+    id: 'barangay-outline',
+    type: 'line',
+    source: 'barangays',
+    paint: {
+      'line-color': ['get', 'outlineColor'],
+      'line-width': 1.8,
+      'line-opacity': 0.8,
+    }
+  });
+
+  map.addLayer({
+    id: 'barangay-labels',
+    type: 'symbol',
+    source: 'barangays',
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 11, 9, 14, 13],
+      'text-anchor': 'center',
+      'text-max-width': 8,
+    },
+    paint: {
+      'text-color': '#fff',
+      'text-halo-color': 'rgba(0,0,0,0.75)',
+      'text-halo-width': 1.5,
+    }
+  });
+
+  // Hover state
+  let hoveredId = null;
+  map.on('mousemove', 'barangay-fill', e => {
+    map.getCanvas().style.cursor = 'pointer';
+    if (e.features.length > 0) {
+      if (hoveredId !== null) map.setFeatureState({ source:'barangays', id: hoveredId }, { hover: false });
+      hoveredId = e.features[0].id;
+      map.setFeatureState({ source:'barangays', id: hoveredId }, { hover: true });
+    }
+  });
+  map.on('mouseleave', 'barangay-fill', () => {
+    map.getCanvas().style.cursor = '';
+    if (hoveredId !== null) map.setFeatureState({ source:'barangays', id: hoveredId }, { hover: false });
+    hoveredId = null;
+  });
+
+  // Click barangay
+  map.on('click', 'barangay-fill', e => {
+    const p = e.features[0].properties;
+    showPanel(p.name, p.type==='u'?'Urban':p.type==='r'?'Rural':'Rural', p.desc, p.facts, p.spots);
+  });
+
+  // Add landmark markers
+  landmarks.forEach(lm => {
+    const el = document.createElement('div');
+    el.style.cssText = `
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,#6b2200,#a03800);
+      border:2.5px solid #fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:16px;cursor:pointer;
+      box-shadow:0 3px 12px rgba(0,0,0,0.5);
+    `;
+    el.textContent = lm.icon;
+    el.title = lm.name;
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      showPanel(lm.name, 'Landmark', lm.desc, '', lm.spots);
+    });
+    new mapboxgl.Marker({ element: el, anchor: 'center' })
+      .setLngLat([lm.lng, lm.lat])
+      .addTo(map);
+  });
+
+  // Zoom controls
+  map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+});
+
+function showPanel(name, type, desc, facts, spots) {
+  document.getElementById('pname').textContent = name;
+  const t = document.getElementById('ptype');
+  const u = type === 'Urban', r = type === 'Rural';
+  t.textContent = u ? '🏙️ Urban Barangay' : r ? '🌿 Rural Barangay' : '📍 ' + type;
+  t.style.background = u ? 'rgba(231,76,60,0.2)' : r ? 'rgba(39,174,96,0.2)' : 'rgba(230,126,34,0.2)';
+  t.style.color = u ? '#ff7675' : r ? '#55efc4' : '#fdcb6e';
+  document.getElementById('pdesc').textContent = desc;
+  document.getElementById('pfacts').innerHTML = facts
+    ? facts.split('|').map(f => `<span class="fp">📊 ${f}</span>`).join('') : '';
+  document.getElementById('pspots').innerHTML = spots
+    ? spots.split('|').map(s => `<span class="sp">${s}</span>`).join('') : '';
+  document.getElementById('pgm').href =
+    'https://maps.google.com/?q=' + encodeURIComponent(name + ' Bago City Negros Occidental Philippines');
+  document.getElementById('panel').classList.add('on');
+  document.getElementById('overlay').classList.add('on');
 }
-function hide(){
-  document.getElementById('pn').classList.remove('on');
-  document.getElementById('ov').classList.remove('on');
+
+function hidePanel() {
+  document.getElementById('panel').classList.remove('on');
+  document.getElementById('overlay').classList.remove('on');
 }
 </script>
 </body>
