@@ -139,7 +139,7 @@ map.on("load",()=>{
     const info={name:s.name,type:"landmark",cat:s.cat,desc:s.desc,spots:s.spots,dist:"",pop:"",area:"",fiesta:""};
     el.onclick=()=>onTap(el,s.lng,s.lat,()=>showPan(info));
     new mapboxgl.Marker({element:el,anchor:"top"}).setLngLat([s.lng,s.lat]).addTo(map);
-    LM.push({el,s});
+    LM.push({el,s,info});
   });
 
   function syncZ(){
@@ -188,31 +188,54 @@ function doFilter(type,chip){
 
 function doSearch(v){
   const q=v.trim().toLowerCase();
-  if(!q){BM.forEach(({el})=>el.classList.remove("dim"));LM.forEach(({el})=>el.classList.remove("dim"));return;}
-  let hit=null,hitEl=null;
+  if(!q){
+    // Reset: restore all markers and re-apply the current active filter
+    BM.forEach(({el})=>el.classList.remove("dim"));
+    LM.forEach(({el})=>el.classList.remove("dim"));
+    return;
+  }
+  // Clear active filter chip so search works across all types
+  document.querySelectorAll(".ch").forEach(c=>c.classList.remove("on"));
+  let hit=null,hitEl=null,hitInfo=null;
+  // Search barangays by name AND spots field
   BM.forEach(({el,b})=>{
-    const m=b.name.toLowerCase().includes(q);
+    const m=b.name.toLowerCase().includes(q)||(b.spots&&b.spots.toLowerCase().includes(q));
     el.classList.toggle("dim",!m);
-    if(m&&!hit){hit=[b.lng,b.lat];hitEl=el;}
+    el.style.opacity=m?"1":"";
+    if(m&&!hit){hit=[b.lng,b.lat];hitEl=el;hitInfo=b;}
   });
-  LM.forEach(({el,s})=>{
-    const m=s.name.toLowerCase().includes(q);
+  // Search landmarks by name, cat, desc
+  LM.forEach(({el,s,info})=>{
+    const m=s.name.toLowerCase().includes(q)||(s.cat&&s.cat.toLowerCase().includes(q))||(s.desc&&s.desc.toLowerCase().includes(q));
     el.classList.toggle("dim",!m);
-    if(m&&!hit){hit=[s.lng,s.lat];hitEl=el;}
+    el.style.opacity=m?"1":"";
+    // Landmarks take priority over barangay spot-text matches
+    if(m&&s.name.toLowerCase().includes(q)){
+      // Exact landmark name match — prefer this over barangay spot text match
+      if(!hit||!hitInfo||!hitInfo.name.toLowerCase().includes(q)){
+        hit=[s.lng,s.lat];hitEl=el;hitInfo=info;
+      }
+    } else if(m&&!hit){
+      hit=[s.lng,s.lat];hitEl=el;hitInfo=info;
+    }
   });
   if(hit){
-    // Remove dim from matched marker so it's visible
     if(hitEl){hitEl.classList.remove("dim");hitEl.style.opacity="1";}
-    // Fly to zoom 15, offset center down so marker shows below chips
     map.flyTo({
       center:hit,
-      zoom:15,
-      duration:900,
-      offset:[0,80],
+      zoom:16,
+      duration:1000,
       essential:true
     });
-    // Auto-open info panel after flying
-    if(hitEl) setTimeout(()=>hitEl.click(),1000);
+    // Open info panel after map finishes flying
+    setTimeout(()=>{
+      if(hitEl){
+        if(activeEl&&activeEl!==hitEl)activeEl.classList.remove("sel");
+        activeEl=hitEl;
+        hitEl.classList.add("sel");
+        showPan(hitInfo);
+      }
+    },1100);
   }
 }
 
