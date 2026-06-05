@@ -1655,7 +1655,7 @@
   document.querySelectorAll('.news-card').forEach(card => {
     card.addEventListener('click', () => {
       const url = card.getAttribute('data-url');
-      if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      if (url) window.open(url + (url.indexOf('?') > -1 ? '&' : '?') + 'from=asenso-bago', '_blank', 'noopener,noreferrer');
     });
   });
 
@@ -1663,7 +1663,7 @@
   document.querySelectorAll('.news-full-card').forEach(card => {
     card.addEventListener('click', () => {
       const url = card.getAttribute('data-url');
-      if (url) window.open(url, '_blank', 'noopener,noreferrer');
+      if (url) window.open(url + (url.indexOf('?') > -1 ? '&' : '?') + 'from=asenso-bago', '_blank', 'noopener,noreferrer');
     });
   });
 
@@ -1732,6 +1732,7 @@
   });
 </script>
 </html>
+
 
 
 
