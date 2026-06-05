@@ -216,25 +216,52 @@ function onTap(el,lng,lat,cb){
 function doFilter(type,chip){
   document.querySelectorAll(".ch").forEach(c=>c.classList.remove("on"));
   chip.classList.add("on");
+  let firstHit=null;
   BM.forEach(({el,b})=>{
     let show=type==="all"||(type==="u"&&b.type==="u")||(type==="r"&&b.type==="r")||(type==="t"&&b.type==="t");
     if(type==="lm")show=false;
     el.classList.toggle("dim",!show);
-    if(!show)el.style.opacity="";
+    if(show){el.style.opacity="1";if(!firstHit)firstHit=[b.lng,b.lat];}
+    else el.style.opacity="";
   });
   LM.forEach(({el})=>{
     const show=type==="all"||type==="lm";
     el.classList.toggle("dim",!show);
+    if(show)el.style.opacity="1";
+    else el.style.opacity="";
   });
+  // Fly to city overview when filtering
+  if(type!=="all") map.flyTo({center:CENTER,zoom:INITIAL_ZOOM,duration:800});
 }
 
 function doSearch(v){
   const q=v.trim().toLowerCase();
   if(!q){BM.forEach(({el})=>el.classList.remove("dim"));LM.forEach(({el})=>el.classList.remove("dim"));return;}
-  let hit=null;
-  BM.forEach(({el,b})=>{const m=b.name.toLowerCase().includes(q);el.classList.toggle("dim",!m);if(m&&!hit)hit=[b.lng,b.lat];});
-  LM.forEach(({el,s})=>{const m=s.name.toLowerCase().includes(q);el.classList.toggle("dim",!m);if(m&&!hit)hit=[s.lng,s.lat];});
-  if(hit)map.easeTo({center:hit,zoom:13.5,duration:700});
+  let hit=null,hitEl=null;
+  BM.forEach(({el,b})=>{
+    const m=b.name.toLowerCase().includes(q);
+    el.classList.toggle("dim",!m);
+    if(m&&!hit){hit=[b.lng,b.lat];hitEl=el;}
+  });
+  LM.forEach(({el,s})=>{
+    const m=s.name.toLowerCase().includes(q);
+    el.classList.toggle("dim",!m);
+    if(m&&!hit){hit=[s.lng,s.lat];hitEl=el;}
+  });
+  if(hit){
+    // Remove dim from matched marker so it's visible
+    if(hitEl){hitEl.classList.remove("dim");hitEl.style.opacity="1";}
+    // Fly to zoom 15, offset center down so marker shows below chips
+    map.flyTo({
+      center:hit,
+      zoom:15,
+      duration:900,
+      offset:[0,80],
+      essential:true
+    });
+    // Auto-open info panel after flying
+    if(hitEl) setTimeout(()=>hitEl.click(),1000);
+  }
 }
 
 function do3D(){
