@@ -1671,8 +1671,7 @@
   document.querySelectorAll('.program-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const url = chip.getAttribute('data-url');
-      const name = chip.querySelector('.program-chip-name')?.textContent || url;
-      if (url) openLaunch(url, name);
+      if (url) window.open(url + '?from=asenso-bago', '_blank', 'noopener,noreferrer');
     });
   });
 
@@ -1680,7 +1679,7 @@
   document.querySelectorAll('.program-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const url = btn.getAttribute('data-url');
-      if (url) openLaunch(url, btn.textContent.trim());
+      if (url) window.open(url + '?from=asenso-bago', '_blank', 'noopener,noreferrer');
     });
   });
 
