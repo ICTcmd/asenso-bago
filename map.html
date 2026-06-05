@@ -221,21 +221,13 @@ function doSearch(v){
   });
   if(hit){
     if(hitEl){hitEl.classList.remove("dim");hitEl.style.opacity="1";}
-    map.flyTo({
-      center:hit,
-      zoom:16,
-      duration:1000,
-      essential:true
-    });
-    // Open info panel after map finishes flying
-    setTimeout(()=>{
-      if(hitEl){
-        if(activeEl&&activeEl!==hitEl)activeEl.classList.remove("sel");
-        activeEl=hitEl;
-        hitEl.classList.add("sel");
-        showPan(hitInfo);
-      }
-    },1100);
+    map.flyTo({center:hit,zoom:16,duration:1000,essential:true});
+    // Just fly and highlight — user taps marker to open panel
+    if(hitEl){
+      if(activeEl&&activeEl!==hitEl)activeEl.classList.remove("sel");
+      activeEl=hitEl;
+      hitEl.classList.add("sel");
+    }
   }
 }
 
