@@ -1,496 +1,280 @@
-const fs = require('fs');
+﻿const fs = require("fs");
+const TOKEN = "pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow";
 
-// Strategy: Use the real official Bago City map as the base image.
-// Draw semi-transparent colored overlay polygons on top for interactivity.
-// The polygons are traced from the real official map photo.
-// Image source: the Buenos_Aires photo and real map photos provided.
-// 
-// We use a 1000x667 coordinate space matching a landscape map image.
-// All coordinates are manually traced from the official map layout.
-
-const barangays = [
-  // ── NORTH BORDER (Bacolod / Murcia) — top row ──
-  {
-    name: 'Calumangan', type: 'r',
-    color: '#f39c12',
-    desc: 'A rural barangay in the northwest of Bago City, known for rice mills and agricultural land.',
-    facts: '📊 6.40 km from city • 1,007 ha • Pop. 7,979',
-    spots: '',
-    // Top-left, large area
-    pts: '62,42 205,35 225,115 210,170 130,195 65,180 42,120'
-  },
-  {
-    name: 'Taloc', type: 'u',
-    color: '#c0392b',
-    desc: 'An urban barangay in the northern part of Bago City with schools and local commerce.',
-    facts: '📊 Urban barangay • Borders Bacolod City',
-    spots: '',
-    pts: '205,35 325,32 345,105 320,160 225,155 210,115'
-  },
-  {
-    name: 'Tabunan', type: 'r',
-    color: '#27ae60',
-    desc: 'A rural barangay in the north, known for mangrove forests and rice fields.',
-    facts: '📊 Borders Bacolod City to the north',
-    spots: '',
-    pts: '325,32 450,28 470,95 450,150 345,145 320,105'
-  },
-  {
-    name: 'Dulao', type: 'r',
-    color: '#8e44ad',
-    desc: 'A rural barangay traversed by Bago River tributaries with fertile agricultural land.',
-    facts: '📊 17.8 km from city • 2,439 ha • Pop. 10,111',
-    spots: '',
-    pts: '450,28 590,25 620,90 600,148 470,148 450,95'
-  },
-  {
-    name: 'Abuanan', type: 'u',
-    color: '#c0392b',
-    desc: 'An urban barangay in the northeast, known for its quarries and rice mills.',
-    facts: '📊 25 km from city • 1,040 ha • Pop. 5,700',
-    spots: '',
-    pts: '590,25 730,28 762,100 738,162 620,158 600,90'
-  },
-  {
-    name: 'Bacong-Montilla', type: 'r',
-    color: '#e74c3c',
-    desc: 'The largest barangay in Bago City by land area, bordering Murcia with vast agricultural and forest lands.',
-    facts: '📊 Largest area: 4,827 ha • 29.50 km • Pop. 7,844',
-    spots: '',
-    pts: '730,28 900,32 935,160 910,238 762,215 738,162'
-  },
-
-  // ── SECOND ROW ──
-  {
-    name: 'Balingasag', type: 'u',
-    color: '#c0392b',
-    desc: 'An urban barangay with commercial establishments, bordering Calumangan, Napoles and Busay.',
-    facts: '📊 1.25 km from city • 436 ha • Pop. 4,498',
-    spots: '',
-    pts: '42,180 130,195 145,260 120,310 48,305 30,245'
-  },
-  {
-    name: 'Napoles', type: 'r',
-    color: '#16a085',
-    desc: 'A rural barangay known for rice mills, rice fields and the Napoles Elementary School.',
-    facts: '📊 9.26 km from city • 1,279 ha • Pop. 6,564',
-    spots: '',
-    pts: '130,195 210,170 225,155 250,175 265,240 245,285 145,280 128,245'
-  },
-  {
-    name: 'Busay', type: 't',
-    color: '#e67e22',
-    desc: 'A large rural barangay stretching from lowlands to upland areas with scenic mountain views.',
-    facts: '📊 7.26 km from city • 1,463 ha • Pop. 6,896',
-    spots: '⭐ Near Buenos Aires Mountain Resort',
-    pts: '250,155 345,145 450,150 470,215 445,275 360,290 310,265 265,240 250,205'
-  },
-  {
-    name: 'Malingin', type: 'r',
-    color: '#2980b9',
-    desc: 'A rural barangay in the central area known for rice mills, quarry sites and farming communities.',
-    facts: '📊 12.20 km from city • 1,495 ha • Pop. 6,649',
-    spots: '',
-    pts: '450,150 600,148 620,195 600,268 500,278 445,275 470,215'
-  },
-  {
-    name: 'Atipuluan', type: 'u',
-    color: '#c0392b',
-    desc: 'An urban barangay along the main highway — key commercial and residential area.',
-    facts: '📊 17.46 km from city • 562 ha • Pop. 4,269',
-    spots: '',
-    pts: '600,148 738,162 762,215 740,278 660,292 600,268 620,195'
-  },
-  {
-    name: 'Sampinit', type: 'r',
-    color: '#1abc9c',
-    desc: 'A rural barangay east of the city center, bordering Mt. Kanlaon Natural Park.',
-    facts: '📊 11 km from city • 553 ha • Pop. 6,856',
-    spots: '',
-    pts: '738,162 910,238 935,330 908,400 840,415 762,378 740,278'
-  },
-
-  // ── CENTER ROW ──
-  {
-    name: 'Pacol', type: 'r',
-    color: '#27ae60',
-    desc: 'A rural barangay near the city center with rice fields and the Pacol Elementary School.',
-    facts: '📊 7.20 km from city • Pop. 3,999',
-    spots: '',
-    pts: '30,305 120,310 138,372 115,420 38,415 22,362'
-  },
-  {
-    name: 'Caridad', type: 'u',
-    color: '#c0392b',
-    desc: 'An urban barangay forming part of the Bago City urban core with schools and churches.',
-    facts: '📊 12 km from city • Pop. 4,901',
-    spots: '',
-    pts: '120,310 145,280 245,285 262,358 238,405 138,398 118,368'
-  },
-  {
-    name: 'Poblacion', type: 't',
-    color: '#f39c12',
-    desc: 'The main downtown barangay — seat of local government. Smallest land area (311 ha). Home to City Hall, the Cathedral, and key heritage landmarks.',
-    facts: '📊 City center • Smallest area: 311 ha • Pop. 11,794',
-    spots: '⭐ Bantayan Park (1898 Revolution site)|⭐ Balay ni Tan Juan|⭐ Bago City Cathedral|⭐ Javellana Mansion|⭐ Bago City Hall',
-    pts: '265,240 360,230 445,248 465,315 442,372 375,390 310,375 265,340'
-  },
-  {
-    name: 'Lag-Asan', type: 'r',
-    color: '#9b59b6',
-    desc: 'A rural barangay south of Poblacion, known for its health center and the Hundred Hills Nature Resort.',
-    facts: '📊 1.60 km from city • 456 ha • Pop. 11,794',
-    spots: '⭐ Hundred Hills Nature Resort',
-    pts: '360,230 500,220 600,240 620,310 600,368 500,388 442,372 445,315'
-  },
-  {
-    name: 'Don Jorge L. Araneta', type: 'u',
-    color: '#e74c3c',
-    desc: 'Named after Gen. Juan A. Araneta who led the bloodless revolution of November 5, 1898.',
-    facts: '📊 16.90 km from city • 2,143 ha • Pop. 9,457',
-    spots: '⭐ Araneta Family Heritage Site',
-    pts: '238,405 310,375 375,390 380,465 345,510 235,498 220,455'
-  },
-  {
-    name: 'Ma-ao', type: 't',
-    color: '#e67e22',
-    desc: 'Most populated barangay (14,916 residents). Home to the historic Ma-ao Sugar Central.',
-    facts: '📊 Most populated: 14,916 • 21.70 km • 5,998 ha',
-    spots: '⭐ Ma-ao Sugar Central (Heritage site)|⭐ MSC Ruins (Lacson Mansion)',
-    pts: '600,268 740,278 762,378 740,450 660,475 565,465 500,440 500,388 600,368'
-  },
-  {
-    name: 'Binubuhan', type: 'r',
-    color: '#8e44ad',
-    desc: 'A rural barangay in Cluster 8 with Ma-ao and Mailum. Known for rice production.',
-    facts: '📊 29.50 km from city • 2,352 ha • Pop. 5,581',
-    spots: '',
-    pts: '762,378 840,415 908,400 935,490 905,560 840,575 762,540 740,450'
-  },
-
-  // ── SOUTH ROW ──
-  {
-    name: 'Bagroy', type: 'r',
-    color: '#27ae60',
-    desc: 'Smallest population in Bago City (1,694). A coastal barangay along the Guimaras Strait.',
-    facts: '📊 Smallest population: 1,694 • 399 ha • Coastal',
-    spots: '',
-    pts: '22,415 115,420 125,482 98,525 28,520 15,468'
-  },
-  {
-    name: 'Sagasa', type: 'r',
-    color: '#16a085',
-    desc: 'A coastal rural barangay along the Guimaras Strait, known for fishing and mangrove forests.',
-    facts: '📊 Coastal barangay • Borders Pulupandan',
-    spots: '',
-    pts: '125,482 235,498 248,568 215,608 145,618 98,590 95,528'
-  },
-  {
-    name: 'Alianza', type: 'r',
-    color: '#2ecc71',
-    desc: 'A rural barangay known for agricultural lands and rice production.',
-    facts: '📊 15 km from city • 365 ha • Pop. 3,211',
-    spots: '',
-    pts: '345,510 380,465 500,440 515,518 488,575 398,588 350,560'
-  },
-  {
-    name: 'Mailum', type: 't',
-    color: '#e67e22',
-    desc: 'Prime ecotourism destination at the foot of Kanlaon Volcano with Kipot Twin Falls and Pataan Mountain Resort.',
-    facts: '📊 29.46 km from city • 3,200 ha • Pop. 8,844',
-    spots: '⭐ Kipot Twin Falls (220 steps to twin cascades)|⭐ Pataan Mountain Resort',
-    pts: '565,465 660,475 740,450 762,540 740,615 660,638 565,625 515,555 515,518'
-  },
-  {
-    name: 'Ilijan', type: 't',
-    color: '#e74c3c',
-    desc: 'Farthest barangay (36.99 km). Coastal barangay where President Quezon stayed in 1942 during WWII.',
-    facts: '📊 Farthest barangay: 36.99 km • 1,489 ha • Pop. 5,581',
-    spots: '⭐ WWII Historical Site (President Quezon 1942)|⭐ Coastal ecotourism',
-    pts: '248,568 350,560 398,588 408,650 348,678 252,665 215,625 215,608'
-  },
+const BARANGAYS = [
+  {num:"01",name:"Abuanan",type:"u",lng:122.9928,lat:10.5269,dist:"25 km",area:"1,040 ha",pop:"5,700",fiesta:"Hublag Festival (Last Sat Feb)",desc:"An urban barangay in the northeast known for quarries and rice mills.",spots:""},
+  {num:"02",name:"Alianza",type:"r",lng:122.9305,lat:10.4761,dist:"15 km",area:"365 ha",pop:"3,211",fiesta:"February 2",desc:"A rural barangay known for agricultural lands and rice production.",spots:""},
+  {num:"03",name:"Atipuluan",type:"u",lng:122.9562,lat:10.5127,dist:"17.46 km",area:"562 ha",pop:"4,269",fiesta:"Pasiduong Festival (May 15)",desc:"An urban barangay along the main Negros South Road — key commercial hub.",spots:""},
+  {num:"04",name:"Bacong-Montilla",type:"r",lng:123.0345,lat:10.5213,dist:"29.50 km",area:"4,827 ha",pop:"7,844",fiesta:"Lumbayag Festival (Mar 26)",desc:"Largest barangay by land area. Vast agricultural and forest lands bordering Murcia.",spots:""},
+  {num:"05",name:"Bagroy",type:"r",lng:122.8716,lat:10.479,dist:"11 km",area:"399 ha",pop:"1,694",fiesta:"February 11",desc:"Smallest population (1,694). Coastal barangay along the Guimaras Strait.",spots:""},
+  {num:"06",name:"Balingasag",type:"u",lng:122.8423,lat:10.5343,dist:"1.25 km",area:"436 ha",pop:"4,498",fiesta:"Zumbali Festival (May 31)",desc:"An urban barangay with commercial establishments near the city center.",spots:""},
+  {num:"07",name:"Binubuhan",type:"r",lng:123.0067,lat:10.4592,dist:"29.50 km",area:"2,352 ha",pop:"5,581",fiesta:"Lechon Festival (Apr 17)",desc:"A rural barangay in Cluster 8 with Ma-ao and Mailum.",spots:""},
+  {num:"08",name:"Busay",type:"t",lng:122.8885,lat:10.5389,dist:"7.26 km",area:"1,463 ha",pop:"6,896",fiesta:"Sinadya Festival (Mar 3)",desc:"A rural barangay with scenic mountain views toward Mt. Kanlaon.",spots:"⭐ Buenos Aires Mountain Resort"},
+  {num:"09",name:"Calumangan",type:"r",lng:122.8767,lat:10.5579,dist:"6.40 km",area:"1,007 ha",pop:"7,979",fiesta:"Kalumangan Festival (May 15)",desc:"A rural barangay known for rice mills and the Bago River watershed.",spots:""},
+  {num:"10",name:"Caridad",type:"u",lng:122.9062,lat:10.4843,dist:"12 km",area:"—",pop:"4,901",fiesta:"Dinagaw Festival (2nd Sat Mar)",desc:"An urban barangay forming part of the Bago City urban core.",spots:""},
+  {num:"11",name:"Don Jorge L. Araneta",type:"u",lng:122.947,lat:10.4793,dist:"16.90 km",area:"2,143 ha",pop:"9,457",fiesta:"Manupak-tapas Festival (Dec 8)",desc:"Named after Gen. Juan A. Araneta who led the 1898 revolution.",spots:"⭐ Araneta Heritage Site"},
+  {num:"12",name:"Dulao",type:"r",lng:122.9514,lat:10.5504,dist:"17.8 km",area:"2,439 ha",pop:"10,111",fiesta:"Hataw Dance Festival (Dec 8)",desc:"A rural barangay traversed by the Bago River with fertile agricultural land.",spots:""},
+  {num:"13",name:"Ilijan",type:"t",lng:123.0555,lat:10.4537,dist:"36.99 km",area:"1,489 ha",pop:"5,581",fiesta:"December 11",desc:"Farthest barangay (36.99 km). President Quezon stayed here in 1942.",spots:"⭐ WWII Historical Site"},
+  {num:"14",name:"Lag-Asan",type:"r",lng:122.8378,lat:10.5318,dist:"1.60 km",area:"456 ha",pop:"11,794",fiesta:"Simadya Festival (Mar 3)",desc:"A rural barangay south of Poblacion with the Hundred Hills Nature Resort.",spots:"⭐ Hundred Hills Nature Resort"},
+  {num:"15",name:"Ma-ao",type:"t",lng:122.9915,lat:10.4914,dist:"21.70 km",area:"5,998 ha",pop:"14,916",fiesta:"Mabaw-Malaw Festival (Dec 30)",desc:"Most populated barangay (14,916). Home to the historic Ma-ao Sugar Central.",spots:"⭐ Ma-ao Sugar Central|⭐ MSC Ruins"},
+  {num:"16",name:"Mailum",type:"t",lng:123.0494,lat:10.4636,dist:"29.46 km",area:"3,200 ha",pop:"8,844",fiesta:"Ginom-Ginom Festival (Mar 19)",desc:"Prime ecotourism destination at the foot of Mt. Kanlaon.",spots:"⭐ Kipot Twin Falls (220 steps)|⭐ Pataan Mountain Resort"},
+  {num:"17",name:"Malingin",type:"r",lng:122.9182,lat:10.4951,dist:"12.20 km",area:"1,495 ha",pop:"6,649",fiesta:"Palakad Festival (Mar 19)",desc:"A rural barangay known for rice mills and farming communities.",spots:""},
+  {num:"18",name:"Napoles",type:"r",lng:122.8981,lat:10.5141,dist:"9.26 km",area:"1,279 ha",pop:"6,564",fiesta:"Kasalipan Festival (Mar 30)",desc:"A rural barangay known for rice mills and rice fields.",spots:""},
+  {num:"19",name:"Pacol",type:"r",lng:122.8673,lat:10.4968,dist:"7.20 km",area:"—",pop:"3,999",fiesta:"December 12",desc:"A rural barangay near the city center along the coastal area.",spots:""},
+  {num:"20",name:"Poblacion",type:"t",lng:122.8353,lat:10.5402,dist:"0 km",area:"311 ha",pop:"11,794",fiesta:"Fiesta of San Sebastian (Jan)",desc:"Main downtown - seat of local government. Smallest land area (311 ha).",spots:"⭐ Bantayan Park|⭐ Balay ni Tan Juan|⭐ Bago City Cathedral|⭐ Javellana Mansion"},
+  {num:"21",name:"Sagasa",type:"r",lng:122.8929,lat:10.4717,dist:"—",area:"—",pop:"—",fiesta:"—",desc:"A coastal rural barangay along the Guimaras Strait known for fishing.",spots:""},
+  {num:"22",name:"Sampinit",type:"r",lng:122.8534,lat:10.5459,dist:"11 km",area:"553 ha",pop:"6,856",fiesta:"Sinadya Festival (Mar 3)",desc:"A rural barangay east of the city center bordering Mt. Kanlaon Natural Park.",spots:""},
+  {num:"23",name:"Tabunan",type:"r",lng:122.9373,lat:10.5775,dist:"—",area:"—",pop:"—",fiesta:"—",desc:"A rural barangay in the north with mangrove forests and rice fields.",spots:""},
+  {num:"24",name:"Taloc",type:"u",lng:122.9094,lat:10.5887,dist:"—",area:"—",pop:"—",fiesta:"—",desc:"An urban barangay in the northwest bordering Bacolod City.",spots:""}
 ];
 
-const DEPTH = 8;
-
-function buildSides(ptsStr, baseColor) {
-  const pts = ptsStr.trim().split(' ').map(p => p.split(',').map(Number));
-  const n = pts.length;
-  // Darken the color for sides
-  let out = '';
-  for (let i = 0; i < n; i++) {
-    const [x1,y1] = pts[i];
-    const [x2,y2] = pts[(i+1)%n];
-    const nx = y2 - y1;
-    const ny = x1 - x2;
-    if (nx + ny < 0) {
-      out += `<polygon points="${x1},${y1} ${x2},${y2} ${x2+DEPTH},${y2+DEPTH} ${x1+DEPTH},${y1+DEPTH}" fill="${darken(baseColor)}" opacity="0.95" stroke="none"/>`;
-    }
-  }
-  return out;
-}
-
-function offsetPts(ptsStr) {
-  return ptsStr.trim().split(' ')
-    .map(p => { const [x,y] = p.split(',').map(Number); return `${x+DEPTH},${y+DEPTH}`; })
-    .join(' ');
-}
-
-function darken(hex) {
-  // Shift hue darker for side face
-  const map = {
-    '#c0392b': '#7b241c', '#e74c3c': '#922b21', '#27ae60': '#1a6b3c',
-    '#16a085': '#0e6655', '#8e44ad': '#6c3483', '#9b59b6': '#7d3c98',
-    '#2980b9': '#1f618d', '#1abc9c': '#17a589', '#f39c12': '#b7770d',
-    '#e67e22': '#a04000', '#2ecc71': '#1e8449',
-  };
-  return map[hex] || '#555';
-}
-
-function centroid(ptsStr) {
-  const pts = ptsStr.trim().split(' ').map(p => p.split(',').map(Number));
-  const n = pts.length;
-  let cx = 0, cy = 0;
-  pts.forEach(([x,y]) => { cx+=x; cy+=y; });
-  return [Math.round(cx/n), Math.round(cy/n)];
-}
-
-function brgyHTML(b) {
-  const gId = 'g' + b.name.replace(/\W/g,'');
-  const [cx, cy] = centroid(b.pts);
-  const nameEsc  = b.name.replace(/'/g,'&#39;');
-  const typeLabel = b.type==='u' ? 'Urban' : 'Rural';
-  const factsEsc = (b.facts||'').replace(/'/g,'&#39;');
-  const spotsEsc = (b.spots||'').replace(/'/g,'&#39;');
-  const descEsc  = (b.desc||'').replace(/'/g,'&#39;');
-
-  // Label — split long names
-  const words = b.name.split(' ');
-  let lines = [];
-  if (b.name.length <= 8 || words.length === 1) {
-    lines = [b.name];
-  } else if (words.length === 2) {
-    lines = words;
-  } else {
-    const mid = Math.ceil(words.length / 2);
-    lines = [words.slice(0,mid).join(' '), words.slice(mid).join(' ')];
-  }
-  const lh = 9.5;
-  const labelSVG = lines.map((l,i) =>
-    `<text x="${cx}" y="${cy - ((lines.length-1)*lh/2) + i*lh}" class="bl">${l}</text>`
-  ).join('');
-
-  return `
-<!-- ${b.name} -->
-<defs><linearGradient id="${gId}" x1="0.2" y1="0" x2="0.8" y2="1">
-  <stop offset="0%" stop-color="${b.color}" stop-opacity="0.95"/>
-  <stop offset="100%" stop-color="${darken(b.color)}" stop-opacity="0.95"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('${nameEsc}','${typeLabel}','${descEsc}','${factsEsc}','${spotsEsc}')">
-  ${buildSides(b.pts, b.color)}
-  <polygon class="bt" points="${b.pts}" fill="url(#${gId})" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-  ${labelSVG}
-</g>`;
-}
-
-// Landmark pins
-const pins = [
-  { name:'City Hall & Bantayan Park',   x:405, y:315, c:'#e74c3c', i:'★', desc:'Bago City Hall and historic Bantayan Park — site of the November 5, 1898 revolution by Gen. Juan Araneta.', s:'⭐ Al Cinco de Noviembre celebration site' },
-  { name:'Bago City Cathedral',          x:378, y:330, c:'#9b59b6', i:'✝', desc:'Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City.', s:'⭐ Religious heritage landmark' },
-  { name:'Javellana Mansion (Balay Daku)',x:355, y:348, c:'#8e44ad', i:'⌂', desc:'Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect. One of Bago Citys most prized heritage landmarks.', s:'⭐ Heritage ancestral house tour' },
-  { name:'Ma-ao Sugar Central',          x:665, y:370, c:'#e67e22', i:'⚙', desc:'Historic sugar mill — Ma-ao Sugar Central (MSC). Heritage industrial landmark in the most populated barangay.', s:'⭐ MSC Ruins|⭐ Lacson Mansion ruins' },
-  { name:'Kipot Twin Falls',             x:600, y:530, c:'#3498db', i:'★', desc:'Stunning twin waterfalls in Brgy. Mailum. Reached via 220 steps. Cold refreshing water — perfect for family trips.', s:'⭐ Nature ecotourism destination' },
-  { name:'Buenos Aires Mountain Resort', x:510, y:248, c:'#27ae60', i:'⛰', desc:'Scenic mountain resort in Brgy. Busay with breathtaking views of Bago City and surrounding landscape.', s:'⭐ Mountain resort & hiking' },
-  { name:'Rafael Salas Park',            x:430, y:340, c:'#16a085', i:'🌿', desc:'Named after Rafael Salas, UN Under-Secretary General from Bago City. A nature center and green sanctuary.', s:'⭐ Nature park & sanctuary' },
+const SPOTS = [
+  {name:"Bago City Hall",icon:"🏛️",cat:"Government",lng:122.8351,lat:10.5383,desc:"Seat of the local government of Bago City.",spots:"Official government center"},
+  {name:"Bago City Hospital",icon:"🏥",cat:"Hospital",lng:122.8471,lat:10.5355,desc:"Primary government hospital serving Bago City.",spots:"Main public health facility"},
+  {name:"Bago City Cathedral",icon:"⛪",cat:"Religious",lng:122.8344,lat:10.5372,desc:"Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City.",spots:"Religious heritage landmark"},
+  {name:"Bantayan Park",icon:"🌳",cat:"Heritage",lng:122.8317,lat:10.5368,desc:"Historic park - site of the November 5, 1898 revolution by Gen. Juan Araneta.",spots:"Al Cinco de Noviembre celebration"},
+  {name:"Balay ni Tan Juan",icon:"🏡",cat:"Heritage",lng:122.8348,lat:10.5345,desc:"Well-preserved ancestral house showcasing Bago City cultural heritage.",spots:"Heritage museum"},
+  {name:"Javellana Mansion",icon:"🏰",cat:"Heritage",lng:122.8361,lat:10.5369,desc:"Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect.",spots:"Heritage ancestral house"},
+  {name:"Ma-ao Sugar Central",icon:"🏭",cat:"Heritage",lng:122.9506,lat:10.477,desc:"Historic sugar mill - heritage industrial landmark in the most populated barangay.",spots:"Heritage industrial site"},
+  {name:"Kipot Twin Falls",icon:"💧",cat:"Tourist Spot",lng:123.0706,lat:10.4788,desc:"Stunning twin waterfalls in Brgy. Mailum. Reached via 220 steps.",spots:"Nature ecotourism"},
+  {name:"Pataan Mountain Resort",icon:"🏔",cat:"Tourist Spot",lng:123.0906,lat:10.4808,desc:"Mountain getaway near Kanlaon Volcano with scenic views.",spots:"Mountain resort"},
+  {name:"Buenos Aires Resort",icon:"⛰",cat:"Tourist Spot",lng:123.0474,lat:10.4552,desc:"Scenic mountain resort in Brgy. Busay with breathtaking panoramic views.",spots:"Mountain resort and hiking"},
+  {name:"Rafael Salas Park",icon:"🌿",cat:"Park",lng:123.0555,lat:10.4486,desc:"Named after Rafael Salas, UN Under-Secretary General from Bago City.",spots:"Nature park"},
+  {name:"Bago City Market",icon:"🏪",cat:"Commercial",lng:122.8374,lat:10.5396,desc:"Main public market of Bago City.",spots:"Fresh produce and local products"},
+  {name:"Bago Bus Terminal",icon:"🚌",cat:"Transport",lng:122.992,lat:10.4876,desc:"Main bus and jeepney terminal with routes to Bacolod.",spots:"Main transport hub"},
+  {name:"Bago City Police",icon:"🚔",cat:"Government",lng:122.8414,lat:10.5264,desc:"Bago City Police Station - Philippine National Police.",spots:"Emergency: 911"},
+  {name:"Bago City Library",icon:"📚",cat:"Government",lng:122.8343,lat:10.535,desc:"Bago City Public Library providing educational resources.",spots:"Public library"}
 ];
-
-function pinHTML(p) {
-  const n = p.name.replace(/'/g,'&#39;');
-  const d = p.desc.replace(/'/g,'&#39;');
-  const s = (p.s||'').replace(/'/g,'&#39;');
-  return `<g class="lp" onclick="showInfo('${n}','Landmark','${d}','','${s}')">
-  <circle cx="${p.x}" cy="${p.y}" r="11" fill="${p.c}" stroke="#fff" stroke-width="2.5" filter="url(#glow)"/>
-  <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="11" fill="#fff" font-weight="900" pointer-events="none">${p.i}</text>
-</g>`;
-}
 
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>Bago City Map</title>
+<title>Bago City Interactive Map</title>
+<link rel="preconnect" href="https://api.mapbox.com">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"><\/script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#111;min-height:100vh;overflow-x:hidden}
-.hdr{background:linear-gradient(135deg,#6b2200,#a03800);padding:max(16px,env(safe-area-inset-top)) 16px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.hdr{background:linear-gradient(135deg,#6b2200,#a03800);padding:max(14px,env(safe-area-inset-top)) 16px 14px;display:flex;align-items:center;gap:12px;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.5)}
 .bk{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0}
-.hi{flex:1}.hi h1{font-size:16px;font-weight:800;color:#fff}.hi p{font-size:11px;color:rgba(255,255,255,.65)}
+.hi{flex:1}.hi h1{font-size:16px;font-weight:800;color:#fff}.hi p{font-size:11px;color:rgba(255,255,255,.65);margin-top:1px}
 .hdr img{width:36px;height:36px;border-radius:50%}
-.legbar{display:flex;gap:10px;flex-wrap:wrap;padding:9px 16px;background:#1a1a1a;border-bottom:1px solid #2a2a2a;font-size:11px;font-weight:600}
-.leg{display:flex;align-items:center;gap:5px;color:#ccc}
-.ld{width:12px;height:12px;border-radius:3px}
-.mw{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#1a2a40}
-.mw svg{display:block;width:100%;height:auto;min-width:360px}
-/* 3D polygon styles */
-.bg{cursor:pointer}
-.bt{
-  transition:filter .22s ease, transform .22s ease;
-  transform-box:fill-box;
-  transform-origin:center;
-  filter:drop-shadow(3px 5px 6px rgba(0,0,0,0.5));
-}
-.bg:hover .bt{
-  filter:brightness(1.6) saturate(1.5) drop-shadow(0 0 14px rgba(255,240,180,0.8)) drop-shadow(3px 5px 6px rgba(0,0,0,0.4));
-  transform:translate(-4px,-4px);
-}
-.bl{
-  font-size:8px;font-weight:800;fill:#fff;text-anchor:middle;dominant-baseline:middle;
-  paint-order:stroke;stroke:#000;stroke-width:3px;stroke-linejoin:round;
-  pointer-events:none;letter-spacing:0.4px;
-}
-.lp{cursor:pointer;transition:transform .2s ease;transform-box:fill-box;transform-origin:center}
-.lp:hover{transform:scale(1.45) translateY(-3px)}
-/* Map labels */
-.sea-lbl{font-size:12px;font-weight:800;fill:#5dade2;opacity:.55;font-style:italic;letter-spacing:1px}
-.bdr-lbl{font-size:9px;font-weight:700;fill:rgba(255,255,255,0.2);text-anchor:middle;letter-spacing:0.8px}
-.river{fill:none;stroke:#5dade2;stroke-width:3;opacity:.45;stroke-linecap:round}
-.land{fill:#1e3a28;stroke:#1e4d30;stroke-width:2}
-/* Panel */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:199;display:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.sw{position:fixed;top:70px;left:0;right:0;padding:8px 12px;z-index:95}
+.si{width:100%;padding:10px 16px;border-radius:24px;border:none;background:rgba(255,255,255,.97);font-size:13px;font-weight:500;color:#1a1a1a;box-shadow:0 2px 12px rgba(0,0,0,.25);outline:none;transition:box-shadow .2s}
+.si:focus{box-shadow:0 2px 20px rgba(160,56,0,.4)}
+.si::placeholder{color:#aaa}
+.cw{position:fixed;top:122px;left:0;right:0;padding:4px 12px 0;z-index:95;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+.cw::-webkit-scrollbar{display:none}
+.ch{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.18);background:rgba(10,10,18,.85);backdrop-filter:blur(10px);color:#ddd;font-size:11px;font-weight:700;cursor:pointer;transition:all .22s ease;user-select:none;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.ch:active{transform:scale(.94)}
+.ch.on{border-color:transparent;color:#fff}
+.ch.on.ca{background:linear-gradient(135deg,#6b2200,#a03800)}
+.ch.on.cu{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.ch.on.cr{background:linear-gradient(135deg,#27ae60,#1e8449)}
+.ch.on.ct{background:linear-gradient(135deg,#f39c12,#d68910)}
+.ch.on.cl{background:linear-gradient(135deg,#5c1a00,#c0392b)}
+#map{position:fixed;top:0;left:0;right:0;bottom:0}
+#ldr{position:fixed;inset:0;background:#0a1628;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;gap:14px;transition:opacity .6s}
+#ldr.done{opacity:0;pointer-events:none}
+#ldr img{width:72px;height:72px;border-radius:50%;animation:lp 1.4s ease-in-out infinite;box-shadow:0 0 30px rgba(160,56,0,.5)}
+@keyframes lp{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+#ldr h2{font-size:18px;font-weight:900;color:#fff}
+#ldr p{font-size:12px;color:rgba(255,255,255,.4)}
+.bw{width:180px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.bf{height:100%;background:linear-gradient(90deg,#6b2200,#f39c12);animation:bfill 1.5s ease forwards}
+@keyframes bfill{0%{width:0}100%{width:95%}}
+.mapboxgl-ctrl-bottom-right{bottom:90px!important;right:12px!important}
+.mapboxgl-ctrl-attrib{font-size:9px!important}
+.bp{cursor:pointer;animation:popIn .45s cubic-bezier(.34,1.56,.64,1) both;transition:opacity .3s}
+.bp:hover .bpill{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.65)}
+.bp.sel .bpill{transform:scale(1.2);box-shadow:0 0 0 3px #fff,0 4px 20px rgba(255,255,255,.4)}
+.bp.dim{opacity:.1!important;pointer-events:none!important}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.bpill{padding:5px 11px;border-radius:20px;font-size:10.5px;font-weight:800;color:#fff;border:2px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.55);white-space:nowrap;letter-spacing:.2px;line-height:1.2;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.bp.u .bpill{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.bp.r .bpill{background:linear-gradient(135deg,#27ae60,#1e8449)}
+.bp.t .bpill{background:linear-gradient(135deg,#f39c12,#d68910)}
+.lm{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;animation:popIn .45s cubic-bezier(.34,1.56,.64,1) both;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+.lm:hover{transform:scale(1.2)}
+.lm:hover .lmi{box-shadow:0 0 0 3px rgba(255,255,255,.7),0 4px 16px rgba(0,0,0,.5)}
+.lm.sel{transform:scale(1.3)}
+.lm.dim{opacity:.1!important;pointer-events:none!important}
+.lmi{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6b2200,#c0392b);border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 10px rgba(0,0,0,.55);transition:box-shadow .2s;position:relative}
+.lmi::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(192,57,43,.4);animation:ring 2s ease-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.8}70%,100%{transform:scale(1.6);opacity:0}}
+.lmt{padding:2px 7px;border-radius:10px;font-size:8.5px;font-weight:800;color:#fff;background:rgba(107,34,0,.9);white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.fabs{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:90}
+.fab{padding:11px 18px;border-radius:24px;border:none;cursor:pointer;font-size:12px;font-weight:800;color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.5);white-space:nowrap;display:flex;align-items:center;gap:6px;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.fab:active{transform:scale(.93)}.fab:hover{transform:scale(1.05)}
+.f3d{background:rgba(20,20,20,.92);backdrop-filter:blur(8px);border:1px solid #444}
+.fhome{background:linear-gradient(135deg,#6b2200,#a03800)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:299;display:none;backdrop-filter:blur(8px);animation:fi .25s ease}
 .ov.on{display:block}
-.pn{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#1c1c1e;border-radius:24px 24px 0 0;padding:20px 20px 40px;box-shadow:0 -8px 48px rgba(0,0,0,.85);z-index:200;display:none;border-top:3px solid #a03800}
-.pn.on{display:block;animation:sup .32s cubic-bezier(.2,.8,.3,1)}
-@keyframes sup{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
-.ph{width:38px;height:4px;background:#3a3a3c;border-radius:2px;margin:0 auto 18px}
-.pc{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;background:#2c2c2e;border:none;color:#aaa;font-size:20px;cursor:pointer;line-height:32px;text-align:center}
-#pname{font-size:21px;font-weight:900;color:#fff;margin-bottom:5px;line-height:1.2}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.pan{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#1c1c1e;border-radius:24px 24px 0 0;padding:20px 20px 44px;z-index:300;display:none;border-top:3px solid #a03800;box-shadow:0 -8px 40px rgba(0,0,0,.8);max-height:78vh;overflow-y:auto}
+.pan.on{display:block;animation:su .35s cubic-bezier(.25,.46,.45,.94)}
+@keyframes su{from{transform:translateX(-50%) translateY(100%);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+.ph{width:38px;height:4px;background:#3a3a3c;border-radius:2px;margin:0 auto 16px}
+.pc{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;background:#2c2c2e;border:none;color:#aaa;font-size:20px;cursor:pointer;line-height:30px;text-align:center;transition:background .2s}
+.pc:hover{background:#3a3a3c}
+#pname{font-size:21px;font-weight:900;color:#fff;margin-bottom:5px}
 #ptype{display:inline-block;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:12px}
 #pdesc{font-size:13px;color:#999;line-height:1.65;margin-bottom:10px}
 .pr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .fp{background:#1a3050;color:#74b9ff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px}
 .sp{background:#3d1500;color:#fdcb6e;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px}
-.gm{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:14px;background:linear-gradient(135deg,#0369a1,#0ea5e9);color:#fff;border-radius:12px;font-size:13px;font-weight:700;text-decoration:none}
-.bot{display:block;margin:12px 14px 32px;padding:15px;background:linear-gradient(135deg,#6b2200,#a03800);color:#fff;text-align:center;border-radius:14px;font-weight:700;font-size:14px;text-decoration:none}
-</style>
-</head>
+.gm{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:14px;background:linear-gradient(135deg,#0369a1,#0ea5e9);color:#fff;border-radius:12px;font-size:13px;font-weight:700;text-decoration:none;transition:transform .2s}
+.gm:hover{transform:scale(1.02)}
+<\/style>
+<\/head>
 <body>
-<div class="hdr">
-  <a href="javascript:history.back()" class="bk">&#8592;</a>
-  <div class="hi"><h1>Bago City Interactive Map</h1><p>Tap any barangay for details</p></div>
-  <img src="assets/images/bago-city-logo.png" alt="Bago City">
-</div>
-<div class="legbar">
-  <div class="leg"><div class="ld" style="background:#c0392b"></div>Urban (8)</div>
-  <div class="leg"><div class="ld" style="background:#27ae60"></div>Rural (16)</div>
-  <div class="leg"><div class="ld" style="background:#e67e22"></div>Tourist Spot</div>
-  <div class="leg"><div class="ld" style="background:#e74c3c;border-radius:50%"></div>Landmark</div>
-</div>
-<div class="mw">
-<svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <linearGradient id="seaG" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#0a2744"/>
-    <stop offset="100%" stop-color="#0d3b6e"/>
-  </linearGradient>
-  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-    <feGaussianBlur stdDeviation="5" result="b"/>
-    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-</defs>
-
-<!-- Ocean -->
-<rect width="960" height="720" fill="url(#seaG)"/>
-
-<!-- City land boundary -->
-<polygon class="land"
-  points="18,38 938,38 962,200 945,420 920,575 865,650 780,700 640,720 470,725 310,715 195,688 120,648 68,590 38,510 18,400 15,260 18,130"/>
-
-<!-- Bago River (flows NE to SW, west side) -->
-<path class="river" d="M 590,28 Q 570,90 550,148 Q 525,210 495,262 Q 460,318 420,360 Q 378,400 335,428 Q 290,456 248,470 Q 208,482 168,496 Q 138,510 112,530"/>
-
-<!-- Border labels -->
-<text x="480" y="20" class="bdr-lbl">── CITY OF BACOLOD ──</text>
-<text x="870" y="55" class="bdr-lbl" transform="rotate(12,870,55)">MUNICIPALITY OF MURCIA</text>
-<text x="220" y="700" class="bdr-lbl">CITY OF LA CARLOTA</text>
-<text x="680" y="715" class="bdr-lbl">CITY OF SAN CARLOS</text>
-<text x="18" y="480" class="bdr-lbl" transform="rotate(-90,18,480)">MUNICIPALITY OF PULUPANDAN</text>
-
-<!-- Sea label -->
-<text x="8" y="360" class="sea-lbl" transform="rotate(-90,8,360)">GUIMARAS STRAIT</text>
-
-${barangays.map(brgyHTML).join('\n')}
-
-<!-- Mt Kanlaon -->
-<defs><linearGradient id="mtG" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0%" stop-color="#d7ccc8"/>
-  <stop offset="45%" stop-color="#8d6e63"/>
-  <stop offset="100%" stop-color="#4e342e"/>
-</linearGradient></defs>
-<g class="bg" onclick="showInfo('Mt. Kanlaon Natural Park','Landmark','Active stratovolcano — highest peak in Visayas at 2,465m. Mt. Kanlaon Natural Park covers 3,651 ha within Bago City territory.','📊 Highest in Visayas: 2,465m • 3,651 ha in Bago City','⭐ Mt. Kanlaon Natural Park|⭐ Mountaineering & hiking')">
-  <polygon points="908,406 945,398 960,460 948,540 910,560 885,490 890,428" fill="#3e2723" stroke="#2a1a16" stroke-width="1.5"/>
-  <polygon class="bt" points="900,398 937,390 952,452 940,532 902,552 877,482 882,420" fill="url(#mtG)" stroke="#5d4037" stroke-width="1.5"/>
-  <text x="912" y="478" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" paint-order="stroke" stroke="#000" stroke-width="3px" pointer-events="none">MT. KANLAON</text>
-  <text x="912" y="490" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.75)" paint-order="stroke" stroke="#000" stroke-width="2px" pointer-events="none">NATURAL PARK ▲ 2,465m</text>
-</g>
-
-${pins.map(pinHTML).join('\n')}
-
-<!-- Compass -->
-<g transform="translate(918,62)">
-  <circle r="26" fill="rgba(0,0,0,0.65)" stroke="#444" stroke-width="1.5"/>
-  <polygon points="0,-20 5,0 0,-5 -5,0" fill="#e74c3c"/>
-  <polygon points="0,20 5,0 0,5 -5,0" fill="#666"/>
-  <polygon points="-20,0 0,5 -5,0 0,-5" fill="#666"/>
-  <polygon points="20,0 0,5 5,0 0,-5" fill="#666"/>
-  <text y="-21" text-anchor="middle" font-size="12" font-weight="900" fill="#e74c3c" dominant-baseline="auto">N</text>
-  <text y="30" text-anchor="middle" font-size="9" fill="#999" dominant-baseline="auto">S</text>
-  <text x="-24" y="4" text-anchor="middle" font-size="9" fill="#999">W</text>
-  <text x="24" y="4" text-anchor="middle" font-size="9" fill="#999">E</text>
-</g>
-
-<!-- Watermark -->
-<text x="480" y="688" text-anchor="middle" font-size="16" font-weight="900" fill="rgba(255,220,130,0.18)" letter-spacing="4">CITY OF BAGO</text>
-<text x="480" y="704" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.12)" letter-spacing="2">NEGROS OCCIDENTAL, PHILIPPINES</text>
-</svg>
-</div>
-
-<a class="bot" href="https://maps.google.com/?q=Bago+City+Negros+Occidental+Philippines" target="_blank" rel="noopener">📍 Explore on Google Maps</a>
-
-<div class="ov" id="ov" onclick="hide()"></div>
-<div class="pn" id="pn">
-  <button class="pc" onclick="hide()">&#215;</button>
-  <div class="ph"></div>
-  <div id="pname"></div>
-  <span id="ptype"></span>
-  <p id="pdesc"></p>
-  <div class="pr" id="pfacts"></div>
-  <div class="pr" id="pspots"></div>
-  <a class="gm" id="pgm" href="#" target="_blank" rel="noopener">📍 View on Google Maps</a>
-</div>
-
+<div id="ldr"><img src="assets/images/bago-city-logo.png" alt=""><h2>Bago City Interactive Map<\/h2><p>Loading map...<\/p><div class="bw"><div class="bf"><\/div><\/div><\/div>
+<div id="map"><\/div>
+<div class="hdr"><a href="javascript:history.back()" class="bk">&#8592;<\/a><div class="hi"><h1>Bago City Interactive Map<\/h1><p>Tap any marker for details<\/p><\/div><img src="assets/images/bago-city-logo.png" alt=""><\/div>
+<div class="sw"><input class="si" id="srch" type="search" placeholder="Search barangay or landmark..." oninput="doSearch(this.value)" autocomplete="off"><\/div>
+<div class="cw">
+  <button class="ch on ca" onclick="doFilter('all',this)">All<\/button>
+  <button class="ch cu" onclick="doFilter('u',this)">&#127961; Urban<\/button>
+  <button class="ch cr" onclick="doFilter('r',this)">&#127807; Rural<\/button>
+  <button class="ch ct" onclick="doFilter('t',this)">&#11088; Tourist<\/button>
+  <button class="ch cl" onclick="doFilter('lm',this)">&#128205; Landmarks<\/button>
+<\/div>
+<div class="fabs"><button class="fab f3d" id="btn3d" onclick="do3D()">&#9635; Enable 3D<\/button><button class="fab fhome" onclick="doHome()">&#127919; Bago City<\/button><\/div>
+<div class="ov" id="ov" onclick="hidePan()"><\/div>
+<div class="pan" id="pan"><button class="pc" onclick="hidePan()">&#215;<\/button><div class="ph"><\/div><div id="pname"><\/div><span id="ptype"><\/span><p id="pdesc"><\/p><div class="pr" id="pfacts"><\/div><div class="pr" id="pspots"><\/div><a class="gm" id="pgm" href="#" target="_blank" rel="noopener">&#128205; View on Google Maps<\/a><\/div>
 <script>
-function showInfo(name,type,desc,facts,spots){
-  document.getElementById('pname').textContent=name;
-  var t=document.getElementById('ptype');
-  var u=type==='Urban',r=type==='Rural';
-  t.textContent=u?'🏙️ Urban Barangay':r?'🌿 Rural Barangay':'📍 '+type;
-  t.style.background=u?'rgba(192,57,43,0.2)':r?'rgba(39,174,96,0.2)':'rgba(230,126,34,0.2)';
-  t.style.color=u?'#ff7675':r?'#55efc4':'#fdcb6e';
-  document.getElementById('pdesc').textContent=desc;
-  document.getElementById('pfacts').innerHTML=facts?facts.split('|').map(f=>'<span class="fp">'+f+'</span>').join(''):'';
-  document.getElementById('pspots').innerHTML=spots?spots.split('|').map(s=>'<span class="sp">'+s+'</span>').join(''):'';
-  document.getElementById('pgm').href='https://maps.google.com/?q='+encodeURIComponent(name+' Bago City Negros Occidental Philippines');
-  document.getElementById('pn').classList.add('on');
-  document.getElementById('ov').classList.add('on');
-}
-function hide(){
-  document.getElementById('pn').classList.remove('on');
-  document.getElementById('ov').classList.remove('on');
-}
-</script>
-</body>
-</html>`;
+mapboxgl.accessToken="${TOKEN}";
+const BARANGAYS=${JSON.stringify(BARANGAYS)};
+const SPOTS=${JSON.stringify(SPOTS)};
+const CENTER=[122.950,10.510];
+const BOUNDS=[[122.67,10.28],[123.25,10.70]];
+const INITIAL_ZOOM=11.2;
+const BM=[],LM=[];
+let is3D=false,activeEl=null;
 
-fs.writeFileSync('map.html', html, 'utf8');
-console.log('Done — ' + html.length + ' bytes');
+const map=new mapboxgl.Map({container:"map",style:"mapbox://styles/mapbox/streets-v12",center:CENTER,zoom:INITIAL_ZOOM,minZoom:10.5,maxZoom:17,maxBounds:BOUNDS});
+map.setPadding({top:160,bottom:90});
+map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),"bottom-right");
+
+map.on("load",()=>{
+  const l=document.getElementById("ldr");
+  l.classList.add("done");
+  setTimeout(()=>l.style.display="none",600);
+
+  map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
+  map.setTerrain({source:"dem",exaggeration:1.8});
+  map.setFog({color:"rgb(186,210,235)","high-color":"rgb(36,92,223)","horizon-blend":0.02});
+
+  BARANGAYS.forEach((b,i)=>{
+    const el=document.createElement("div");
+    el.className="bp "+b.type;
+    el.innerHTML="<div class=bpill>"+b.name+"<\/div>";
+    el.style.animationDelay=(i*35)+"ms";
+    el.onclick=()=>onTap(el,b.lng,b.lat,()=>showPan(b));
+    new mapboxgl.Marker({element:el,anchor:"center"}).setLngLat([b.lng,b.lat]).addTo(map);
+    BM.push({el,b});
+  });
+
+  SPOTS.forEach((s,i)=>{
+    const el=document.createElement("div");
+    el.className="lm";
+    el.style.animationDelay=((BARANGAYS.length+i)*35)+"ms";
+    const sh=s.name.length>13?s.name.slice(0,12)+"...":s.name;
+    el.innerHTML="<div class=lmi>"+s.icon+"<\/div><div class=lmt>"+sh+"<\/div>";
+    const info={name:s.name,type:"landmark",cat:s.cat,desc:s.desc,spots:s.spots,dist:"",pop:"",area:"",fiesta:""};
+    el.onclick=()=>onTap(el,s.lng,s.lat,()=>showPan(info));
+    new mapboxgl.Marker({element:el,anchor:"top"}).setLngLat([s.lng,s.lat]).addTo(map);
+    LM.push({el,s});
+  });
+
+  function syncZ(){
+    const z=map.getZoom();
+    BM.forEach(({el})=>{
+      if(el.classList.contains("dim"))return;
+      el.style.opacity=z<10.8?"0":z<11.3?"0.55":"1";
+      el.style.pointerEvents=z<10.8?"none":"auto";
+    });
+  }
+  map.on("zoom",syncZ);syncZ();
+
+  setTimeout(()=>{
+    map.easeTo({pitch:20,duration:1600});
+    setTimeout(()=>map.easeTo({pitch:0,duration:1200}),2000);
+  },700);
+});
+
+function onTap(el,lng,lat,cb){
+  if(activeEl&&activeEl!==el)activeEl.classList.remove("sel");
+  activeEl=el;el.classList.add("sel");
+  map.easeTo({center:[lng,lat],zoom:Math.max(map.getZoom(),13),duration:550,easing:t=>1-Math.pow(1-t,3)});
+  setTimeout(cb,280);
+}
+
+function doFilter(type,chip){
+  document.querySelectorAll(".ch").forEach(c=>c.classList.remove("on"));
+  chip.classList.add("on");
+  BM.forEach(({el,b})=>{
+    let show=type==="all"||(type==="u"&&b.type==="u")||(type==="r"&&b.type==="r")||(type==="t"&&b.type==="t");
+    if(type==="lm")show=false;
+    el.classList.toggle("dim",!show);
+    if(!show)el.style.opacity="";
+  });
+  LM.forEach(({el})=>{
+    const show=type==="all"||type==="lm";
+    el.classList.toggle("dim",!show);
+  });
+}
+
+function doSearch(v){
+  const q=v.trim().toLowerCase();
+  if(!q){BM.forEach(({el})=>el.classList.remove("dim"));LM.forEach(({el})=>el.classList.remove("dim"));return;}
+  let hit=null;
+  BM.forEach(({el,b})=>{const m=b.name.toLowerCase().includes(q);el.classList.toggle("dim",!m);if(m&&!hit)hit=[b.lng,b.lat];});
+  LM.forEach(({el,s})=>{const m=s.name.toLowerCase().includes(q);el.classList.toggle("dim",!m);if(m&&!hit)hit=[s.lng,s.lat];});
+  if(hit)map.easeTo({center:hit,zoom:13.5,duration:700});
+}
+
+function do3D(){
+  is3D=!is3D;
+  const btn=document.getElementById("btn3d");
+  if(is3D){map.easeTo({pitch:55,bearing:-15,duration:900});btn.innerHTML="&#9634; Disable 3D";btn.style.background="linear-gradient(135deg,#1a3050,#0369a1)";btn.style.border="none";}
+  else{map.easeTo({pitch:0,bearing:0,duration:800});btn.innerHTML="&#9635; Enable 3D";btn.style.background="rgba(20,20,20,.92)";btn.style.border="1px solid #444";}
+}
+
+function doHome(){map.flyTo({center:CENTER,zoom:11.4,pitch:is3D?55:0,bearing:is3D?-15:0,duration:1100});}
+
+function showPan(p){
+  document.getElementById("pname").textContent=p.name;
+  const t=document.getElementById("ptype");
+  const u=p.type==="u",lm=p.type==="landmark";
+  t.textContent=u?"🏙️ Urban Barangay":lm?"📍 "+p.cat:p.type==="t"?"🌿 Rural · Tourist":"🌿 Rural Barangay";
+  t.style.background=u?"rgba(231,76,60,.2)":lm?"rgba(230,126,34,.2)":p.type==="t"?"rgba(243,156,18,.2)":"rgba(39,174,96,.2)";
+  t.style.color=u?"#ff7675":lm?"#fdcb6e":p.type==="t"?"#fdcb6e":"#55efc4";
+  document.getElementById("pdesc").textContent=p.desc||"";
+  const f=[];
+  if(p.num)f.push("🔢 Brgy. No. "+p.num);
+  if(p.dist&&p.dist!=="—")f.push("📍 "+p.dist+" from city");
+  if(p.pop&&p.pop!=="—")f.push("👥 Pop. "+p.pop);
+  if(p.area&&p.area!=="—")f.push("📐 "+p.area);
+  if(p.fiesta&&p.fiesta!=="—")f.push("🎉 "+p.fiesta);
+  document.getElementById("pfacts").innerHTML=f.map(x=>"<span class=fp>"+x+"<\/span>").join("");
+  document.getElementById("pspots").innerHTML=p.spots?p.spots.split("|").map(s=>"<span class=sp>"+s+"<\/span>").join(""):"";
+  document.getElementById("pgm").href="https://maps.google.com/?q="+encodeURIComponent(p.name+" Bago City Negros Occidental");
+  document.getElementById("pan").classList.add("on");
+  document.getElementById("ov").classList.add("on");
+}
+
+function hidePan(){
+  document.getElementById("pan").classList.remove("on");
+  document.getElementById("ov").classList.remove("on");
+  if(activeEl){activeEl.classList.remove("sel");activeEl=null;}
+}
+<\/script>
+<\/body>
+<\/html>`;
+
+fs.writeFileSync("map.html", html, "utf8");
+console.log("Done - " + html.length + " bytes");
