@@ -70,8 +70,8 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   text-align:center;
   box-shadow:0 1px 4px rgba(0,0,0,.4);
 }
-.bp.dim{opacity:.12;pointer-events:none}
-.lm.dim{opacity:.12;pointer-events:none}
+.bp.dim{opacity:.08!important;pointer-events:none!important;filter:grayscale(1)}
+.spot-marker.dim{opacity:.08!important;pointer-events:none!important;filter:grayscale(1)}
 .bp.sel .brgy-pill{transform:scale(1.18);box-shadow:0 0 0 3px #fff,0 4px 20px rgba(255,255,255,.35)}
 .lm.sel{transform:scale(1.28)}
 /* Pop-in animation */
@@ -241,7 +241,7 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v12',
   center: CENTER,
-  zoom: 11.5,
+  zoom: 12,
   minZoom: 10.5,
   maxZoom: 17,
   maxBounds: BOUNDS,
@@ -287,8 +287,9 @@ map.on('load', () => {
     const zoom = map.getZoom();
     BM.forEach(({el}) => {
       if (el.classList.contains('dim')) return;
-      el.style.opacity = zoom < 10.8 ? '0' : zoom < 11.4 ? '0.5' : '1';
-      el.style.pointerEvents = zoom < 10.8 ? 'none' : 'auto';
+      el.style.opacity = zoom < 10.5 ? '0' : '1';
+      el.style.transform = zoom < 10.8 ? 'scale(0.75)' : 'scale(1)';
+      el.style.pointerEvents = zoom < 10.5 ? 'none' : 'auto';
     });
   }
   map.on('zoom', updateMarkerVisibility);
@@ -401,7 +402,12 @@ function doSearch(val) {
     el.classList.toggle('dim', !m);
     if (m && !hit) hit = [s.lng, s.lat];
   });
-  if (hit) map.easeTo({center: hit, zoom: 13.5, duration: 700});
+  if (hit) {
+    // Show all markers first, then fly to hit
+    BM.forEach(({el}) => { el.style.opacity = ''; el.style.pointerEvents = ''; });
+    LM.forEach(({el}) => { el.style.opacity = ''; el.style.pointerEvents = ''; });
+    map.flyTo({center: hit, zoom: 15, duration: 900, essential: true});
+  }
 }
 
 // ── Fly-to on tap ────────────────────────────────────────────
