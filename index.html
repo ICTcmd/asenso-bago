@@ -331,9 +331,18 @@
         </div>
       </div>
 
+      <!-- ── DAILY BIBLE VERSE ── -->
+      <div id="bible-verse-card" style="margin:0 16px 16px;background:linear-gradient(135deg,#1a3a2a,#0d2018);border-radius:16px;padding:18px;border-left:4px solid #f39c12;box-shadow:0 4px 16px rgba(0,0,0,.12);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:18px;">✝️</span>
+          <span style="font-size:10px;font-weight:800;color:#f39c12;text-transform:uppercase;letter-spacing:1px;">Daily Bible Verse</span>
+        </div>
+        <p id="bv-text" style="font-size:14px;font-style:italic;color:#e8f5e9;line-height:1.7;margin-bottom:8px;"></p>
+        <p id="bv-ref" style="font-size:11px;font-weight:800;color:#f39c12;"></p>
+      </div>
+
       <!-- ── CTA BANNER ── -->
-      <div class="cta-banner">
-        <div class="cta-content">
+      <div class="cta-banner">        <div class="cta-content">
           <h3>Bago City, at your fingertips</h3>
           <p>Access all city programs and services designed for <strong>Bagonhons</strong></p>
           <button class="cta-btn">Create an Account</button>
@@ -1522,6 +1531,47 @@
       window.location.reload();
     });
   }
+
+  // ─── Daily Bible Verse ──────────────────────────────────────────────────────
+  const VERSES = [
+    { text: '"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."', ref: 'Jeremiah 29:11' },
+    { text: '"I can do all things through Christ who strengthens me."', ref: 'Philippians 4:13' },
+    { text: '"The Lord is my shepherd; I shall not want."', ref: 'Psalm 23:1' },
+    { text: '"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."', ref: 'Proverbs 3:5-6' },
+    { text: '"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."', ref: 'John 3:16' },
+    { text: '"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."', ref: 'Joshua 1:9' },
+    { text: '"Love the Lord your God with all your heart and with all your soul and with all your mind. This is the first and greatest commandment."', ref: 'Matthew 22:37-38' },
+    { text: '"And we know that in all things God works for the good of those who love him, who have been called according to his purpose."', ref: 'Romans 8:28' },
+    { text: '"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God."', ref: 'Philippians 4:6' },
+    { text: '"The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you."', ref: 'Numbers 6:24-25' },
+    { text: '"Come to me, all you who are weary and burdened, and I will give you rest."', ref: 'Matthew 11:28' },
+    { text: '"He heals the brokenhearted and binds up their wounds."', ref: 'Psalm 147:3' },
+    { text: '"Give thanks to the Lord, for he is good; his love endures forever."', ref: 'Psalm 107:1' },
+    { text: '"The name of the Lord is a fortified tower; the righteous run to it and are safe."', ref: 'Proverbs 18:10' },
+    { text: '"Blessed are the poor in spirit, for theirs is the kingdom of heaven."', ref: 'Matthew 5:3' },
+    { text: '"The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?"', ref: 'Psalm 27:1' },
+    { text: '"Seek first his kingdom and his righteousness, and all these things will be given to you as well."', ref: 'Matthew 6:33' },
+    { text: '"Even youths grow tired and weary, and young men stumble and fall; but those who hope in the Lord will renew their strength."', ref: 'Isaiah 40:30-31' },
+    { text: '"Love is patient, love is kind. It does not envy, it does not boast, it is not proud."', ref: '1 Corinthians 13:4' },
+    { text: '"The steadfast love of the Lord never ceases; his mercies never come to an end; they are new every morning."', ref: 'Lamentations 3:22-23' },
+    { text: '"With man this is impossible, but with God all things are possible."', ref: 'Matthew 19:26' },
+    { text: '"Let your light shine before others, that they may see your good deeds and glorify your Father in heaven."', ref: 'Matthew 5:16' },
+    { text: '"For where two or three gather in my name, there am I with them."', ref: 'Matthew 18:20' },
+    { text: '"The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you."', ref: 'Zephaniah 3:17' },
+    { text: '"Cast all your anxiety on him because he cares for you."', ref: '1 Peter 5:7' },
+    { text: '"Delight yourself in the Lord, and he will give you the desires of your heart."', ref: 'Psalm 37:4' },
+    { text: '"If my people, who are called by my name, will humble themselves and pray and seek my face, then I will hear from heaven."', ref: '2 Chronicles 7:14' },
+    { text: '"The fear of the Lord is the beginning of wisdom, and knowledge of the Holy One is understanding."', ref: 'Proverbs 9:10' },
+    { text: '"I am the way and the truth and the life. No one comes to the Father except through me."', ref: 'John 14:6' },
+    { text: '"Not by might nor by power, but by my Spirit, says the Lord Almighty."', ref: 'Zechariah 4:6' },
+    { text: '"Jesus said, I am the resurrection and the life. The one who believes in me will live, even though they die."', ref: 'John 11:25' },
+  ];
+  const dayIndex = Math.floor(Date.now() / 86400000) % VERSES.length;
+  const verse = VERSES[dayIndex];
+  const bvText = document.getElementById('bv-text');
+  const bvRef  = document.getElementById('bv-ref');
+  if (bvText) bvText.textContent = verse.text;
+  if (bvRef)  bvRef.textContent  = '— ' + verse.ref;
 
   // ─── Greeting based on time of day ─────────────────────────────────────────
   function updateGreeting() {
