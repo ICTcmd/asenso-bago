@@ -1442,17 +1442,6 @@
     fbSdkLoaded = true;
     window.fbAsyncInit = function() {
       FB.init({ xfbml: true, version: 'v19.0' });
-    };
-    const script = document.createElement('script');
-    script.src = 'https://connect.facebook.net/en_US/sdk.js';
-    script.async = true; script.defer = true; script.crossOrigin = 'anonymous';
-    document.body.appendChild(script);
-  }
-  function loadFbSdk() {
-    if (fbSdkLoaded) return;
-    fbSdkLoaded = true;
-    window.fbAsyncInit = function() {
-      FB.init({ xfbml: true, version: 'v19.0' });
       FB.Event.subscribe('xfbml.render', function() {
         const loading = document.getElementById('fb-loading');
         const wrap = document.getElementById('fb-embed-wrap');
@@ -1997,7 +1986,7 @@
           navigateTo('page-barangays');
           break;
         default:
-          alert('Coming soon!');
+          showToast('Coming soon! Check back for updates.');
       }
     });
   });
@@ -2053,6 +2042,7 @@
   
 
   // ─── PWA Install Prompt ─────────────────────────────────────────────────────
+    function showToast(m){var t=document.getElementById("_t");if(!t){t=document.createElement("div");t.id="_t";t.style.cssText="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;";document.body.appendChild(t);}t.textContent=m;t.style.opacity="1";clearTimeout(t._);t._=setTimeout(function(){t.style.opacity="0";},2500);}
   let deferredPrompt = null;
   const installBanner = document.getElementById('install-banner');
   const installBtn = document.getElementById('install-btn');

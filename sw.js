@@ -1,6 +1,6 @@
-// Asenso Bago — Service Worker v20260526
+﻿// Asenso Bago â€” Service Worker v20260526
 // Version timestamp ensures cache busts on every deploy
-const CACHE = 'asenso-bago-20260604-002';
+const CACHE = '__CACHE_VERSION__';
 
 const ASSETS = [
   '/',
@@ -10,6 +10,8 @@ const ASSETS = [
   '/manifest.json',
   '/assets/css/app.css',
   '/assets/images/bago-city-logo.png',
+  '/assets/images/May%20Gugma%20Nga%20Panghimanwa%20Logo%20Final.png',
+  '/assets/images/May%20Gugma%20Nga%20Panghimanwa%20Logo%20Final.png',
   '/assets/images/hw-logo.png',
   '/assets/images/hw-cover.png',
   '/assets/images/wol-logo.png',
@@ -20,10 +22,10 @@ const ASSETS = [
   '/assets/images/kipot.jpg',
   '/assets/images/1311-Bago-City-St.-John-the-Baptist-Parish.jpg',
   '/assets/images/Buenos_Aires_Mountain_Resort_in_Bago_City.jpg',
-  '/assets/images/javellana mansion.jpg',
-  '/assets/images/rafael salas.jpg',
+  '/assets/images/javellana%20mansion.jpg',
+  '/assets/images/rafael%20salas.jpg',
   '/assets/images/sugar.png',
-  '/assets/images/tan juan balay.jpg',
+  '/assets/images/tan%20juan%20balay.jpg',
 ];
 
 self.addEventListener('install', e => {
@@ -50,7 +52,7 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
-  // Never cache map.html or index.html — always fetch fresh
+  // Never cache map.html or index.html â€” always fetch fresh
   if (url.pathname === '/map.html' || url.pathname === '/index.html' || url.pathname === '/') {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
@@ -77,3 +79,6 @@ self.addEventListener('fetch', e => {
 self.addEventListener('message', e => {
   if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
+
+
+
