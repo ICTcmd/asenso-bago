@@ -375,7 +375,7 @@ map.on("load",()=>{
 
   map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
   map.setTerrain({source:"dem",exaggeration:1.5});
-  map.setFog({color:"rgb(255,230,200)",horizon-blend:.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.4});
+  map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.4});
 
   BARANGAYS.forEach((b,i)=>{
     const el=document.createElement("div");
