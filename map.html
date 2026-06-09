@@ -382,7 +382,7 @@ map.on("load",()=>{
     el.className="bp "+b.type;
     el.innerHTML="<div class=bpill>"+b.name+"</div>";
     el.style.animationDelay=(i*30)+"ms";
-    el.onclick=()=>onTap(el,b.lng,b.lat,()=>showPan(b));
+    el.onclick=()=>onTap(el,b.lng,b.lat,()=>{});
     new mapboxgl.Marker({element:el,anchor:"center"}).setLngLat([b.lng,b.lat]).addTo(map);
     BM.push({el,b});
   });
@@ -395,7 +395,7 @@ map.on("load",()=>{
     const sh=s.name.length>14?s.name.slice(0,13)+"…":s.name;
     el.innerHTML="<div class=lmi>"+s.icon+"</div><div class=lmt>"+sh+"</div>";
     const info={name:s.name,type:"landmark",cat:s.cat,tier:t,icon:s.icon,desc:s.desc,spots:s.spots,dist:"",pop:"",area:"",fiesta:""};
-    el.onclick=()=>onTap(el,s.lng,s.lat,()=>showPan(info));
+    el.onclick=()=>onTap(el,s.lng,s.lat,()=>{});
     new mapboxgl.Marker({element:el,anchor:"top"}).setLngLat([s.lng,s.lat]).addTo(map);
     LM.push({el,s,info,t});
   });
@@ -489,13 +489,17 @@ function selectSearchResult(item){
   document.getElementById("srch-drop").classList.remove("on");
   document.getElementById("srch").value=item.name;
   document.getElementById("srch-clr").classList.add("on");
+  
+  // Zoom to the selected location instead of showing panel
+  map.flyTo({center:[item.lng,item.lat],zoom:16,duration:1000});
+  
   let el=null;
   if(item.kind==="barangay"){
     const hit=BM.find(x=>x.b.name===item.name);
-    if(hit){el=hit.el;showPan(item.data);onTap(el,item.lng,item.lat,()=>showPan(item.data));}
+    if(hit){el=hit.el;onTap(el,item.lng,item.lat,()=>{});}
   }else{
     const hit=LM.find(x=>x.s.name===item.name);
-    if(hit){el=hit.el;onTap(el,item.lng,item.lat,()=>showPan(hit.info));}
+    if(hit){el=hit.el;onTap(el,item.lng,item.lat,()=>{});}
   }
 }
 
