@@ -1,6 +1,6 @@
 ﻿// Asenso Bago â€” Service Worker v20260526
 // Version timestamp ensures cache busts on every deploy
-const CACHE = '__CACHE_VERSION__';
+const CACHE = 'bago-map-v2-20260609';
 
 const ASSETS = [
   '/',
@@ -50,6 +50,25 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
+
+  // Cache external images (Unsplash) for offline use
+  if (url.hostname === 'images.unsplash.com') {
+    e.respondWith(
+      caches.open('external-images-v1').then(cache => {
+        return cache.match(e.request).then(response => {
+          if (response) return response;
+          return fetch(e.request).then(networkResponse => {
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(e.request, networkResponse.clone());
+            }
+            return networkResponse;
+          });
+        });
+      })
+    );
+    return;
+  }
+
   if (url.origin !== self.location.origin) return;
 
   // Never cache map.html or index.html â€” always fetch fresh

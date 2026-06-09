@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /offline.html
+Disallow: /map-editor.html
+Disallow: /map-new.html
+Disallow: /gen-map.js
+Disallow: /gen-verses.py
 
 Sitemap: https://asenso-bago.vercel.app/manifest.json
