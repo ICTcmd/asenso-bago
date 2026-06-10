@@ -322,14 +322,14 @@ function isHeritageSpot(s){return spotTier(s)==="heritage"}
 
 const map=new mapboxgl.Map({
   container:"map",
-  style:"mapbox://styles/mapbox/outdoors-v12",
+  style:"mapbox://styles/mapbox/streets-v12",
   center:CENTER,
   zoom:INITIAL_ZOOM,
   minZoom:10.5,
   maxZoom:17,
   maxBounds:BOUNDS
 });
-map.setPadding({top:200,bottom:90});
+map.setPadding({top:115,bottom:80});
 
 map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),"bottom-right");
 
@@ -419,7 +419,7 @@ map.on("load",()=>{
   loadEvents();
 
   map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
-  map.setTerrain({source:"dem",exaggeration:0.5});
+  map.setTerrain({source:"dem",exaggeration:0.3});
   // Reduced fog effects for better performance
   map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.2});
 
