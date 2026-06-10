@@ -492,22 +492,25 @@ function selectSearchResult(item){
   document.getElementById("srch").value=item.name;
   document.getElementById("srch-clr").classList.add("on");
   
-  // Fly to the selected location at high zoom
+  // Fly to location and highlight marker — tap marker to see details
   map.flyTo({center:[item.lng,item.lat],zoom:16,duration:900,essential:true});
   
-  // Highlight and open panel after fly completes
-  setTimeout(()=>{
-    if(item.kind==="barangay"){
-      const hit=BM.find(x=>x.b.name===item.name);
-      if(hit){onTap(hit.el,item.lng,item.lat,()=>showPan(hit.b));}
-    }else{
-      const hit=LM.find(x=>x.s.name===item.name);
-      if(hit){
-        const info={name:hit.s.name,type:"landmark",cat:hit.s.cat,desc:hit.s.desc,spots:hit.s.spots,dist:"",pop:"",area:"",fiesta:""};
-        onTap(hit.el,item.lng,item.lat,()=>showPan(info));
-      }
+  // Highlight the marker
+  if(item.kind==="barangay"){
+    const hit=BM.find(x=>x.b.name===item.name);
+    if(hit){
+      if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
+      activeEl=hit.el;
+      hit.el.classList.add("sel");
     }
-  },950);
+  }else{
+    const hit=LM.find(x=>x.s.name===item.name);
+    if(hit){
+      if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
+      activeEl=hit.el;
+      hit.el.classList.add("sel");
+    }
+  }
 }
 
 // Debounce timer
