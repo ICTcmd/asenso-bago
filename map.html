@@ -370,19 +370,10 @@ function initQuickPicks(){
 }
 
 function initFilterCounts(){
-  const urbanCount=BARANGAYS.filter(b=>b.type==='u').length;
-  const ruralCount=BARANGAYS.filter(b=>b.type==='r').length;
-  const touristCount=BARANGAYS.filter(b=>b.type==='t').length;
+  // Filter chip elements removed — just update the header badge
   const starCount=SPOTS.filter(s=>spotTier(s)==='star').length;
-  const heritageCount=SPOTS.filter(s=>spotTier(s)==='heritage').length;
-  const cityCount=SPOTS.filter(s=>spotTier(s)==='city').length;
-  
-  document.querySelector('[data-f="u"]').innerHTML=`🏙️ Urban <span class="cnt">${urbanCount}</span>`;
-  document.querySelector('[data-f="r"]').innerHTML=`🌾 Rural <span class="cnt">${ruralCount}</span>`;
-  document.querySelector('[data-f="t"]').innerHTML=`🏞️ Tourist Brgy <span class="cnt">${touristCount}</span>`;
-  document.querySelector('[data-f="star"]').innerHTML=`⭐ Must-See <span class="cnt">${starCount}</span>`;
-  document.querySelector('[data-f="heritage"]').innerHTML=`🏛️ Heritage <span class="cnt">${heritageCount}</span>`;
-  document.querySelector('[data-f="city"]').innerHTML=`🏢 City Services <span class="cnt">${cityCount}</span>`;
+  const sc=document.getElementById("spot-count");
+  if(sc) sc.textContent=starCount+" must-see";
 }
 
 document.getElementById("srch").addEventListener("input",e=>doSearch(e.target.value,false));
@@ -407,8 +398,8 @@ document.getElementById("srch").addEventListener("blur",()=>{
   },200);
 });
 
-document.getElementById("cnt-star").textContent=SPOTS_DEDUPED.filter(isStarSpot).length;
-document.getElementById("spot-count").textContent=SPOTS_DEDUPED.filter(isStarSpot).length+" must-see";
+const _sc=document.getElementById("spot-count");
+if(_sc) _sc.textContent=SPOTS_DEDUPED.filter(isStarSpot).length+" must-see";
 
 map.on("load",()=>{
   const ldr=document.getElementById("ldr");

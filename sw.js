@@ -11,7 +11,6 @@ const ASSETS = [
   '/assets/css/app.css',
   '/assets/images/bago-city-logo.png',
   '/assets/images/May%20Gugma%20Nga%20Panghimanwa%20Logo%20Final.png',
-  '/assets/images/May%20Gugma%20Nga%20Panghimanwa%20Logo%20Final.png',
   '/assets/images/hw-logo.png',
   '/assets/images/hw-cover.png',
   '/assets/images/wol-logo.png',
