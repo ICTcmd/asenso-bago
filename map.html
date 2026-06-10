@@ -295,12 +295,12 @@ const SPOTS=[
 const SPOTS_DEDUPED=SPOTS;
 
 const QUICK_PICKS=[
-  {q:"Kipot",label:"💧 Kipot Falls"},
-  {q:"Bantayan",label:"🌳 Bantayan Park"},
-  {q:"Buenos Aires",label:"⛰️ Buenos Aires"},
-  {q:"Hundred Hills",label:"🌄 Hundred Hills"},
-  {q:"Poblacion",label:"🏙️ Poblacion"},
-  {q:"Mailum",label:"🏞️ Mailum"}
+  {q:"Kipot Twin Falls",  label:"💧 Kipot Falls",  lng:123.0706, lat:10.4788},
+  {q:"Bantayan Park",     label:"🌳 Bantayan Park", lng:122.8317, lat:10.5368},
+  {q:"Buenos Aires Resort",label:"⛰️ Buenos Aires", lng:123.0474, lat:10.4552},
+  {q:"Hundred Hills",    label:"🌄 Hundred Hills",  lng:122.8378, lat:10.5318},
+  {q:"Poblacion",        label:"🏙️ Poblacion",      lng:122.8353, lat:10.5402},
+  {q:"Mailum",           label:"🏞️ Mailum",         lng:123.0494, lat:10.4636}
 ];
 
 const CENTER=[122.950,10.510];
@@ -340,7 +340,26 @@ function buildSearchIndex(){
 function initQuickPicks(){
   const el=document.getElementById("quick-picks");
   el.innerHTML=QUICK_PICKS.map(p=>`<button class="qp star" type="button" data-q="${p.q}">${p.label}</button>`).join("");
-  el.querySelectorAll(".qp").forEach(btn=>btn.onclick=()=>{document.getElementById("srch").value=btn.dataset.q;doSearch(btn.dataset.q,true);});
+  el.querySelectorAll(".qp").forEach(btn=>{
+    const p=QUICK_PICKS.find(x=>x.q===btn.dataset.q);
+    btn.onclick=()=>{
+      // Set search text
+      document.getElementById("srch").value=p.q;
+      document.getElementById("srch-clr").classList.add("on");
+      document.getElementById("srch-drop").classList.remove("on");
+      // Fly directly to the known coordinates — no fuzzy search
+      map.flyTo({center:[p.lng,p.lat],zoom:16,duration:900,essential:true});
+      // Find and highlight the matching marker
+      const hitLM=LM.find(x=>x.s.name===p.q);
+      const hitBM=BM.find(x=>x.b.name===p.q);
+      const hit=hitLM||hitBM;
+      if(hit){
+        if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
+        activeEl=hit.el;
+        hit.el.classList.add("sel");
+      }
+    };
+  });
 }
 
 function initFilterCounts(){
