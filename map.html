@@ -559,7 +559,14 @@ function _doSearchNow(v,openFirst){
 
   document.querySelectorAll(".ch").forEach(c=>c.classList.remove("on"));
   const ql=q.toLowerCase();
-  const matches=searchIndex.filter(item=>item.searchText.includes(ql)).slice(0,8);
+  // Get all matches, then sort: name matches first, spot/desc matches second
+  const allMatches=searchIndex.filter(item=>item.searchText.includes(ql));
+  allMatches.sort((a,b)=>{
+    const aName=a.name.toLowerCase().includes(ql)?0:1;
+    const bName=b.name.toLowerCase().includes(ql)?0:1;
+    return aName-bName;
+  });
+  const matches=allMatches.slice(0,8);
 
   BM.forEach(({el,b})=>{
     const m=b.name.toLowerCase().includes(ql)||(b.spots&&b.spots.toLowerCase().includes(ql))||b.desc.toLowerCase().includes(ql);
