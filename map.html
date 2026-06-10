@@ -213,7 +213,7 @@ body.dark-mode .legend-row{color:#aaa}
 <div class="ui-top">
   <div class="search-wrap">
     <span class="search-ico" aria-hidden="true">🔍</span>
-    <input class="si" id="srch" type="search" placeholder="Search waterfalls, parks, barangays..." autocomplete="off" enterkeyhint="search">
+    <input class="si" id="srch" type="search" placeholder="Search waterfalls, parks, barangays..." autocomplete="off" enterkeyhint="search" onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch(this.value,true);this.blur();}">
     <button class="search-clear" id="srch-clr" type="button" aria-label="Clear search" onclick="clearSearch()">×</button>
   </div>
   <div class="srch-drop" id="srch-drop"></div>
@@ -360,6 +360,7 @@ function initFilterCounts(){
 }
 
 document.getElementById("srch").addEventListener("input",e=>doSearch(e.target.value,false));
+document.getElementById("srch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();doSearch(e.target.value,true);e.target.blur();}});
 document.getElementById("srch").addEventListener("focus",()=>{const v=document.getElementById("srch").value;if(v)doSearch(v,false);});
 
 document.getElementById("cnt-star").textContent=SPOTS_DEDUPED.filter(isStarSpot).length;
@@ -374,8 +375,9 @@ map.on("load",()=>{
   loadEvents();
 
   map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
-  map.setTerrain({source:"dem",exaggeration:1.5});
-  map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.4});
+  map.setTerrain({source:"dem",exaggeration:0.5});
+  // Reduced fog effects for better performance
+  map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.2});
 
   BARANGAYS.forEach((b,i)=>{
     const el=document.createElement("div");
@@ -490,20 +492,34 @@ function selectSearchResult(item){
   document.getElementById("srch").value=item.name;
   document.getElementById("srch-clr").classList.add("on");
   
-  // Zoom to the selected location instead of showing panel
-  map.flyTo({center:[item.lng,item.lat],zoom:16,duration:1000});
+  // Fly to the selected location at high zoom
+  map.flyTo({center:[item.lng,item.lat],zoom:16,duration:900,essential:true});
   
-  let el=null;
-  if(item.kind==="barangay"){
-    const hit=BM.find(x=>x.b.name===item.name);
-    if(hit){el=hit.el;onTap(el,item.lng,item.lat,()=>{});}
-  }else{
-    const hit=LM.find(x=>x.s.name===item.name);
-    if(hit){el=hit.el;onTap(el,item.lng,item.lat,()=>{});}
-  }
+  // Highlight and open panel after fly completes
+  setTimeout(()=>{
+    if(item.kind==="barangay"){
+      const hit=BM.find(x=>x.b.name===item.name);
+      if(hit){onTap(hit.el,item.lng,item.lat,()=>showPan(hit.b));}
+    }else{
+      const hit=LM.find(x=>x.s.name===item.name);
+      if(hit){
+        const info={name:hit.s.name,type:"landmark",cat:hit.s.cat,desc:hit.s.desc,spots:hit.s.spots,dist:"",pop:"",area:"",fiesta:""};
+        onTap(hit.el,item.lng,item.lat,()=>showPan(info));
+      }
+    }
+  },950);
 }
 
+// Debounce timer
+let _searchTimer = null;
+
 function doSearch(v,openFirst){
+  // Debounce — wait 300ms after user stops typing
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(()=>_doSearchNow(v,openFirst), 300);
+}
+
+function _doSearchNow(v,openFirst){
   const q=v.trim();
   const clr=document.getElementById("srch-clr");
   const drop=document.getElementById("srch-drop");
@@ -535,15 +551,12 @@ function doSearch(v,openFirst){
   if(matches.length){
     drop.innerHTML=matches.map((item,i)=>{
       const icoClass=item.tier==="star"?"star":item.tier==="heritage"?"heritage":item.tier==="barangay"?"barangay":"city";
-      const imageHtml = item.data && item.data.image ? `<img src="${item.data.image}" class="srch-item-img" alt="${item.name}" loading="lazy">` : '';
-      return `<div class="srch-item" data-idx="${i}">${imageHtml}<div class="srch-item-ico ${icoClass}">${item.icon}</div><div class="srch-item-body"><div class="srch-item-name">${highlightMatch(item.name,q)}</div><div class="srch-item-sub">${item.sub}</div></div></div>`;
+      return `<div class="srch-item" data-idx="${i}"><div class="srch-item-ico ${icoClass}">${item.icon}</div><div class="srch-item-body"><div class="srch-item-name">${highlightMatch(item.name,q)}</div><div class="srch-item-sub">${item.sub}</div></div></div>`;
     }).join("");
     drop.classList.add("on");
     drop.querySelectorAll(".srch-item").forEach((row,i)=>row.onclick=()=>selectSearchResult(matches[i]));
-    if(openFirst&&matches[0])selectSearchResult(matches[0]);
-    else if(matches[0]){
-      map.flyTo({center:[matches[0].lng,matches[0].lat],zoom:14,duration:900});
-    }
+    // Only auto-fly if user pressed Enter (openFirst=true), not while typing
+    if(openFirst && matches[0]) selectSearchResult(matches[0]);
   }else{
     drop.innerHTML='<div class="srch-empty">No results — try "falls", "park", or a barangay name</div>';
     drop.classList.add("on");
