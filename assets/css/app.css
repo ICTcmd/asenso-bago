@@ -77,7 +77,7 @@ body {
   letter-spacing: 0px;
   text-decoration: none;
 }
-.nav-item.active { color: #c0392b; }
+.nav-item.active { color: #E67E22; }
 .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
 .nav-item span { 
   max-width: 100%; 
@@ -194,16 +194,16 @@ body {
 }
 .splash-city-sub {
   font-size: 12px; color: rgba(255,255,255,0.7);
-  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
 }
 .splash-divider-line {
   width: 48px; height: 2px;
-  background: linear-gradient(90deg, transparent, #F39C12, transparent);
-  margin: 0 auto 20px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #E67E22, transparent);
+  margin: 0 auto 16px; border-radius: 2px;
 }
 .splash-tagline {
   font-size: 15px; color: rgba(255,255,255,0.85);
-  line-height: 1.7; max-width: 280px; margin: 0 auto;
+  line-height: 1.6; max-width: 300px; margin: 0 auto;
 }
 
 /* Footer buttons */
@@ -213,8 +213,8 @@ body {
   position: relative; z-index: 1;
 }
 .splash-mobile-footer .btn-primary {
-  background: linear-gradient(135deg, #C0392B, #E74C3C);
-  box-shadow: 0 8px 24px rgba(192,57,43,0.4);
+  background: linear-gradient(135deg, #F28C28, #FFA459);
+  box-shadow: 0 8px 24px rgba(242,140,40,0.4);
 }
 .splash-mobile-footer .btn-link { color: rgba(255,255,255,0.5); }
 .splash-mobile-footer .btn-link span { color: rgba(255,255,255,0.85); }
@@ -239,13 +239,13 @@ body {
 .splash-body { display: none; } /* old class — hidden */
 
 .btn-primary {
-  background: linear-gradient(135deg, #C0392B 0%, #E74C3C 100%);
+  background: linear-gradient(135deg, #F28C28 0%, #FFA459 100%);
   color: #fff; border: none; border-radius: 14px;
   padding: 17px; font-size: 16px; font-weight: 700;
   cursor: pointer; letter-spacing: 0.3px;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 8px 24px rgba(26,42,74,0.3);
+  box-shadow: 0 8px 24px rgba(242,140,40,0.35);
   font-family: inherit;
 }
 .btn-primary:active { transform: scale(0.97); box-shadow: 0 4px 12px rgba(26,42,74,0.2); }
@@ -255,7 +255,7 @@ body {
   cursor: pointer; padding: 8px;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-link span { color: #c0392b; font-weight: 700; }
+.btn-link span { color: #E67E22; font-weight: 700; }
 
 /* ── Safe area top padding ── */
 .safe-top { padding-top: max(20px, env(safe-area-inset-top)); }
@@ -267,12 +267,27 @@ body {
   align-items: flex-start;
   padding: 20px 20px 12px;
   background: linear-gradient(180deg, #fff 0%, #f8f9fb 100%);
+  position: relative;
+}
+.home-topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(230,126,34,0.3) 20%, 
+    rgba(230,126,34,0.6) 50%, 
+    rgba(230,126,34,0.3) 80%, 
+    transparent 100%);
 }
 .greeting-text h2 { font-size: 24px; font-weight: 800; line-height: 1.2; color: #0f172a; }
 .greeting-text span { font-size: 14px; color: #64748b; font-weight: 500; }
 .app-brand { text-align: right; }
-.app-brand .brand-red  { font-size: 20px; font-weight: 900; font-style: italic; color: #c0392b; line-height: 1.1; }
-.app-brand .brand-gold { font-size: 20px; font-weight: 900; font-style: italic; color: #e8820c; line-height: 1.1; }
+.app-brand .brand-red  { font-size: 20px; font-weight: 900; font-style: italic; color: #E67E22; line-height: 1.1; }
+.app-brand .brand-gold { font-size: 20px; font-weight: 900; font-style: italic; color: #FFA459; line-height: 1.1; }
 
 .search-row {
   display: flex; align-items: center; gap: 10px;
@@ -326,8 +341,11 @@ body {
   width: 52px; height: 52px; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 8px;
-  transition: transform 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
   flex-shrink: 0;
+}
+.service-item:hover .service-icon {
+  box-shadow: 0 0 0 3px rgba(230,126,34,0.12), 0 4px 12px rgba(230,126,34,0.15);
 }
 .service-item:active .service-icon { transform: scale(0.92); }
 .service-icon svg { width: 24px; height: 24px; }
@@ -804,8 +822,8 @@ body {
   }
   .sidebar-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
   .sidebar-link.active {
-    background: rgba(243,156,18,0.15); color: #fff;
-    border-left: 3px solid #F39C12; padding-left: 9px;
+    background: rgba(230,126,34,0.15); color: #fff;
+    border-left: 3px solid #E67E22; padding-left: 9px;
   }
   .sidebar-link svg { width: 17px; height: 17px; flex-shrink: 0; }
 
@@ -945,7 +963,7 @@ body {
   .splash-desktop-left .splash-title { font-size: 64px; margin-bottom: 16px; }
   .splash-desktop-left .splash-tagline { margin-bottom: 36px; }
   .splash-stats { display: flex; gap: 24px; margin-bottom: 36px; }
-  .splash-stat .n { font-size: 28px; font-weight: 900; color: #F39C12; line-height: 1; }
+  .splash-stat .n { font-size: 28px; font-weight: 900; color: #E67E22; line-height: 1; }
   .splash-stat .l { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
   .splash-stat-div { width: 1px; background: #e5e7eb; align-self: stretch; }
   .splash-programs { display: flex; gap: 12px; align-items: center; }
@@ -1370,7 +1388,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   margin: 16px 0 20px; gap: 0;
 }
 .home-stat-item { flex: 1; text-align: center; }
-.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #F39C12; line-height: 1; }
+.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #E67E22; line-height: 1; }
 .home-stat-l { display: block; font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; font-weight: 600; }
 .home-stat-div { width: 1px; height: 36px; background: rgba(255,255,255,0.2); }
 
@@ -1379,13 +1397,13 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   display: flex; align-items: center; gap: 14px;
   margin: 8px 16px 8px;
   background: linear-gradient(135deg, #fffbf5 0%, #fff8ee 100%);
-  border-radius: 18px; padding: 16px 18px;
-  border-left: 4px solid #e8820c;
+  border-radius: 18px; padding: 18px 20px;
+  border-left: 4px solid #E67E22;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .mayor-seal { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
-.mayor-quote { font-size: 12px; color: #475569; font-style: italic; line-height: 1.6; margin-bottom: 8px; }
-.mayor-name { font-size: 12px; font-weight: 800; color: #0A2E5C; }
+.mayor-quote { font-size: 13px; color: #475569; font-style: italic; line-height: 1.7; margin-bottom: 8px; }
+.mayor-name { font-size: 13px; font-weight: 800; color: #E67E22; }
 .mayor-title { font-size: 11px; color: #94a3b8; }
 
 /* Hide old home topbar */
