@@ -117,7 +117,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, #3d1400 0%, #6b2200 50%, #3d1400 100%);
+  background: linear-gradient(160deg, #0A2E5C 0%, #0D3A6F 50%, #0A2E5C 100%);
 }
 
 /* Animated background glow */
@@ -193,16 +193,16 @@ body {
   letter-spacing: 1px; margin-bottom: 4px;
 }
 .splash-city-sub {
-  font-size: 12px; color: rgba(255,255,255,0.5);
+  font-size: 12px; color: rgba(255,255,255,0.7);
   text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;
 }
 .splash-divider-line {
   width: 48px; height: 2px;
-  background: linear-gradient(90deg, transparent, #c0392b, transparent);
+  background: linear-gradient(90deg, transparent, #F39C12, transparent);
   margin: 0 auto 20px; border-radius: 2px;
 }
 .splash-tagline {
-  font-size: 15px; color: rgba(255,255,255,0.65);
+  font-size: 15px; color: rgba(255,255,255,0.85);
   line-height: 1.7; max-width: 280px; margin: 0 auto;
 }
 
@@ -213,7 +213,7 @@ body {
   position: relative; z-index: 1;
 }
 .splash-mobile-footer .btn-primary {
-  background: linear-gradient(135deg, #e05000, #ff6b00);
+  background: linear-gradient(135deg, #C0392B, #E74C3C);
   box-shadow: 0 8px 24px rgba(192,57,43,0.4);
 }
 .splash-mobile-footer .btn-link { color: rgba(255,255,255,0.5); }
@@ -239,7 +239,7 @@ body {
 .splash-body { display: none; } /* old class — hidden */
 
 .btn-primary {
-  background: linear-gradient(135deg, #c0392b 0%, #e05000 100%);
+  background: linear-gradient(135deg, #C0392B 0%, #E74C3C 100%);
   color: #fff; border: none; border-radius: 14px;
   padding: 17px; font-size: 16px; font-weight: 700;
   cursor: pointer; letter-spacing: 0.3px;
@@ -360,7 +360,7 @@ body {
 /* CTA Banner */
 .cta-banner {
   margin: 8px 16px 8px;
-  background: linear-gradient(135deg, #7a2800 0%, #a03800 60%, #8b3200 100%);
+  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
   border-radius: 20px;
   padding: 22px 20px;
   display: flex; align-items: center; gap: 14px;
@@ -380,7 +380,7 @@ body {
 .cta-btn {
   background: #fff; border: none; border-radius: 10px;
   padding: 10px 16px; font-size: 13px; font-weight: 700;
-  color: #7a2800; cursor: pointer; width: 100%;
+  color: #0A2E5C; cursor: pointer; width: 100%;
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.15s;
   font-family: inherit;
@@ -552,7 +552,7 @@ body {
 .profile-card {
   display: flex; align-items: center; gap: 14px;
   margin: 0 16px 12px;
-  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
+  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
   border-radius: 20px; padding: 20px;
   box-shadow: 0 8px 24px rgba(26,42,74,0.2);
 }
@@ -567,7 +567,7 @@ body {
 .profile-info h3 { font-size: 16px; font-weight: 800; color: #fff; }
 .profile-info p  { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; font-weight: 500; }
 .signin-btn {
-  background: #fff; color: #7a2800; border: none;
+  background: #fff; color: #0A2E5C; border: none;
   border-radius: 10px; padding: 9px 16px;
   font-size: 13px; font-weight: 700; cursor: pointer;
   -webkit-tap-highlight-color: transparent; font-family: inherit;
@@ -622,7 +622,7 @@ body {
   display: none;
   position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 32px); max-width: 398px;
-  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
+  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
   color: #fff;
   border-radius: 18px; padding: 16px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.25);
@@ -708,7 +708,7 @@ body {
 .tourism-map-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   margin: 8px 16px 8px;
-  background: linear-gradient(135deg, #7a2800, #a03800);
+  background: linear-gradient(135deg, #0A2E5C, #104682);
   color: #fff; text-decoration: none;
   border-radius: 14px; padding: 14px;
   font-size: 14px; font-weight: 700;
@@ -764,7 +764,7 @@ body {
     flex-direction: column;
     width: 240px;
     min-height: 100vh;
-    background: linear-gradient(180deg, #6b2200 0%, #3d1400 100%);
+    background: linear-gradient(180deg, #0A2E5C 0%, #0D3A6F 100%);
     position: fixed;
     top: 0; left: 0;
     z-index: 200;
@@ -781,7 +781,7 @@ body {
     border: 2px solid rgba(255,255,255,0.2);
   }
   .sidebar-brand-text .name { font-size: 14px; font-weight: 800; color: #fff; }
-  .sidebar-brand-text .sub  { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+  .sidebar-brand-text .sub  { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 1px; }
 
   .sidebar-nav {
     flex: 1; padding: 12px 10px;
@@ -797,15 +797,15 @@ body {
     display: flex; align-items: center; gap: 10px;
     padding: 10px 12px; border-radius: 10px;
     cursor: pointer; border: none; background: none;
-    color: rgba(255,255,255,0.55); font-size: 13px;
+    color: rgba(255,255,255,0.85); font-size: 13px;
     font-weight: 600; font-family: inherit;
     text-align: left; width: 100%;
     transition: all 0.18s; -webkit-tap-highlight-color: transparent;
   }
   .sidebar-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
   .sidebar-link.active {
-    background: rgba(255,140,0,0.2); color: #fff;
-    border-left: 3px solid #ff8c00; padding-left: 9px;
+    background: rgba(243,156,18,0.15); color: #fff;
+    border-left: 3px solid #F39C12; padding-left: 9px;
   }
   .sidebar-link svg { width: 17px; height: 17px; flex-shrink: 0; }
 
@@ -945,7 +945,7 @@ body {
   .splash-desktop-left .splash-title { font-size: 64px; margin-bottom: 16px; }
   .splash-desktop-left .splash-tagline { margin-bottom: 36px; }
   .splash-stats { display: flex; gap: 24px; margin-bottom: 36px; }
-  .splash-stat .n { font-size: 28px; font-weight: 900; color: #c0392b; line-height: 1; }
+  .splash-stat .n { font-size: 28px; font-weight: 900; color: #F39C12; line-height: 1; }
   .splash-stat .l { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
   .splash-stat-div { width: 1px; background: #e5e7eb; align-self: stretch; }
   .splash-programs { display: flex; gap: 12px; align-items: center; }
@@ -955,7 +955,7 @@ body {
   .splash-desktop-right {
     display: flex; flex-direction: column; justify-content: center;
     padding: 60px;
-    background: linear-gradient(160deg, #6b2200 0%, #3d1400 60%, #2a0e00 100%);
+    background: linear-gradient(160deg, #0A2E5C 0%, #0D3A6F 60%, #104682 100%);
     position: relative; overflow: hidden;
   }
   .splash-desktop-right::before {
@@ -1079,7 +1079,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 /* ── News Page Redesign ── */
 .news-hero {
-  background: linear-gradient(135deg, #7a2800 0%, #a03800 100%);
+  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
   padding: 28px 20px 24px;
   position: relative; overflow: hidden;
 }
@@ -1344,7 +1344,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 /* ── Home Hero Banner ── */
 .home-hero {
   position: relative; overflow: hidden;
-  background: linear-gradient(135deg, #6b2200 0%, #a03800 50%, #7a2800 100%);
+  background: linear-gradient(135deg, #0A2E5C 0%, #0D3A6F 50%, #104682 100%);
   padding: 0 20px 0;
 }
 .home-hero-bg {
@@ -1370,7 +1370,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   margin: 16px 0 20px; gap: 0;
 }
 .home-stat-item { flex: 1; text-align: center; }
-.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #fff; line-height: 1; }
+.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #F39C12; line-height: 1; }
 .home-stat-l { display: block; font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; font-weight: 600; }
 .home-stat-div { width: 1px; height: 36px; background: rgba(255,255,255,0.2); }
 
@@ -1385,7 +1385,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 }
 .mayor-seal { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
 .mayor-quote { font-size: 12px; color: #475569; font-style: italic; line-height: 1.6; margin-bottom: 8px; }
-.mayor-name { font-size: 12px; font-weight: 800; color: #7a2800; }
+.mayor-name { font-size: 12px; font-weight: 800; color: #0A2E5C; }
 .mayor-title { font-size: 11px; color: #94a3b8; }
 
 /* Hide old home topbar */
