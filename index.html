@@ -188,6 +188,12 @@
           <p>Welcome to the official Bago City app</p>
         </div>
         <div class="desktop-topbar-right">
+          <div class="datetime-display desktop-only">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="datetime-icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+            </svg>
+            <span id="desktop-datetime">Loading...</span>
+          </div>
           <div class="desktop-search">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
             <input type="search" placeholder="Search for a service..." />
@@ -203,6 +209,13 @@
       <div class="home-hero safe-top">
         <div class="home-hero-bg" aria-hidden="true"></div>
         <div class="home-hero-content">
+          <!-- Date and Time Display -->
+          <div class="datetime-display mobile-only">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="datetime-icon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+            </svg>
+            <span id="current-datetime">Loading...</span>
+          </div>
           <div class="home-hero-top">
             <div>
               <p class="home-hero-label">Republic of the Philippines</p>
@@ -2078,6 +2091,41 @@
   }
 
   function closeLaunch() { document.getElementById("launch-screen").style.display = "none"; }
+
+  // ─── Date and Time Display ──────────────────────────────────────────────────
+  function updateDateTime() {
+    const now = new Date();
+    
+    // Philippine timezone options
+    const options = {
+      timeZone: 'Asia/Manila',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    };
+    
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const formattedDate = formatter.format(now);
+    
+    // Update both mobile and desktop displays
+    const mobileDisplay = document.getElementById('current-datetime');
+    const desktopDisplay = document.getElementById('desktop-datetime');
+    
+    if (mobileDisplay) {
+      mobileDisplay.textContent = formattedDate;
+    }
+    if (desktopDisplay) {
+      desktopDisplay.textContent = formattedDate;
+    }
+  }
+  
+  // Update immediately and then every second
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
 
   
 

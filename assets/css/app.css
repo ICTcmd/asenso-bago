@@ -283,6 +283,54 @@ body {
     rgba(230,126,34,0.3) 80%, 
     transparent 100%);
 }
+
+/* Date and Time Display */
+.datetime-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid rgba(230,126,34,0.15);
+  margin-bottom: 12px;
+}
+.datetime-display.mobile-only {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0A2E5C;
+}
+.datetime-display.desktop-only {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0A2E5C;
+  margin-bottom: 0;
+  margin-right: 16px;
+}
+.datetime-icon {
+  width: 18px;
+  height: 18px;
+  color: #E67E22;
+  flex-shrink: 0;
+}
+.datetime-display span {
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+/* Hide mobile datetime on very small screens */
+@media (max-width: 359px) {
+  .datetime-display.mobile-only {
+    font-size: 11px;
+    padding: 8px 12px;
+  }
+  .datetime-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .greeting-text h2 { font-size: 24px; font-weight: 800; line-height: 1.2; color: #0f172a; }
 .greeting-text span { font-size: 14px; color: #64748b; font-weight: 500; }
 .app-brand { text-align: right; }
