@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0A2E5C" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <title>Health Services Request — Asenso Bago</title>
+  <style>
+    /* Health Request Form Styles */
+    .health-request-page {
+      min-height: 100vh;
+      background: #f9fafb;
+      padding-bottom: 80px;
+    }
+
+    .health-header {
+      background: #0A2E5C;
+      color: white;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .health-header-content {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .health-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      flex: 1;
+    }
+
+    .health-form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .form-section {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-section-icon {
+      font-size: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .form-label .required {
+      color: #dc2626;
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #0A2E5C;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 16px;
+    }
+
+    .radio-option {
+      flex: 1;
+    }
+
+    .radio-option input[type="radio"] {
+      display: none;
+    }
+
+    .radio-option label {
+      display: block;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .radio-option input[type="radio"]:checked + label {
+      background: #0A2E5C;
+      color: white;
+      border-color: #0A2E5C;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .checkbox-option:hover {
+      border-color: #0A2E5C;
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .checkbox-option input[type="checkbox"]:checked {
+      accent-color: #0A2E5C;
+    }
+
+    .checkbox-option label {
+      flex: 1;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .program-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .program-option {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .program-option:hover {
+      border-color: #0A2E5C;
+    }
+
+    .program-option.selected {
+      background: #f0f9ff;
+      border-color: #0A2E5C;
+    }
+
+    .program-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: #0A2E5C;
+    }
+
+    .program-info {
+      flex: 1;
+    }
+
+    .program-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .program-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .program-specific-section {
+      display: none;
+    }
+
+    .program-specific-section.active {
+      display: block;
+    }
+
+    .file-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: #0A2E5C;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .file-upload-btn:hover {
+      background: #082347;
+    }
+
+    .file-preview {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .file-preview.active {
+      display: block;
+    }
+
+    .file-preview-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .file-preview-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .file-info {
+      flex: 1;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .file-remove {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #0A2E5C;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-btn:hover {
+      background: #082347;
+    }
+
+    .submit-btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      background: #fef2f2;
+      border: 2px solid #fecaca;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .error-message.active {
+      display: block;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="health-request-page">
+    <!-- Header -->
+    <header class="health-header">
+      <div class="health-header-content">
+        <button class="back-btn" onclick="window.history.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h1>Health Services Request</h1>
+      </div>
+    </header>
+
+    <!-- Form Container -->
+    <div class="health-form-container">
+      <form id="health-request-form">
+        
+        <!-- Program Selection -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span class="form-section-icon">🏥</span>
+            Which service do you need?
+          </h2>
+          <div class="program-selector">
+            <div class="program-option" data-program="heart_warriors">
+              <input type="radio" name="program" value="heart_warriors" id="program-hw" required>
+              <label for="program-hw" class="program-info">
+                <div class="program-name">Heart Warriors</div>
+                <div class="program-desc">Cardiovascular screening and consultation</div>
+              </label>
+            </div>
+            <div class="program-option" data-program="wheels_of_love">
+              <input type="radio" name="program" value="wheels_of_love" id="program-wol" required>
+              <label for="program-wol" class="program-info">
+                <div class="program-name">Wheels of Love</div>
+                <div class="program-desc">Wheelchair and mobility aid assistance</div>
+              </label>
+            </div>
+            <div class="program-option" data-program="smile_bright">
+              <input type="radio" name="program" value="smile_bright" id="program-sbb" required>
+              <label for="program-sbb" class="program-info">
+                <div class="program-name">Smile Bright Bago</div>
+                <div class="program-desc">Dental services and oral health care</div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span class="form-section-icon">👤</span>
+            Personal Information
+          </h2>
+          <div class="form-group">
+            <label class="form-label">Full Name <span class="required">*</span></label>
+            <input type="text" class="form-input" name="full_name" placeholder="Juan Dela Cruz" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Age <span class="required">*</span></label>
+              <input type="number" class="form-input" name="age" placeholder="25" min="1" max="120" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gender <span class="required">*</span></label>
+              <select class="form-select" name="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-section">
+          <h2 class="form-section-title">
+            <span class="form-section-icon">📞</span>
+            Contact Information
+          </h2>
+          <div class="form-group">
+            <label class="form-label">Mobile Number <span class="required">*</span></label>
+            <input type="tel" class="form-input" name="contact_number" placeholder="09171234567" pattern="[0-9]{11}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Barangay <span class="required">*</span></label>
+            <select class="form-select" name="barangay" required>
+              <option value="">Select your barangay</option>
+              <option value="Abuanan">Abuanan</option>
+              <option value="Alianza">Alianza</option>
+              <option value="Atipuluan">Atipuluan</option>
+              <option value="Bacong-Montilla">Bacong-Montilla</option>
+              <option value="Bagroy">Bagroy</option>
+              <option value="Balingasag">Balingasag</option>
+              <option value="Binubuhan">Binubuhan</option>
+              <option value="Busay">Busay</option>
+              <option value="Calumangan">Calumangan</option>
+              <option value="Caridad">Caridad</option>
+              <option value="Dulao">Dulao</option>
+              <option value="Ilijan">Ilijan</option>
+              <option value="Lag-asan">Lag-asan</option>
+              <option value="Ma-ao">Ma-ao</option>
+              <option value="Mailum">Mailum</option>
+              <option value="Malingin">Malingin</option>
+              <option value="Napoles">Napoles</option>
+              <option value="Pacol">Pacol</option>
+              <option value="Poblacion">Poblacion</option>
+              <option value="Sagasa">Sagasa</option>
+              <option value="Sampinit">Sampinit</option>
+              <option value="San Isidro">San Isidro</option>
+              <option value="Taloc">Taloc</option>
+              <option value="Talubangi">Talubangi</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Heart Warriors Specific Fields -->
+        <div id="heart-warriors-fields" class="program-specific-section">
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <span class="form-section-icon">❤️</span>
+              Medical Information
+            </h2>
+            <div class="form-group">
+              <label class="form-label">Do you have an existing heart condition?</label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" name="existing_condition" value="yes" id="condition-yes">
+                  <label for="condition-yes">Yes</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" name="existing_condition" value="no" id="condition-no">
+                  <label for="condition-no">No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Current Medications (optional)</label>
+              <input type="text" class="form-input" name="current_medications" placeholder="List your current medications">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Preferred Screening Date</label>
+              <input type="date" class="form-input" name="preferred_date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Emergency Contact Name <span class="required">*</span></label>
+              <input type="text" class="form-input" name="emergency_contact_name" placeholder="Maria Dela Cruz">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Emergency Contact Number <span class="required">*</span></label>
+              <input type="tel" class="form-input" name="emergency_contact_number" placeholder="09181234567" pattern="[0-9]{11}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Wheels of Love Specific Fields -->
+        <div id="wheels-of-love-fields" class="program-specific-section">
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <span class="form-section-icon">♿</span>
+              Disability Information
+            </h2>
+            <div class="form-group">
+              <label class="form-label">PWD ID Number <span class="required">*</span></label>
+              <input type="text" class="form-input" name="pwd_id_number" placeholder="PWD-2026-1234">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type of Disability <span class="required">*</span></label>
+              <select class="form-select" name="disability_type">
+                <option value="">Select disability type</option>
+                <option value="Physical">Physical</option>
+                <option value="Visual">Visual</option>
+                <option value="Hearing">Hearing</option>
+                <option value="Mental">Mental</option>
+                <option value="Multiple">Multiple Disabilities</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">What mobility aid do you need? <span class="required">*</span></label>
+              <select class="form-select" name="mobility_aid_needed">
+                <option value="">Select mobility aid</option>
+                <option value="Manual Wheelchair">Manual Wheelchair</option>
+                <option value="Electric Wheelchair">Electric Wheelchair</option>
+                <option value="Walker">Walker</option>
+                <option value="Crutches">Crutches</option>
+                <option value="Cane">Cane</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Describe your current situation <span class="required">*</span></label>
+              <textarea class="form-textarea" name="situation_description" placeholder="Please describe your mobility needs and current situation"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload PWD ID Photo <span class="required">*</span></label>
+              <input type="file" id="pwd-id-upload" accept="image/*" style="display:none">
+              <button type="button" class="file-upload-btn" onclick="document.getElementById('pwd-id-upload').click()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Choose Photo or Take Photo
+              </button>
+              <div id="pwd-id-preview" class="file-preview"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload Medical Certificate (optional)</label>
+              <input type="file" id="medical-cert-upload" accept="image/*,application/pdf" style="display:none">
+              <button type="button" class="file-upload-btn" onclick="document.getElementById('medical-cert-upload').click()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Choose File
+              </button>
+              <div id="medical-cert-preview" class="file-preview"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smile Bright Bago Specific Fields -->
+        <div id="smile-bright-fields" class="program-specific-section">
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <span class="form-section-icon">🦷</span>
+              Dental Information
+            </h2>
+            <div class="form-group">
+              <label class="form-label">What services do you need? <span class="required">*</span></label>
+              <div class="checkbox-group">
+                <div class="checkbox-option">
+                  <input type="checkbox" name="services_needed" value="Cleaning" id="service-cleaning">
+                  <label for="service-cleaning">Cleaning</label>
+                </div>
+                <div class="checkbox-option">
+                  <input type="checkbox" name="services_needed" value="Extraction" id="service-extraction">
+                  <label for="service-extraction">Tooth Extraction</label>
+                </div>
+                <div class="checkbox-option">
+                  <input type="checkbox" name="services_needed" value="Check-up" id="service-checkup">
+                  <label for="service-checkup">Check-up</label>
+                </div>
+                <div class="checkbox-option">
+                  <input type="checkbox" name="services_needed" value="Restoration" id="service-restoration">
+                  <label for="service-restoration">Tooth Restoration</label>
+                </div>
+                <div class="checkbox-option">
+                  <input type="checkbox" name="services_needed" value="Other" id="service-other">
+                  <label for="service-other">Other</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Describe your dental concern <span class="required">*</span></label>
+              <textarea class="form-textarea" name="dental_concern" placeholder="Please describe your dental problem or concern"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Preferred Appointment Date</label>
+              <input type="date" class="form-input" name="dental_preferred_date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Preferred Time</label>
+              <select class="form-select" name="preferred_time">
+                <option value="">Select time</option>
+                <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+                <option value="Afternoon (1PM - 5PM)">Afternoon (1PM - 5PM)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Allergies (optional)</label>
+              <input type="text" class="form-input" name="allergies" placeholder="List any allergies">
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-section">
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <span id="submit-text">Submit Request</span>
+            <svg id="submit-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <div id="error-message" class="error-message"></div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/health-request.js"></script>
+
+</body>
+</html>

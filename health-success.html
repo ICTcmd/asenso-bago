@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#059669" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <title>Request Submitted — Asenso Bago</title>
+  <style>
+    .success-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .success-container {
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    .success-icon svg {
+      width: 48px;
+      height: 48px;
+      color: white;
+    }
+
+    .success-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1f2937;
+      margin: 0 0 12px 0;
+    }
+
+    .success-subtitle {
+      font-size: 16px;
+      color: #6b7280;
+      margin: 0 0 32px 0;
+      line-height: 1.6;
+    }
+
+    .reference-card {
+      background: #f9fafb;
+      border: 2px dashed #d1d5db;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .reference-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .reference-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #059669;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    .copy-btn {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    .copy-btn.copied {
+      background: #10b981;
+    }
+
+    .info-section {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #92400e;
+      margin: 0 0 12px 0;
+    }
+
+    .info-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .info-steps li {
+      font-size: 14px;
+      color: #78350f;
+      padding: 6px 0;
+      display: flex;
+      align-items: start;
+      gap: 8px;
+    }
+
+    .info-steps li::before {
+      content: "✓";
+      color: #f59e0b;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #0A2E5C;
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: #082347;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+      border-color: #0A2E5C;
+      color: #0A2E5C;
+    }
+  </style>
+</head>
+<body>
+  <div class="success-page">
+    <div class="success-container">
+      <!-- Success Icon -->
+      <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <h1 class="success-title">Request Submitted!</h1>
+      <p class="success-subtitle" id="program-subtitle">Your health service request has been received.</p>
+
+      <!-- Reference Number Card -->
+      <div class="reference-card">
+        <div class="reference-label">Your Reference Number</div>
+        <div class="reference-number" id="reference-number">---</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyReference()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <span id="copy-text">Copy Number</span>
+        </button>
+      </div>
+
+      <!-- What's Next Info -->
+      <div class="info-section">
+        <div class="info-title">📋 What Happens Next?</div>
+        <ul class="info-steps">
+          <li>We'll review your request within 1-2 business days</li>
+          <li>You'll be contacted via mobile for confirmation</li>
+          <li>Your appointment will be scheduled</li>
+          <li>You can track your request status anytime</li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="health-track.html" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Track Request Status
+        </a>
+        <a href="health-request.html" class="btn btn-secondary">
+          Submit Another Request
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get reference number and program from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const refNumber = urlParams.get('ref');
+    const program = urlParams.get('program');
+
+    // Display reference number
+    if (refNumber) {
+      document.getElementById('reference-number').textContent = refNumber;
+    }
+
+    // Update subtitle based on program
+    const programNames = {
+      'heart_warriors': 'Heart Warriors screening request',
+      'wheels_of_love': 'Wheels of Love application',
+      'smile_bright': 'Smile Bright Bago appointment request'
+    };
+
+    if (program && programNames[program]) {
+      document.getElementById('program-subtitle').textContent = 
+        `Your ${programNames[program]} has been received.`;
+    }
+
+    // Copy reference number
+    function copyReference() {
+      const refNumber = document.getElementById('reference-number').textContent;
+      
+      navigator.clipboard.writeText(refNumber).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const text = document.getElementById('copy-text');
+        
+        btn.classList.add('copied');
+        text.textContent = 'Copied!';
+        
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          text.textContent = 'Copy Number';
+        }, 2000);
+      });
+    }
+
+    // Save reference to localStorage for easy tracking
+    if (refNumber) {
+      const savedRefs = JSON.parse(localStorage.getItem('healthServiceRefs') || '[]');
+      if (!savedRefs.includes(refNumber)) {
+        savedRefs.unshift(refNumber);
+        // Keep only last 5 references
+        if (savedRefs.length > 5) savedRefs.pop();
+        localStorage.setItem('healthServiceRefs', JSON.stringify(savedRefs));
+      }
+    }
+  </script>
+</body>
+</html>
