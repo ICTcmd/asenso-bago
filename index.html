@@ -742,334 +742,602 @@
 
       <div class="screen-header safe-top">
         <h1>Our <span>Barangays</span></h1>
-        <p>The 24 barangays of Bago City, Negros Occidental</p>
+        <p>Explore the 24 barangays of Bago City, Negros Occidental</p>
       </div>
 
-      <!-- Legend -->
-      <div class="brgy-legend">
-        <span class="brgy-badge urban">🏙️ Urban</span>
-        <span class="brgy-badge rural">🌿 Rural</span>
-        <span class="brgy-badge attraction">⭐ Has Tourist Spot</span>
+      <!-- Statistics Summary -->
+      <div class="brgy-stats-container">
+        <div class="brgy-stat-card">
+          <div class="brgy-stat-number" id="brgy-total-count">24</div>
+          <div class="brgy-stat-label">Total Barangays</div>
+        </div>
+        <div class="brgy-stat-card">
+          <div class="brgy-stat-number" id="brgy-urban-count">8</div>
+          <div class="brgy-stat-label">Urban</div>
+        </div>
+        <div class="brgy-stat-card">
+          <div class="brgy-stat-number" id="brgy-rural-count">16</div>
+          <div class="brgy-stat-label">Rural</div>
+        </div>
+        <div class="brgy-stat-card">
+          <div class="brgy-stat-number" id="brgy-tourist-count">6</div>
+          <div class="brgy-stat-label">Tourist Spots</div>
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="brgy-search-container">
+        <div class="brgy-search-wrapper">
+          <svg class="brgy-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+          </svg>
+          <input 
+            type="search" 
+            id="brgy-search-input" 
+            class="brgy-search-input" 
+            placeholder="Search barangay name or location..."
+            aria-label="Search barangays"
+          />
+          <button id="brgy-search-clear" class="brgy-search-clear" aria-label="Clear search" style="display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="brgy-filters-container">
+        <button class="brgy-filter-btn active" data-filter="all">
+          <span>All Barangays</span>
+          <span class="brgy-filter-count" id="filter-count-all">24</span>
+        </button>
+        <button class="brgy-filter-btn" data-filter="urban">
+          <span>Urban</span>
+          <span class="brgy-filter-count" id="filter-count-urban">8</span>
+        </button>
+        <button class="brgy-filter-btn" data-filter="rural">
+          <span>Rural</span>
+          <span class="brgy-filter-count" id="filter-count-rural">16</span>
+        </button>
+        <button class="brgy-filter-btn" data-filter="tourist">
+          <span>Tourist Spots</span>
+          <span class="brgy-filter-count" id="filter-count-tourist">6</span>
+        </button>
+      </div>
+
+      <!-- Results count -->
+      <div class="brgy-results-info" id="brgy-results-count" style="display:none;">
+        Showing 0 of 24 barangays
       </div>
 
       <!-- Map link -->
-      <a href="map.html?mode=tourist" style="display:flex;align-items:center;gap:10px;margin:12px 16px;padding:14px 16px;background:linear-gradient(135deg,#0A2E5C,#104682);color:#fff;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+      <a href="map.html?mode=tourist" class="brgy-map-link-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/>
         </svg>
-        <span style="flex:1;">View Interactive Barangay Map</span>
-        <span style="opacity:0.7;">→</span>
+        <span>View Interactive Barangay Map</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="brgy-arrow">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
       </a>
 
       <!-- Barangay list -->
       <div class="brgy-list">
 
         <!-- 1. Abuanan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">
+        <div class="brgy-card" data-type="urban" data-name="Abuanan" data-search="abuanan urban northern bacolod border">
+          <div class="brgy-card-header">
             <span class="brgy-number">01</span>
             <div>
               <h3>Abuanan</h3>
-              <span class="brgy-badge urban">🏙️ Urban</span>
+              <span class="brgy-badge urban-badge">Urban</span>
             </div>
           </div>
           <div class="brgy-card-body">
             <p>One of the 8 urban barangays of Bago City. Located near the northern part of the city, Abuanan is historically connected to the Bacolod-Bago border area.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Abuanan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Abuanan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 2. Alianza -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#059669,#10b981);">
+        <div class="brgy-card" data-type="rural" data-name="Alianza" data-search="alianza rural agricultural rice sugarcane">
+          <div class="brgy-card-header">
             <span class="brgy-number">02</span>
-            <div><h3>Alianza</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Alianza</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay of Bago City known for its agricultural lands. Part of the city's rice and sugarcane producing areas.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Alianza+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Alianza+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 3. Atipuluan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#0284c7,#0ea5e9);">
+        <div class="brgy-card" data-type="urban" data-name="Atipuluan" data-search="atipuluan urban highway commercial residential">
+          <div class="brgy-card-header">
             <span class="brgy-number">03</span>
-            <div><h3>Atipuluan</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Atipuluan</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>An urban barangay of Bago City located along the main highway. A key commercial and residential area within the city proper.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Atipuluan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Atipuluan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 4. Bacong-Montilla -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);">
+        <div class="brgy-card" data-type="rural" data-name="Bacong-Montilla" data-search="bacong montilla rural largest land area agricultural forest">
+          <div class="brgy-card-header">
             <span class="brgy-number">04</span>
-            <div><h3>Bacong-Montilla</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Bacong-Montilla</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>The largest barangay in Bago City by land area with 4,827 hectares. A vast rural barangay with extensive agricultural and forest lands.</p>
-            <div class="brgy-fact">📊 Largest barangay by land area</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Bacong+Montilla+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-info-badge">Largest barangay by land area</div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Bacong+Montilla+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 5. Bagroy -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+        <div class="brgy-card" data-type="rural" data-name="Bagroy" data-search="bagroy rural coastal guimaras strait fishing waterfront">
+          <div class="brgy-card-header">
             <span class="brgy-number">05</span>
-            <div><h3>Bagroy</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Bagroy</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A coastal rural barangay of Bago City with access to the Guimaras Strait. Known for its fishing community and scenic waterfront.</p>
-            <div class="brgy-fact">📊 Smallest population (1,305)</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Bagroy+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-info-badge">Smallest population (1,305)</div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Bagroy+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 6. Balingasag -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e05c00);">
+        <div class="brgy-card" data-type="urban" data-name="Balingasag" data-search="balingasag urban center residential commercial">
+          <div class="brgy-card-header">
             <span class="brgy-number">06</span>
-            <div><h3>Balingasag</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Balingasag</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>One of the urban barangays of Bago City. A well-established community near the city center with residential and commercial establishments.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Balingasag+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Balingasag+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 7. Binubuhan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#0f766e,#14b8a6);">
+        <div class="brgy-card" data-type="rural" data-name="Binubuhan" data-search="binubuhan rural cluster rice production">
+          <div class="brgy-card-header">
             <span class="brgy-number">07</span>
-            <div><h3>Binubuhan</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Binubuhan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay that is part of the Cluster 8 group along with Ma-ao and Mailum. Known for rice production and community activities.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Binubuhan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Binubuhan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 8. Busay -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#be185d,#ec4899);">
+        <div class="brgy-card" data-type="rural" data-name="Busay" data-search="busay rural mountain buenos aires resort kanlaon" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">08</span>
-            <div><h3>Busay</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Busay</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay located in the mountain areas of Bago City. Surrounded by lush vegetation with scenic views toward Mt. Kanlaon.</p>
-            <div class="brgy-spot">⭐ Near Buenos Aires Mountain Resort</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Busay+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Near Buenos Aires Mountain Resort
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Busay+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 9. Calumangan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#475569,#64748b);">
+        <div class="brgy-card" data-type="rural" data-name="Calumangan" data-search="calumangan rural agricultural rice sugarcane">
+          <div class="brgy-card-header">
             <span class="brgy-number">09</span>
-            <div><h3>Calumangan</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Calumangan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay of Bago City. Part of the agricultural heartland of the city with rice paddies and sugarcane fields.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Calumangan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Calumangan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 10. Caridad -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">
+        <div class="brgy-card" data-type="urban" data-name="Caridad" data-search="caridad urban core schools churches businesses">
+          <div class="brgy-card-header">
             <span class="brgy-number">10</span>
-            <div><h3>Caridad</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Caridad</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>An urban barangay forming part of the Bago City urban core. A well-developed community with schools, churches, and local businesses.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Caridad+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Caridad+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 11. Don Jorge L. Araneta -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#92400e,#d97706);">
+        <div class="brgy-card" data-type="urban" data-name="Don Jorge L. Araneta" data-search="don jorge araneta urban historical revolution 1898" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">11</span>
-            <div><h3>Don Jorge L. Araneta</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Don Jorge L. Araneta</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>Named after the Araneta family, a prominent family in Bago City's history. General Juan A. Araneta led the bloodless revolution of November 5, 1898.</p>
-            <div class="brgy-spot">⭐ Historical significance — Araneta Family heritage</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Don+Jorge+Araneta+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Historical significance — Araneta Family heritage
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Don+Jorge+Araneta+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 12. Dulao -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#059669,#10b981);">
+        <div class="brgy-card" data-type="rural" data-name="Dulao" data-search="dulao rural bacolod border">
+          <div class="brgy-card-header">
             <span class="brgy-number">12</span>
-            <div><h3>Dulao</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Dulao</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay historically connected to the Bacolod-Bago area. Part of the territory that once included communities along the Bago-Bacolod border.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Dulao+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Dulao+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 13. Ilijan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#0284c7,#0ea5e9);">
+        <div class="brgy-card" data-type="rural" data-name="Ilijan" data-search="ilijan rural coastal farthest buenos aires quezon wwii" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">13</span>
-            <div><h3>Ilijan</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Ilijan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>The farthest barangay from Bago City proper at 30.5 km away. A coastal barangay along the Guimaras Strait. During WWII, President Quezon stayed here on his way to Zamboanguita.</p>
-            <div class="brgy-fact">📊 Farthest barangay (30.5 km from city)</div>
-            <div class="brgy-spot">⭐ Buenos Aires Mountain Resort — Historical WWII site</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Ilijan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-info-badge">Farthest barangay (30.5 km from city)</div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Buenos Aires Mountain Resort — Historical WWII site
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Ilijan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 14. Lag-Asan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);">
+        <div class="brgy-card" data-type="rural" data-name="Lag-Asan" data-search="lag asan rural agricultural interior">
+          <div class="brgy-card-header">
             <span class="brgy-number">14</span>
-            <div><h3>Lag-Asan</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Lag-Asan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay known for its peaceful community and agricultural activities. Located in the interior areas of Bago City.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Lag-Asan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Lag-Asan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 15. Ma-ao -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">
+        <div class="brgy-card" data-type="urban" data-name="Ma-ao" data-search="ma ao maao urban populous sugar central heritage" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">15</span>
-            <div><h3>Ma-ao</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Ma-ao</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>The most populous barangay in Bago City with 14,916 residents. Home to the historic Ma-ao Sugar Central, one of the major sugar mills in Negros Occidental.</p>
-            <div class="brgy-fact">📊 Most populated barangay (14,916 people)</div>
-            <div class="brgy-spot">⭐ Ma-ao Sugar Central — Heritage industrial site</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Ma-ao+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-info-badge">Most populated barangay (14,916 people)</div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Ma-ao Sugar Central — Heritage industrial site
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Ma-ao+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 16. Mailum -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#0284c7,#0ea5e9);">
+        <div class="brgy-card" data-type="rural" data-name="Mailum" data-search="mailum rural kipot falls pataan resort kanlaon ecotourism" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">16</span>
-            <div><h3>Mailum</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Mailum</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>Home to the famous Kipot Twin Falls and Pataan Mountain Resort. Located at the foot of Kanlaon Volcano, Mailum is a prime ecotourism destination.</p>
-            <div class="brgy-spot">⭐ Kipot Twin Falls — 220 steps to two cascading waterfalls</div>
-            <div class="brgy-spot">⭐ Pataan Mountain Resort — Mountain getaway near Kanlaon</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Mailum+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Kipot Twin Falls — 220 steps to two cascading waterfalls
+            </div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Pataan Mountain Resort — Mountain getaway near Kanlaon
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Mailum+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 17. Malingin -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#059669,#10b981);">
+        <div class="brgy-card" data-type="rural" data-name="Malingin" data-search="malingin rural farming agricultural landscape">
+          <div class="brgy-card-header">
             <span class="brgy-number">17</span>
-            <div><h3>Malingin</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Malingin</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay of Bago City with a close-knit farming community. Known for its scenic rural landscape and agricultural produce.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Malingin+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Malingin+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 18. Napoles -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+        <div class="brgy-card" data-type="rural" data-name="Napoles" data-search="napoles rural agricultural rice producer">
+          <div class="brgy-card-header">
             <span class="brgy-number">18</span>
-            <div><h3>Napoles</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Napoles</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay of Bago City. Part of the rich agricultural landscape that makes Bago City one of the top rice producers in Negros Occidental.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Napoles+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Napoles+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 19. Pacol -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#be185d,#ec4899);">
+        <div class="brgy-card" data-type="rural" data-name="Pacol" data-search="pacol rural agricultural interior farming">
+          <div class="brgy-card-header">
             <span class="brgy-number">19</span>
-            <div><h3>Pacol</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Pacol</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay known for its agricultural community. Located in the interior portions of Bago City with fertile lands for farming.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Pacol+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Pacol+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 20. Poblacion -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">
+        <div class="brgy-card" data-type="urban" data-name="Poblacion" data-search="poblacion urban downtown city hall bantayan balay cathedral" data-tourist="true">
+          <div class="brgy-card-header">
             <span class="brgy-number">20</span>
-            <div><h3>Poblacion</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Poblacion</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>The main downtown barangay of Bago City — the seat of local government. Home to City Hall, Bantayan Park, Balay ni Tan Juan, and the historic Bago City Cathedral.</p>
-            <div class="brgy-fact">📊 Smallest barangay by land area (311 hectares)</div>
-            <div class="brgy-spot">⭐ Bantayan Park — Historic revolution site (1898)</div>
-            <div class="brgy-spot">⭐ Balay ni Tan Juan — Ancestral heritage house</div>
-            <div class="brgy-spot">⭐ Bago City Cathedral (San Sebastian)</div>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Poblacion+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <div class="brgy-info-badge">Smallest barangay by land area (311 hectares)</div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Bantayan Park — Historic revolution site (1898)
+            </div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Balay ni Tan Juan — Ancestral heritage house
+            </div>
+            <div class="brgy-tourist-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              Bago City Cathedral (San Sebastian)
+            </div>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Poblacion+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 21. Sagasa -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#0f766e,#14b8a6);">
+        <div class="brgy-card" data-type="rural" data-name="Sagasa" data-search="sagasa rural coastal guimaras fishing seaside">
+          <div class="brgy-card-header">
             <span class="brgy-number">21</span>
-            <div><h3>Sagasa</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Sagasa</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A coastal rural barangay along the Guimaras Strait. Known for its fishing activities and scenic seaside views.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Sagasa+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Sagasa+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 22. Sampinit -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#475569,#64748b);">
+        <div class="brgy-card" data-type="rural" data-name="Sampinit" data-search="sampinit rural agricultural forest upland kanlaon">
+          <div class="brgy-card-header">
             <span class="brgy-number">22</span>
-            <div><h3>Sampinit</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Sampinit</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay of Bago City with agricultural and forested areas. Part of the upland communities near Mt. Kanlaon Natural Park.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Sampinit+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Sampinit+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 23. Tabunan -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#92400e,#d97706);">
+        <div class="brgy-card" data-type="rural" data-name="Tabunan" data-search="tabunan rural bacolod agricultural heritage">
+          <div class="brgy-card-header">
             <span class="brgy-number">23</span>
-            <div><h3>Tabunan</h3><span class="brgy-badge rural">🌿 Rural</span></div>
+            <div><h3>Tabunan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
           <div class="brgy-card-body">
             <p>A rural barangay historically connected to the Bacolod area. Known for its community spirit and agricultural heritage.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Tabunan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Tabunan+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
         <!-- 24. Taloc -->
-        <div class="brgy-card">
-          <div class="brgy-card-header" style="background:linear-gradient(135deg,#c0392b,#e74c3c);">
+        <div class="brgy-card" data-type="urban" data-name="Taloc" data-search="taloc urban cluster center residential commerce">
+          <div class="brgy-card-header">
             <span class="brgy-number">24</span>
-            <div><h3>Taloc</h3><span class="brgy-badge urban">🏙️ Urban</span></div>
+            <div><h3>Taloc</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
           <div class="brgy-card-body">
             <p>An urban barangay and part of the Bago City urban cluster. Located near the city center with established residential communities and local commerce.</p>
-            <a class="brgy-map-btn" href="https://maps.google.com/?q=Taloc+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">📍 View on Google Maps</a>
+            <a class="brgy-map-btn" href="https://maps.google.com/?q=Taloc+Bago+City+Negros+Occidental" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              View on Google Maps
+            </a>
           </div>
         </div>
 
       </div><!-- /brgy-list -->
+
+      <!-- Empty state -->
+      <div class="brgy-empty-state" id="brgy-empty-state" style="display:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+        </svg>
+        <h3>No barangays found</h3>
+        <p>Try adjusting your search or filters</p>
+      </div>
 
       <p class="version-text" style="padding:16px 0 24px;">
         Data sourced from Philippine Statistics Authority and official city records.<br>
@@ -2152,6 +2420,138 @@
     installBanner.style.display = 'none';
     deferredPrompt = null;
   });
+
+  // ─── Barangays Search & Filter ──────────────────────────────────────────────
+  const brgySearchInput = document.getElementById('brgy-search-input');
+  const brgySearchClear = document.getElementById('brgy-search-clear');
+  const brgyFilterBtns = document.querySelectorAll('.brgy-filter-btn');
+  const brgyCards = document.querySelectorAll('.brgy-card');
+  const brgyEmptyState = document.getElementById('brgy-empty-state');
+  const brgyResultsCount = document.getElementById('brgy-results-count');
+  const brgyTotalCount = document.getElementById('brgy-total-count');
+
+  if (brgySearchInput && brgyCards.length > 0) {
+    let currentFilter = 'all'; // Track active filter
+    let currentSearch = ''; // Track current search term
+
+    // Update statistics dynamically from actual data
+    function updateStatistics() {
+      const totalCount = brgyCards.length;
+      const urbanCount = Array.from(brgyCards).filter(card => card.dataset.type === 'urban').length;
+      const ruralCount = Array.from(brgyCards).filter(card => card.dataset.type === 'rural').length;
+      const touristCount = Array.from(brgyCards).filter(card => card.dataset.tourist === 'true').length;
+
+      const totalEl = document.getElementById('brgy-total-count');
+      const urbanEl = document.getElementById('brgy-urban-count');
+      const ruralEl = document.getElementById('brgy-rural-count');
+      const touristEl = document.getElementById('brgy-tourist-count');
+
+      if (totalEl) totalEl.textContent = totalCount;
+      if (urbanEl) urbanEl.textContent = urbanCount;
+      if (ruralEl) ruralEl.textContent = ruralCount;
+      if (touristEl) touristEl.textContent = touristCount;
+
+      // Update filter button counts
+      const allBtn = document.querySelector('[data-filter="all"] .brgy-filter-count');
+      const urbanBtn = document.querySelector('[data-filter="urban"] .brgy-filter-count');
+      const ruralBtn = document.querySelector('[data-filter="rural"] .brgy-filter-count');
+      const touristBtn = document.querySelector('[data-filter="tourist"] .brgy-filter-count');
+
+      if (allBtn) allBtn.textContent = totalCount;
+      if (urbanBtn) urbanBtn.textContent = urbanCount;
+      if (ruralBtn) ruralBtn.textContent = ruralCount;
+      if (touristBtn) touristBtn.textContent = touristCount;
+    }
+
+    // Filter and search logic
+    function filterAndSearch() {
+      let visibleCount = 0;
+
+      brgyCards.forEach(card => {
+        const matchesFilter = 
+          currentFilter === 'all' || 
+          (currentFilter === 'urban' && card.dataset.type === 'urban') ||
+          (currentFilter === 'rural' && card.dataset.type === 'rural') ||
+          (currentFilter === 'tourist' && card.dataset.tourist === 'true');
+
+        const searchTerm = currentSearch.toLowerCase();
+        const cardName = (card.dataset.name || '').toLowerCase();
+        const cardSearch = (card.dataset.search || '').toLowerCase();
+        const matchesSearch = 
+          currentSearch === '' || 
+          cardName.includes(searchTerm) || 
+          cardSearch.includes(searchTerm);
+
+        const isVisible = matchesFilter && matchesSearch;
+        card.style.display = isVisible ? '' : 'none';
+        if (isVisible) visibleCount++;
+      });
+
+      // Update results count
+      if (brgyResultsCount) {
+        if (currentSearch || currentFilter !== 'all') {
+          brgyResultsCount.textContent = `Showing ${visibleCount} of ${brgyCards.length} barangays`;
+          brgyResultsCount.style.display = 'block';
+        } else {
+          brgyResultsCount.style.display = 'none';
+        }
+      }
+
+      // Show/hide empty state
+      if (brgyEmptyState) {
+        if (visibleCount === 0) {
+          brgyEmptyState.classList.add('active');
+        } else {
+          brgyEmptyState.classList.remove('active');
+        }
+      }
+    }
+
+    // Search input handler
+    brgySearchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      
+      // Show/hide clear button
+      if (brgySearchClear) {
+        if (currentSearch) {
+          brgySearchClear.classList.add('active');
+        } else {
+          brgySearchClear.classList.remove('active');
+        }
+      }
+
+      filterAndSearch();
+    });
+
+    // Clear search button
+    if (brgySearchClear) {
+      brgySearchClear.addEventListener('click', () => {
+        currentSearch = '';
+        brgySearchInput.value = '';
+        brgySearchClear.classList.remove('active');
+        filterAndSearch();
+        brgySearchInput.focus();
+      });
+    }
+
+    // Filter buttons
+    brgyFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        brgyFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Update current filter
+        currentFilter = btn.dataset.filter;
+
+        // Run filter
+        filterAndSearch();
+      });
+    });
+
+    // Initialize statistics on page load
+    updateStatistics();
+  }
 </script>
 </html>
 
