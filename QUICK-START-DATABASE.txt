@@ -1,0 +1,71 @@
+═══════════════════════════════════════════════════════════
+  HEALTH SERVICES DATABASE - QUICK START GUIDE
+═══════════════════════════════════════════════════════════
+
+⏱️ TIME: 5 minutes
+🎯 GOAL: Add health services to your Bago Safe Supabase
+
+═══════════════════════════════════════════════════════════
+  STEP 1: OPEN SUPABASE
+═══════════════════════════════════════════════════════════
+
+1. Go to: https://supabase.com/dashboard
+2. Click your BAGO SAFE project
+3. Click "SQL Editor" (left sidebar)
+4. Click "+ New Query"
+
+═══════════════════════════════════════════════════════════
+  STEP 2: RUN THE SCHEMA
+═══════════════════════════════════════════════════════════
+
+1. Open file: health-services-schema.sql
+2. Copy ALL (Ctrl+A, Ctrl+C)
+3. Paste into SQL Editor (Ctrl+V)
+4. Click "Run" button
+
+═══════════════════════════════════════════════════════════
+  STEP 3: VERIFY SUCCESS
+═══════════════════════════════════════════════════════════
+
+✅ You should see success message:
+   "Health Services schema created successfully!"
+
+✅ Go to "Table Editor" → See "health_service_requests"
+✅ Go to "Storage" → See "health-documents" bucket
+✅ You'll see 3 test requests in the table
+
+═══════════════════════════════════════════════════════════
+  WHAT WAS CREATED
+═══════════════════════════════════════════════════════════
+
+📋 TABLE: health_service_requests
+   - Stores all health program requests
+   - Auto-generates reference numbers
+   - Supports all 3 programs
+
+🔐 SECURITY: Row-Level Security enabled
+   - Anyone can submit requests
+   - Only admins can update/delete
+
+🗂️ STORAGE: health-documents bucket
+   - For PWD IDs
+   - For medical certificates
+
+═══════════════════════════════════════════════════════════
+  REFERENCE NUMBER FORMAT
+═══════════════════════════════════════════════════════════
+
+Heart Warriors:   HW-2026-00001, HW-2026-00002, etc.
+Wheels of Love:   WOL-2026-00001, WOL-2026-00002, etc.
+Smile Bright:     SBB-2026-00001, SBB-2026-00002, etc.
+
+═══════════════════════════════════════════════════════════
+  NEXT STEP
+═══════════════════════════════════════════════════════════
+
+✅ Database ready!
+🚀 Next: Build the unified request form
+
+═══════════════════════════════════════════════════════════
+
+Need detailed instructions? See: DATABASE-SETUP-INSTRUCTIONS.md
