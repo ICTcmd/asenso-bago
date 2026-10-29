@@ -138,7 +138,7 @@ body.dark-mode .srch-popular-chips .qp:hover{background:rgba(242,140,40,.15);bor
 @keyframes ring{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(1.7);opacity:0}}
 
 /* ── FABs (Redesigned) ── */
-.fabs{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:90;padding:0 14px}
+.fabs{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:90;padding:0 14px;flex-wrap:wrap}
 .fab{padding:12px 18px;border-radius:28px;border:none;cursor:pointer;font-size:12px;font-weight:800;color:var(--white);box-shadow:0 4px 20px rgba(0,0,0,.4);white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .2s;-webkit-tap-highlight-color:transparent;font-family:var(--font-heading);min-height:52px}
 .fab:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.5)}
 .fab:active{transform:scale(.96)}
@@ -147,6 +147,16 @@ body.dark-mode .srch-popular-chips .qp:hover{background:rgba(242,140,40,.15);bor
 .floc{background:linear-gradient(135deg,#3498db,#2980b9)}
 .fdark{background:linear-gradient(135deg,#2c3e50,#34495e)}
 .f3d{background:rgba(30,30,35,.92);backdrop-filter:blur(10px);border:1px solid #555}
+
+/* Mobile responsive FABs */
+@media (max-width:768px){
+  .fabs{gap:8px;padding:0 10px}
+  .fab{padding:10px 14px;font-size:11px;min-height:44px;gap:5px}
+}
+@media (max-width:480px){
+  .fabs{gap:6px;padding:0 8px;bottom:max(12px,env(safe-area-inset-bottom))}
+  .fab{padding:9px 12px;font-size:10px;min-height:40px;border-radius:24px}
+}
 
 /* ── Dark Mode ── */
 body.dark-mode{background:#0a0a0a}
@@ -168,12 +178,14 @@ body.dark-mode .filter-chip.active{background:linear-gradient(135deg,var(--navy)
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:299;display:none;backdrop-filter:blur(8px)}
 .ov.on{display:block;animation:fi .25s ease}
 @keyframes fi{from{opacity:0}to{opacity:1}}
-.pan{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:540px;background:linear-gradient(180deg,#252528 0%,#1c1c1e 100%);border-radius:28px 28px 0 0;padding:22px 22px max(40px,env(safe-area-inset-bottom));z-index:300;display:none;border-top:4px solid var(--gold);box-shadow:0 -10px 48px rgba(0,0,0,.75);max-height:75vh;overflow-y:auto}
+.pan{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:540px;background:linear-gradient(180deg,#252528 0%,#1c1c1e 100%);border-radius:28px 28px 0 0;padding:0;z-index:300;display:none;border-top:4px solid var(--gold);box-shadow:0 -10px 48px rgba(0,0,0,.75);max-height:80vh;overflow-y:auto}
 .pan.on{display:block;animation:su .35s cubic-bezier(.25,.46,.45,.94)}
 @keyframes su{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
-.ph{width:44px;height:5px;background:#444;border-radius:3px;margin:0 auto 16px}
-.pc{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:#333;border:none;color:#aaa;font-size:22px;cursor:pointer;transition:all .2s;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.ph{width:44px;height:5px;background:#444;border-radius:3px;margin:16px auto 0}
+.pc{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:#333;border:none;color:#aaa;font-size:22px;cursor:pointer;transition:all .2s;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;z-index:10}
 .pc:hover{background:#3a3a3a;color:#ddd}
+.pan-img{width:100%;height:220px;object-fit:cover;border-radius:0;display:block}
+.pan-content{padding:20px 22px max(40px,env(safe-area-inset-bottom))}
 .pan-hero{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .pan-ico{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
 .pan-ico.star{background:linear-gradient(135deg,var(--orange),var(--gold))}
@@ -206,7 +218,7 @@ body.dark-mode .filter-chip.active{background:linear-gradient(135deg,var(--navy)
     <h1>Bago City Explorer</h1>
     <p>Discover the landmarks, culture and natural beauty of Bago City</p>
   </div>
-  <span class="hdr-badge" id="spot-count">15 spots</span>
+  <span class="hdr-badge" id="spot-count">28 spots</span>
   <img src="assets/images/bago-city-logo.png" alt="Bago City">
 </div>
 
@@ -228,15 +240,15 @@ body.dark-mode .filter-chip.active{background:linear-gradient(135deg,var(--navy)
   <div class="filter-scroll">
     <button class="filter-chip active" data-filter="all" onclick="doFilter('all',this)">
       <span>All Places</span>
-      <span class="cnt" id="filter-all-cnt">20</span>
+      <span class="cnt" id="filter-all-cnt">28</span>
     </button>
     <button class="filter-chip" data-filter="star" onclick="doFilter('star',this)">
       <span>Nature & Waterfalls</span>
-      <span class="cnt" id="filter-star-cnt">7</span>
+      <span class="cnt" id="filter-star-cnt">14</span>
     </button>
     <button class="filter-chip" data-filter="heritage" onclick="doFilter('heritage',this)">
       <span>Historical & Heritage</span>
-      <span class="cnt" id="filter-heritage-cnt">6</span>
+      <span class="cnt" id="filter-heritage-cnt">7</span>
     </button>
     <button class="filter-chip" data-filter="city" onclick="doFilter('city',this)">
       <span>City Services</span>
@@ -258,21 +270,25 @@ body.dark-mode .filter-chip.active{background:linear-gradient(135deg,var(--navy)
   <button class="fab floc" id="btn-loc" onclick="locateUser()">📍 My Location</button>
   <button class="fab fdark" id="btn-dark" onclick="toggleDarkMode()">🌙 Dark</button>
   <button class="fab f3d" id="btn3d" onclick="do3D()">🏔️ 3D</button>
+  <button class="fab f3d" id="btn-buildings" onclick="toggle3DBuildings()" style="display:none">🏢 Buildings</button>
 </div>
 
 <div class="ov" id="ov" onclick="hidePan()"></div>
 <div class="pan" id="pan">
   <button class="pc" onclick="hidePan()" aria-label="Close">×</button>
   <div class="ph"></div>
-  <div class="pan-hero">
-    <div class="pan-ico star" id="pan-ico">⭐</div>
-    <div><div id="pname"></div></div>
+  <img class="pan-img" id="pan-img" src="" alt="" style="display:none">
+  <div class="pan-content">
+    <div class="pan-hero">
+      <div class="pan-ico star" id="pan-ico">⭐</div>
+      <div><div id="pname"></div></div>
+    </div>
+    <span id="ptype"></span>
+    <p id="pdesc"></p>
+    <div class="pr" id="pfacts"></div>
+    <div class="pr" id="pspots"></div>
+    <a class="gm" id="pgm" href="#" target="_blank" rel="noopener">📍 Open in Google Maps</a>
   </div>
-  <span id="ptype"></span>
-  <p id="pdesc"></p>
-  <div class="pr" id="pfacts"></div>
-  <div class="pr" id="pspots"></div>
-  <a class="gm" id="pgm" href="#" target="_blank" rel="noopener">📍 Open in Google Maps</a>
 </div>
 
 <script>
@@ -282,22 +298,32 @@ const BARANGAYS=[{"num":"01","name":"Abuanan","type":"u","lng":122.9928,"lat":10
 
 const SPOTS=[
   {name:"Kipot Twin Falls",icon:"💧",cat:"Waterfall",tier:"star",lng:123.0706,lat:10.4788,desc:"Stunning twin waterfalls in Brgy. Mailum — reached via 220 scenic steps through lush forest.",spots:"Nature · Ecotourism · Photo spot",image:"https://images.unsplash.com/photo-1432405972618-c6b0f908f94f?w=400&h=300&fit=crop"},
-  {name:"Pataan Mountain Resort",icon:"🏔",cat:"Mountain Resort",tier:"star",lng:123.092328,lat:10.481988,desc:"Mountain getaway near Kanlaon Volcano with cool breeze and panoramic views.",spots:"Mountain resort · Hiking",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
-  {name:"Buenos Aires Resort",icon:"⛰",cat:"Mountain Resort",tier:"star",lng:123.047931,lat:10.455348,desc:"Scenic mountain resort in Brgy. Busay with breathtaking views of Negros.",spots:"Mountain resort · Hiking · Views",image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"},
-  {name:"Kipot Summer Resort",icon:"🏖",cat:"Resort",tier:"star",lng:123.069693,lat:10.477676,desc:"Popular summer resort near Kipot Twin Falls in Brgy. Mailum.",spots:"Swimming · Recreation · Family",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop"},
-  {name:"Balaan Hills",icon:"⛰",cat:"Nature",tier:"star",lng:123.102885,lat:10.480257,desc:"Scenic hills offering panoramic views of the surrounding landscape. A nature destination for hikers and nature lovers.",spots:"Hiking · Views · Nature",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
-  {name:"Rafael Salas Park and Nature Center",icon:"🌿",cat:"Nature Park",tier:"star",lng:123.086663,lat:10.427096,desc:"Named after Rafael Salas — UN Under-Secretary General and Bago City native. A nature sanctuary with diverse flora and fauna.",spots:"Nature park · Birdwatching · Hiking",image:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop"},
+  {name:"Pataan Mountain Resort",icon:"🏔",cat:"Mountain Resort",tier:"star",lng:123.09226372370247,lat:10.482019585201646,desc:"Mountain getaway near Kanlaon Volcano with cool breeze and panoramic views.",spots:"Mountain resort · Hiking",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
+  {name:"Tinago Falls",icon:"💧",cat:"Waterfall",tier:"star",lng:123.09342702555657,lat:10.4761328896147,desc:"Hidden waterfall gem in Bago City — a serene natural attraction surrounded by lush greenery.",spots:"Waterfall · Nature · Swimming",image:"https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=300&fit=crop"},
+  {name:"Gianna's Mountain Resort",icon:"🏔",cat:"Mountain Resort",tier:"star",lng:123.1032204120654,lat:10.483586883522356,desc:"Scenic mountain resort offering relaxation and breathtaking views of Mt. Kanlaon.",spots:"Mountain resort · Views · Recreation",image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"},
+  {name:"Bala-an Hills",icon:"⛰",cat:"Nature",tier:"star",lng:123.10303538322917,lat:10.480235988219139,desc:"Scenic hills offering panoramic views of the surrounding landscape. A nature destination for hikers and nature lovers.",spots:"Hiking · Views · Nature",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
+  {name:"Bungyod Agri Tourism Park",icon:"🌾",cat:"Agri-Tourism",tier:"star",lng:123.09050410258965,lat:10.479096601860814,desc:"Agricultural tourism park showcasing Bago City's farming heritage and sustainable agriculture.",spots:"Agritourism · Farm visit · Nature",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop"},
+  {name:"Mailum Organic Village (MOVA)",icon:"🌱",cat:"Agri-Tourism",tier:"star",lng:123.0706571745684,lat:10.485367357044765,desc:"Mailum Organic Village Association (MOVA) office — promoting organic farming and sustainable agriculture in Mailum.",spots:"Organic farming · Community · Ecotourism",image:"https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&h=300&fit=crop"},
+  {name:"Torresta Infinity Farm",icon:"🌾",cat:"Agri-Tourism",tier:"star",lng:123.07386894960827,lat:10.484125388280878,desc:"Infinity Farm in Mailum offering agricultural experiences and scenic rural landscapes.",spots:"Farm tourism · Agriculture · Nature",image:"https://images.unsplash.com/photo-1560493676-04071c5f467b?w=400&h=300&fit=crop"},
+  {name:"Kipot Summer Resort",icon:"🏖",cat:"Resort",tier:"star",lng:123.06982716530145,lat:10.477862241175968,desc:"Popular summer resort near Kipot Twin Falls in Brgy. Mailum.",spots:"Swimming · Recreation · Family",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop"},
+  {name:"Maragandang Falls",icon:"💧",cat:"Waterfall",tier:"star",lng:123.0780370395538,lat:10.463099875402742,desc:"Beautiful cascading waterfall hidden in the mountains of Bago City — a nature lover's paradise.",spots:"Waterfall · Nature · Adventure",image:"https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=300&fit=crop"},
+  {name:"Buenos Aires Mountain Resort",icon:"⛰",cat:"Mountain Resort",tier:"star",lng:123.04815740062239,lat:10.457006377209883,desc:"Scenic mountain resort in Brgy. Busay with breathtaking views of Negros.",spots:"Mountain resort · Hiking · Views",image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"},
+  {name:"Ma-ao Sugar Central Public Market",icon:"🏪",cat:"Commercial",tier:"city",lng:122.95384952618106,lat:10.475143262674598,desc:"Historic public market in Ma-ao serving the community with fresh produce and local goods.",spots:"Market · Shopping · Local products",image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"},
+  {name:"Buen Tierra Beach House",icon:"🏖",cat:"Beach Resort",tier:"star",lng:122.85207210955127,lat:10.547386523769433,desc:"Beachfront getaway offering coastal relaxation and stunning ocean views.",spots:"Beach · Resort · Coastal",image:"https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=300&fit=crop"},
+  {name:"Nana's Place",icon:"🍽",cat:"Restaurant",tier:"city",lng:122.84816255825815,lat:10.543035756438785,desc:"Local dining establishment offering authentic Filipino cuisine and hospitality.",spots:"Restaurant · Local food · Dining",image:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop"},
   {name:"OISCA Sunflower Farm",icon:"🌻",cat:"Agri-Tourism",tier:"heritage",lng:122.936908,lat:10.582619,desc:"OISCA Sunflower Farm — an agricultural heritage farm featuring sunflower fields and sustainable farming practices in Bago City.",spots:"Agritourism · Farm visit · Sunflower fields",image:"https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=400&h=300&fit=crop"},
-  {name:"Manuel Y. Torres Memorial Coliseum",icon:"🏟",cat:"Cultural Center",tier:"heritage",lng:122.835077,lat:10.537288,desc:"The Manuel Y. Torres Memorial Coliseum and Cultural Center — a major cultural and events venue in Bago City.",spots:"Cultural events · Sports · Concerts",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"},
-  {name:"Manuel Y. Torres Sports Center",icon:"🏅",cat:"Sports Center",tier:"city",lng:122.840483,lat:10.528413,desc:"The Manuel Y. Torres Sports Center — a venue for sports events and community activities in Bago City.",spots:"Sports · Events · Basketball",image:"https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=400&h=300&fit=crop"},
-  {name:"Bantayan Park",icon:"🌳",cat:"Heritage Park",tier:"star",lng:122.8317,lat:10.5368,desc:"Historic park — site of the November 5, 1898 revolution led by Gen. Juan Araneta.",spots:"Al Cinco de Noviembre · Heritage",image:"https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=400&h=300&fit=crop"},
-  {name:"Balay ni Tan Juan",icon:"🏡",cat:"Heritage",tier:"heritage",lng:122.8348,lat:10.5345,desc:"Well-preserved ancestral house showcasing Bago City cultural heritage.",spots:"Heritage museum",image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"},
-  {name:"Javellana Mansion",icon:"🏰",cat:"Heritage",tier:"heritage",lng:122.8361,lat:10.5369,desc:"Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect.",spots:"Heritage ancestral house",image:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"},
+  {name:"Manuel Y. Torres Memorial Coliseum",icon:"🏟",cat:"Cultural Center",tier:"heritage",lng:122.83501322677576,lat:10.537226158958923,desc:"The Manuel Y. Torres Memorial Coliseum and Cultural Center — a major cultural and events venue in Bago City.",spots:"Cultural events · Sports · Concerts",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"},
+  {name:"Saint John the Baptist Parish",icon:"⛪",cat:"Heritage",tier:"heritage",lng:122.83453506928456,lat:10.537283811975193,desc:"Historic Catholic parish church serving the Bago City community — a religious heritage landmark.",spots:"Church · Religious heritage · Architecture",image:"https://images.unsplash.com/photo-1548625361-987822ebbd8a?w=400&h=300&fit=crop"},Basketball",image:"https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=400&h=300&fit=crop"},
+  {name:"Saint John the Baptist Parish",icon:"⛪",cat:"Heritage",tier:"heritage",lng:122.83453506928456,lat:10.537283811975193,desc:"Historic Catholic parish church serving the Bago City community — a religious heritage landmark.",spots:"Church · Religious heritage · Architecture",image:"https://images.unsplash.com/photo-1548625361-987822ebbd8a?w=400&h=300&fit=crop"},
+  {name:"Bantayan Park",icon:"🌳",cat:"Heritage Park",tier:"heritage",lng:122.83162155649741,lat:10.537627445468019,desc:"Historic park — site of the November 5, 1898 revolution led by Gen. Juan Araneta.",spots:"Al Cinco de Noviembre · Heritage",image:"https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=400&h=300&fit=crop"},
+  {name:"Balay ni Tan Juan",icon:"🏡",cat:"Heritage",tier:"heritage",lng:122.83477865897227,lat:10.534489844937438,desc:"Well-preserved ancestral house showcasing Bago City cultural heritage.",spots:"Heritage museum",image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"},
+  {name:"Javellana Mansion",icon:"🏰",cat:"Heritage",tier:"heritage",lng:122.83605744838584,lat:10.536859752555511,desc:"Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect. Known as Balay Daku.",spots:"Heritage ancestral house",image:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"},
   {name:"Bago City Cathedral",icon:"⛪",cat:"Heritage",tier:"heritage",lng:122.8344,lat:10.5372,desc:"Spanish-colonial cathedral dedicated to San Sebastian, patron saint of Bago City.",spots:"Religious heritage landmark",image:"https://images.unsplash.com/photo-1548625361-987822ebbd8a?w=400&h=300&fit=crop"},
   {name:"Ma-ao Sugar Central",icon:"🏭",cat:"Heritage",tier:"heritage",lng:122.9506,lat:10.477,desc:"Historic sugar mill — heritage industrial landmark in the most populated barangay.",spots:"Heritage industrial site",image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=300&fit=crop"},
-  {name:"Bago City Hall",icon:"🏛️",cat:"Government",tier:"city",lng:122.8351,lat:10.5383,desc:"Seat of the local government of Bago City.",spots:"Official government center",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"},
+  {name:"Ma-ao Public Plaza",icon:"🏞",cat:"City Service",tier:"city",lng:122.99161502666759,lat:10.489965324482274,desc:"Community gathering place in Ma-ao barangay — a hub for local events and activities.",spots:"Plaza · Community · Events",image:"https://images.unsplash.com/photo-1541795083-1b160cf4f3d7?w=400&h=300&fit=crop"},
+  {name:"Bago Public Market",icon:"🏪",cat:"Commercial",tier:"city",lng:122.83799043389978,lat:10.53936818360094,desc:"Main public market of Bago City.",spots:"Fresh produce and local products",image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"},
+  {name:"Bago City Hall",icon:"🏛️",cat:"Government",tier:"city",lng:122.83512455511269,lat:10.53815531116121,desc:"Seat of the local government of Bago City.",spots:"Official government center",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"},
   {name:"Bago City Hospital",icon:"🏥",cat:"Hospital",tier:"city",lng:122.8471,lat:10.5355,desc:"Primary government hospital serving Bago City.",spots:"Main public health facility",image:"https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=300&fit=crop"},
-  {name:"Bago City Market",icon:"🏪",cat:"Commercial",tier:"city",lng:122.8374,lat:10.5396,desc:"Main public market of Bago City.",spots:"Fresh produce and local products",image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"},
   {name:"Bago Bus Terminal",icon:"🚌",cat:"Transport",tier:"city",lng:122.992,lat:10.4876,desc:"Main bus and jeepney terminal with routes to Bacolod.",spots:"Main transport hub",image:"https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop"},
   {name:"Bago City Police",icon:"🚔",cat:"Government",tier:"city",lng:122.8414,lat:10.5264,desc:"Bago City Police Station — Philippine National Police.",spots:"Emergency: 911",image:"https://images.unsplash.com/photo-1557683316-973673baf926?w=400&h=300&fit=crop"},
   {name:"Bago City Library",icon:"📚",cat:"Government",tier:"city",lng:122.8343,lat:10.535,desc:"Bago City Public Library providing educational resources.",spots:"Public library",image:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=300&fit=crop"}
@@ -307,18 +333,20 @@ const SPOTS_DEDUPED=SPOTS;
 
 const QUICK_PICKS=[
   {q:"Kipot Twin Falls",  label:"💧 Kipot Falls",  lng:123.0706, lat:10.4788},
-  {q:"Bantayan Park",     label:"🌳 Bantayan Park", lng:122.8317, lat:10.5368},
-  {q:"Buenos Aires Resort",label:"⛰️ Buenos Aires", lng:123.047931, lat:10.455348},
-  {q:"Hundred Hills",    label:"🌄 Hundred Hills",  lng:122.8378, lat:10.5318},
+  {q:"Bantayan Park",     label:"🌳 Bantayan Park", lng:122.83162155649741, lat:10.537627445468019},
+  {q:"Pataan Mountain Resort",label:"🏔 Pataan Resort", lng:123.09226372370247, lat:10.482019585201646},
+  {q:"Tinago Falls",    label:"💧 Tinago Falls",  lng:123.09342702555657, lat:10.4761328896147},
   {q:"Poblacion",        label:"🏙️ Poblacion",      lng:122.8353, lat:10.5402},
-  {q:"Mailum",           label:"🏞️ Mailum",         lng:123.0494, lat:10.4636}
+  {q:"Mailum",           label:"🏞️ Mailum",         lng:123.0494, lat:10.4636},
+  {q:"Buenos Aires Mountain Resort",label:"⛰️ Buenos Aires", lng:123.04815740062239, lat:10.457006377209883},
+  {q:"Bago City Hall",   label:"🏛️ City Hall",     lng:122.83512455511269, lat:10.53815531116121}
 ];
 
 const CENTER=[122.950,10.510];
 const BOUNDS=[[122.67,10.28],[123.25,10.70]];
 const INITIAL_ZOOM=11.2;
 const BM=[],LM=[];
-let is3D=false,activeEl=null,activeFilter="star",searchIndex=[];
+let is3D=false,activeEl=null,activeFilter="star",searchIndex=[],buildings3DEnabled=false;
 
 function spotTier(s){return s.tier||(s.cat==="Tourist Spot"||s.cat==="Park"||s.cat==="Nature Park"?"star":s.cat==="Heritage"||s.cat==="Religious"?"heritage":"city")}
 function isStarSpot(s){return spotTier(s)==="star"}
@@ -427,16 +455,22 @@ map.on("load",()=>{
   initFilterCounts();
 
   map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
-  map.setTerrain({source:"dem",exaggeration:0.3});
-  // Reduced fog effects for better performance
-  map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.2});
+  map.setTerrain({source:"dem",exaggeration:1.5});
+  // Enhanced fog effects for immersive 3D experience
+  map.setFog({
+    color:"rgb(220,235,255)",
+    "horizon-blend":0.1,
+    "high-color":"rgb(36,92,223)",
+    "space-color":"rgb(11,11,25)",
+    "star-intensity":0.15
+  });
 
   BARANGAYS.forEach((b,i)=>{
     const el=document.createElement("div");
     el.className="bp "+b.type;
     el.innerHTML="<div class=bpill>"+b.name+"</div>";
     el.style.animationDelay=(i*30)+"ms";
-    el.onclick=()=>onTap(el,b.lng,b.lat,()=>{});
+    el.onclick=()=>onTap(el,b.lng,b.lat,()=>showPan(b));
     new mapboxgl.Marker({element:el,anchor:"center"}).setLngLat([b.lng,b.lat]).addTo(map);
     BM.push({el,b});
   });
@@ -448,14 +482,17 @@ map.on("load",()=>{
     el.style.animationDelay=((BARANGAYS.length+i)*30)+"ms";
     const sh=s.name.length>14?s.name.slice(0,13)+"…":s.name;
     el.innerHTML="<div class=lmi>"+s.icon+"</div><div class=lmt>"+sh+"</div>";
-    const info={name:s.name,type:"landmark",cat:s.cat,tier:t,icon:s.icon,desc:s.desc,spots:s.spots,dist:"",pop:"",area:"",fiesta:""};
-    el.onclick=()=>onTap(el,s.lng,s.lat,()=>{});
+    const info={name:s.name,type:"landmark",cat:s.cat,tier:t,icon:s.icon,desc:s.desc,spots:s.spots,image:s.image,dist:"",pop:"",area:"",fiesta:""};
+    el.onclick=()=>onTap(el,s.lng,s.lat,()=>showPan(info));
     new mapboxgl.Marker({element:el,anchor:"top"}).setLngLat([s.lng,s.lat]).addTo(map);
     LM.push({el,s,info,t});
   });
 
   buildSearchIndex();
   initQuickPicks();
+  
+  // Add 3D buildings layer (conditionally enabled)
+  init3DBuildings();
   
   // Set initial filter to "all" instead of "star"
   doFilter("all",document.querySelector('[data-filter="all"]'));
@@ -652,11 +689,26 @@ function do3D(){
   is3D=!is3D;
   const btn=document.getElementById("btn3d");
   if(is3D){
-    map.easeTo({pitch:58,bearing:-20,duration:900});
+    // Enhanced 3D mode with better terrain and camera
+    map.easeTo({
+      pitch:60,
+      bearing:-25,
+      duration:1200,
+      easing:t=>1-Math.pow(1-t,3)
+    });
+    // Increase terrain exaggeration in 3D mode for dramatic effect
+    map.setTerrain({source:"dem",exaggeration:1.8});
     btn.innerHTML="🗺️ Flat";
     btn.style.background="linear-gradient(135deg,#1a3050,#0369a1)";
   }else{
-    map.easeTo({pitch:0,bearing:0,duration:800});
+    // Return to 2D with standard terrain
+    map.easeTo({
+      pitch:0,
+      bearing:0,
+      duration:1000,
+      easing:t=>t<0.5?2*t*t:-1+(4-2*t)*t
+    });
+    map.setTerrain({source:"dem",exaggeration:1.5});
     btn.innerHTML="🏔️ 3D";
     btn.style.background="";
   }
@@ -813,6 +865,16 @@ function showPan(p){
   const isLm=p.type==="landmark";
   const tier=p.tier||(isBrgy?(p.type==="t"?"barangay":"barangay"):isLm?spotTier(p):"city");
 
+  // Show image if available (for landmarks/spots)
+  const panImg = document.getElementById("pan-img");
+  if (p.image && !isBrgy) {
+    panImg.src = p.image;
+    panImg.alt = p.name;
+    panImg.style.display = "block";
+  } else {
+    panImg.style.display = "none";
+  }
+
   document.getElementById("pname").textContent=p.name;
   const icoEl=document.getElementById("pan-ico");
   icoEl.textContent=isLm?(p.icon||"📍"):(p.type==="t"?"🏞️":"📍");
@@ -849,6 +911,112 @@ function hidePan(){
   document.getElementById("ov").classList.remove("on");
   if(activeEl){activeEl.classList.remove("sel");activeEl=null;}
 }
+
+function init3DBuildings(){
+  // Check if the current style supports building layer
+  // Mapbox Streets style includes building data in 'composite' source
+  try {
+    const style = map.getStyle();
+    if (!style || !style.sources || !style.sources.composite) {
+      console.log('3D buildings not available in current style');
+      return;
+    }
+    
+    // Find the label layer to insert buildings below labels
+    const layers = style.layers;
+    let labelLayerId;
+    for (let i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol' && layers[i].layout && layers[i].layout['text-field']) {
+        labelLayerId = layers[i].id;
+        break;
+      }
+    }
+    
+    // Add 3D buildings layer (hidden by default)
+    map.addLayer({
+      'id': '3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': ['==', 'extrude', 'true'],
+      'type': 'fill-extrusion',
+      'minzoom': 14,
+      'layout': {
+        'visibility': 'none'  // Hidden by default
+      },
+      'paint': {
+        'fill-extrusion-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'height'],
+          0, '#aaaaaa',
+          50, '#999999',
+          100, '#888888'
+        ],
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          14, 0,
+          14.5, ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          14, 0,
+          14.5, ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.7
+      }
+    }, labelLayerId);
+    
+    // Show buildings button
+    const buildingsBtn = document.getElementById('btn-buildings');
+    if (buildingsBtn) {
+      buildingsBtn.style.display = 'flex';
+    }
+    
+    console.log('3D buildings layer initialized');
+  } catch (error) {
+    console.log('Could not initialize 3D buildings:', error.message);
+  }
+}
+
+function toggle3DBuildings(){
+  buildings3DEnabled = !buildings3DEnabled;
+  const btn = document.getElementById('btn-buildings');
+  
+  try {
+    const visibility = buildings3DEnabled ? 'visible' : 'none';
+    map.setLayoutProperty('3d-buildings', 'visibility', visibility);
+    
+    if (buildings3DEnabled) {
+      btn.innerHTML = '🏢 Hide Buildings';
+      btn.style.background = 'linear-gradient(135deg,#e67e22,#d35400)';
+      
+      // Zoom in if too far out
+      if (map.getZoom() < 14) {
+        map.easeTo({
+          zoom: 14.5,
+          duration: 1000
+        });
+      }
+      
+      // Auto-enable 3D mode if not already enabled
+      if (!is3D) {
+        do3D();
+      }
+    } else {
+      btn.innerHTML = '🏢 Buildings';
+      btn.style.background = '';
+    }
+  } catch (error) {
+    console.log('Could not toggle 3D buildings:', error.message);
+    // Hide button if layer doesn't exist
+    btn.style.display = 'none';
+  }
+}
+
 </script>
 </body>
 </html>
