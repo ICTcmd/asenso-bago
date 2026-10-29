@@ -1,25 +1,27 @@
 {
   "expo": {
-    "name": "bago-city-app",
+    "name": "Bago City",
     "slug": "bago-city-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0f0a00"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "ph.gov.bago.cityapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0f0a00"
       },
+      "package": "ph.gov.bago.cityapp",
       "edgeToEdgeEnabled": true
     },
     "web": {
