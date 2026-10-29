@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#0A2E5C">
 <title>Bago City Explorer — Interactive Map</title>
-<link rel="preconnect" href="https://api.mapbox.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
-/* ── Design Tokens ── */
 :root {
   --navy: #0A2E5C;
   --navy-dark: #081f3d;
@@ -22,834 +23,550 @@
   --bg-light: #F4F6F9;
   --text-primary: #172033;
   --text-secondary: #64748B;
-  --text-tertiary: #94A3B8;
   --font-heading: 'Montserrat', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:var(--font-body)}
-#map{position:fixed;inset:0}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; font-family: var(--font-body); }
 
-/* ── Loader ── */
-#ldr{position:fixed;inset:0;background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 50%,#0d3a73 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;gap:14px;transition:opacity .6s}
-#ldr.done{opacity:0;pointer-events:none}
-#ldr img{width:80px;height:80px;border-radius:50%;animation:lp 1.4s ease-in-out infinite;box-shadow:0 0 40px rgba(201,162,39,.6)}
-@keyframes lp{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.1) rotate(5deg)}}
-#ldr h2{font-size:20px;font-weight:900;color:var(--white);text-align:center;font-family:var(--font-heading)}
-#ldr p{font-size:13px;color:rgba(255,255,255,.65);font-family:var(--font-body)}
-.bw{width:200px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
-.bf{height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));animation:bfill 1.5s ease forwards}
-@keyframes bfill{0%{width:0}100%{width:95%}}
+#map { position: fixed; inset: 0; z-index: 0; }
 
-/* ── Header (Compact Navy Design) ── */
-.hdr{background:linear-gradient(135deg,var(--navy) 0%,#0d3a73 100%);padding:max(12px,env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 4px 24px rgba(10,46,92,.35)}
-.bk{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;transition:all .2s;min-width:44px;min-height:44px}
-.bk:hover{background:rgba(255,255,255,.25)}
-.bk:active{transform:scale(.92)}
-.hi{flex:1}.hi h1{font-size:16px;font-weight:800;color:var(--white);letter-spacing:-.3px;font-family:var(--font-heading)}.hi p{font-size:10.5px;color:rgba(255,255,255,.75);margin-top:2px;font-family:var(--font-body)}
-.hdr img{width:40px;height:40px;border-radius:50%;border:2px solid rgba(201,162,39,.6);box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.hdr-badge{background:linear-gradient(135deg,rgba(201,162,39,.25),rgba(242,140,40,.25));backdrop-filter:blur(8px);border:1px solid rgba(201,162,39,.4);padding:5px 11px;border-radius:20px;font-size:10px;font-weight:700;color:rgba(255,255,255,.95);white-space:nowrap;font-family:var(--font-heading)}
+/* Header */
+.hdr {
+  background: linear-gradient(135deg, var(--navy) 0%, #0d3a73 100%);
+  padding: max(12px, env(safe-area-inset-top)) 14px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 24px rgba(10, 46, 92, 0.35);
+}
 
-/* ── Search ── */
-.ui-top{position:fixed;top:calc(max(12px,env(safe-area-inset-top)) + 62px);left:0;right:0;z-index:95;padding:0 12px}
-.search-wrap{position:relative;display:flex;align-items:center;background:rgba(255,255,255,.98);border-radius:28px;box-shadow:0 4px 20px rgba(0,0,0,.18);border:2px solid transparent;transition:border-color .2s,box-shadow .2s}
-.search-wrap:focus-within{border-color:var(--orange);box-shadow:0 4px 24px rgba(242,140,40,.35)}
-.search-ico{padding:0 4px 0 16px;font-size:16px;line-height:1;opacity:.5}
-.si{flex:1;padding:13px 8px 13px 4px;border:none;background:transparent;font-size:14px;font-weight:500;color:var(--text-primary);outline:none;font-family:var(--font-body);min-height:48px}
-.si::placeholder{color:var(--text-tertiary);font-weight:500}
-.search-clear{width:36px;height:36px;margin-right:6px;border-radius:50%;border:none;background:var(--bg-light);color:var(--text-secondary);font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;transition:all .2s;min-width:44px;min-height:44px}
-.search-clear:hover{background:#e2e8f0;color:var(--text-primary)}
-.search-clear.on{display:flex}
-.srch-drop{display:none;margin-top:8px;background:rgba(255,255,255,.98);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.2);max-height:320px;overflow-y:auto;scrollbar-width:thin}
-.srch-drop.on{display:block;animation:dropIn .2s ease}
-@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.srch-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #f2f2f2;transition:background .15s;min-height:70px}
-.srch-item:last-child{border-bottom:none}
-.srch-item:active,.srch-item:hover{background:#f8fafc}
-.srch-item-img{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.srch-item-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.srch-item-ico.star{background:linear-gradient(135deg,var(--orange),var(--gold))}
-.srch-item-ico.heritage{background:linear-gradient(135deg,#8e44ad,#9b59b6)}
-.srch-item-ico.barangay{background:linear-gradient(135deg,#27ae60,#2ecc71)}
-.srch-item-ico.city{background:linear-gradient(135deg,var(--navy),#0d3a73)}
-.srch-item-body{flex:1;min-width:0}
-.srch-item-name{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-heading)}
-.srch-item-sub{font-size:11px;color:var(--text-secondary);font-weight:600;margin-top:2px;font-family:var(--font-body)}
-.srch-empty{padding:20px;text-align:center;font-size:13px;color:var(--text-secondary);font-family:var(--font-body)}
-.srch-hl{background:rgba(242,140,40,.2);border-radius:3px;padding:0 2px;color:var(--orange);font-weight:700}
+.bk {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+}
 
-/* ── Quick picks ── */
-.srch-popular{padding:14px 16px 10px}
-.srch-popular-label{font-size:10px;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;font-family:var(--font-heading)}
-.srch-popular-chips{display:flex;gap:8px;flex-wrap:wrap}
-.srch-popular-chips .qp{font-size:11px;font-weight:700;padding:8px 14px;border-radius:20px;border:2px solid #e8e8e8;background:#f8f8f8;color:var(--text-primary);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--font-body);min-height:36px}
-.srch-popular-chips .qp:active,.srch-popular-chips .qp:hover{background:rgba(242,140,40,.1);border-color:var(--orange);color:var(--orange)}
-body.dark-mode .srch-popular-label{color:#888}
-body.dark-mode .srch-popular-chips .qp{background:#1f1f1f;border-color:#333;color:#ccc}
-body.dark-mode .srch-popular-chips .qp:hover{background:rgba(242,140,40,.15);border-color:var(--orange);color:var(--orange)}
+.bk:hover { background: rgba(255, 255, 255, 0.25); }
+.bk:active { transform: scale(0.92); }
 
-/* ── Category Filter Chips ── */
-.filter-container{position:fixed;top:calc(max(12px,env(safe-area-inset-top)) + 122px);left:0;right:0;z-index:94;padding:0 12px}
-.filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:6px 0 8px;scrollbar-width:none}
-.filter-scroll::-webkit-scrollbar{display:none}
-.filter-chip{flex-shrink:0;padding:9px 16px;border-radius:24px;border:2px solid rgba(255,255,255,.3);background:rgba(10,46,92,.85);backdrop-filter:blur(12px);color:rgba(255,255,255,.9);font-size:11.5px;font-weight:800;cursor:pointer;transition:all .2s ease;user-select:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;font-family:var(--font-heading);min-height:44px;display:flex;align-items:center;gap:6px}
-.filter-chip:active{transform:scale(.96)}
-.filter-chip.active{background:linear-gradient(135deg,var(--navy),#0d3a73);border-color:var(--gold);color:var(--white);box-shadow:0 4px 16px rgba(10,46,92,.4)}
-.filter-chip .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;background:rgba(255,255,255,.2);border-radius:10px;font-size:10px;font-weight:800}
-.filter-chip.active .cnt{background:rgba(201,162,39,.3);color:var(--white)}
+.hi { flex: 1; }
+.hi h1 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.3px;
+  font-family: var(--font-heading);
+}
+.hi p {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 2px;
+  font-family: var(--font-body);
+}
 
-/* ── Legend ── */
-.legend{position:fixed;bottom:100px;left:14px;z-index:88;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-radius:16px;padding:12px 14px;box-shadow:0 4px 20px rgba(0,0,0,.18);font-size:10px;font-weight:600;color:var(--text-secondary);border:1px solid rgba(10,46,92,.08);font-family:var(--font-body)}
-.legend-title{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;font-family:var(--font-heading)}
-.legend-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.legend-row:last-child{margin-bottom:0}
-.legend-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid var(--white);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.hdr img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 162, 39, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 
-/* ── Map controls ── */
-.mapboxgl-ctrl-bottom-right{bottom:100px!important;right:14px!important}
-.mapboxgl-ctrl-attrib{font-size:9px!important;font-family:var(--font-body)!important}
+.hdr-badge {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.25), rgba(242, 140, 40, 0.25));
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  font-family: var(--font-heading);
+}
 
-/* ── Barangay markers ── */
-.bp{cursor:pointer;animation:popIn .45s cubic-bezier(.34,1.56,.64,1) both;transition:opacity .3s,filter .3s}
-.bp:hover .bpill{transform:scale(1.12)}
-.bp.sel .bpill{transform:scale(1.18);box-shadow:0 0 0 3px var(--white),0 4px 20px rgba(242,140,40,.6)}
-.bp.dim{opacity:.06!important;pointer-events:none!important}
-@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.bpill{padding:6px 13px;border-radius:22px;font-size:10.5px;font-weight:800;color:var(--white);border:2px solid rgba(255,255,255,.95);box-shadow:0 2px 12px rgba(0,0,0,.45);white-space:nowrap;transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;font-family:var(--font-heading)}
-.bp.u .bpill{background:linear-gradient(135deg,var(--navy),#0d3a73)}
-.bp.r .bpill{background:linear-gradient(135deg,#27ae60,#1e8449)}
-.bp.t .bpill{background:linear-gradient(135deg,var(--orange),var(--gold));box-shadow:0 2px 14px rgba(242,140,40,.5)}
+/* Legend */
+.legend {
+  position: absolute;
+  bottom: 20px;
+  left: 14px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid rgba(10, 46, 92, 0.08);
+  font-family: var(--font-body);
+}
 
-/* ── Landmark markers ── */
-.lm{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .3s}
-.lm:hover{transform:scale(1.15)}
-.lm.sel{transform:scale(1.25)}
-.lm.dim{opacity:.05!important;pointer-events:none!important}
-.lmi{width:44px;height:44px;border-radius:50%;border:3px solid var(--white);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 16px rgba(0,0,0,.45);transition:box-shadow .2s;position:relative}
-.lm-star .lmi{width:54px;height:54px;font-size:24px;background:linear-gradient(135deg,var(--orange),var(--gold));box-shadow:0 4px 24px rgba(242,140,40,.55)}
-.lm-star .lmi::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:3px solid rgba(242,140,40,.4);animation:ring 2.2s ease-out infinite}
-.lm-heritage .lmi{background:linear-gradient(135deg,#8e44ad,#9b59b6);font-size:18px}
-.lm-heritage .lmi::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(142,68,173,.4);animation:ring 2.5s ease-out infinite}
-.lm-city .lmi{width:38px;height:38px;font-size:16px;background:linear-gradient(135deg,var(--navy),#0d3a73);opacity:.9}
-.lm-city .lmt{opacity:.85}
-.lmt{padding:4px 10px;border-radius:12px;font-size:9.5px;font-weight:900;color:var(--white);background:rgba(10,46,92,.92);white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:var(--font-heading)}
-.lm-star .lmt{background:linear-gradient(135deg,#d97706,var(--orange));font-size:10px;max-width:130px}
-@keyframes ring{0%{transform:scale(1);opacity:.75}70%,100%{transform:scale(1.7);opacity:0}}
+.legend-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+}
 
-/* ── FABs (Redesigned) ── */
-.fabs{position:fixed;bottom:max(18px,env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:center;gap:10px;z-index:90;padding:0 14px}
-.fab{padding:12px 18px;border-radius:28px;border:none;cursor:pointer;font-size:12px;font-weight:800;color:var(--white);box-shadow:0 4px 20px rgba(0,0,0,.4);white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .2s;-webkit-tap-highlight-color:transparent;font-family:var(--font-heading);min-height:52px}
-.fab:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.5)}
-.fab:active{transform:scale(.96)}
-.freset{background:linear-gradient(135deg,var(--navy),#0d3a73);border:1px solid rgba(201,162,39,.3)}
-.fshowall{background:linear-gradient(135deg,var(--orange),var(--gold))}
-.floc{background:linear-gradient(135deg,#3498db,#2980b9)}
-.fdark{background:linear-gradient(135deg,#2c3e50,#34495e)}
-.f3d{background:rgba(30,30,35,.92);backdrop-filter:blur(10px);border:1px solid #555}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
 
-/* ── Dark Mode ── */
-body.dark-mode{background:#0a0a0a}
-body.dark-mode .search-wrap{background:rgba(30,30,30,.96);border-color:#333}
-body.dark-mode .si{color:var(--white)}
-body.dark-mode .si::placeholder{color:#666}
-body.dark-mode .srch-drop{background:rgba(30,30,30,.96)}
-body.dark-mode .srch-item{border-bottom-color:#2a2a2a}
-body.dark-mode .srch-item:active,body.dark-mode .srch-item:hover{background:#1f1f1f}
-body.dark-mode .srch-item-name{color:var(--white)}
-body.dark-mode .srch-item-sub{color:#888}
-body.dark-mode .legend{background:rgba(30,30,30,.96);border-color:#333}
-body.dark-mode .legend-title{color:var(--white)}
-body.dark-mode .legend-row{color:#aaa}
-body.dark-mode .filter-chip{background:rgba(30,30,35,.9);border-color:#444;color:#ccc}
-body.dark-mode .filter-chip.active{background:linear-gradient(135deg,var(--navy),#0d3a73);border-color:var(--gold);color:var(--white)}
+.legend-row:last-child { margin-bottom: 0; }
 
-/* ── Detail panel ── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:299;display:none;backdrop-filter:blur(8px)}
-.ov.on{display:block;animation:fi .25s ease}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.pan{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:540px;background:linear-gradient(180deg,#252528 0%,#1c1c1e 100%);border-radius:28px 28px 0 0;padding:22px 22px max(40px,env(safe-area-inset-bottom));z-index:300;display:none;border-top:4px solid var(--gold);box-shadow:0 -10px 48px rgba(0,0,0,.75);max-height:75vh;overflow-y:auto}
-.pan.on{display:block;animation:su .35s cubic-bezier(.25,.46,.45,.94)}
-@keyframes su{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
-.ph{width:44px;height:5px;background:#444;border-radius:3px;margin:0 auto 16px}
-.pc{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:50%;background:#333;border:none;color:#aaa;font-size:22px;cursor:pointer;transition:all .2s;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
-.pc:hover{background:#3a3a3a;color:#ddd}
-.pan-hero{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-.pan-ico{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
-.pan-ico.star{background:linear-gradient(135deg,var(--orange),var(--gold))}
-.pan-ico.heritage{background:linear-gradient(135deg,#8e44ad,#9b59b6)}
-.pan-ico.barangay{background:linear-gradient(135deg,#27ae60,#2ecc71)}
-.pan-ico.city{background:linear-gradient(135deg,var(--navy),#0d3a73)}
-#pname{font-size:22px;font-weight:900;color:var(--white);line-height:1.2;font-family:var(--font-heading)}
-#ptype{display:inline-block;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:12px;font-family:var(--font-heading)}
-#pdesc{font-size:14px;color:#aaa;line-height:1.7;margin-bottom:12px;font-family:var(--font-body)}
-.pr{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.fp{background:rgba(10,46,92,.3);color:#74b9ff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;font-family:var(--font-body)}
-.sp{background:linear-gradient(135deg,rgba(242,140,40,.15),rgba(201,162,39,.15));color:var(--gold);font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;border:1px solid rgba(201,162,39,.3);font-family:var(--font-body)}
-.gm{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;padding:16px;background:linear-gradient(135deg,#0369a1,#0ea5e9);color:var(--white);border-radius:16px;font-size:14px;font-weight:700;text-decoration:none;font-family:var(--font-heading);transition:all .2s;min-height:52px}
-.gm:hover{background:linear-gradient(135deg,#0284c7,#06b6d4);transform:translateY(-2px)}
-.gm:active{transform:scale(.98)}
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid var(--white);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Stats overlay */
+.stats-overlay {
+  position: absolute;
+  top: max(72px, calc(env(safe-area-inset-top) + 72px));
+  right: 14px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(10, 46, 92, 0.08);
+}
+
+.stats-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--navy);
+  font-family: var(--font-heading);
+}
+
+/* Custom marker styles */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+  border-radius: 16px;
+  padding: 0;
+  font-family: var(--font-body);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 220px;
+}
+
+.popup-content {
+  padding: 14px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.popup-icon {
+  font-size: 24px;
+}
+
+.popup-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+.popup-category {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+}
+
+.popup-category.star { background: linear-gradient(135deg, var(--orange), var(--gold)); color: white; }
+.popup-category.heritage { background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; }
+.popup-category.barangay { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+.popup-category.city { background: linear-gradient(135deg, var(--navy), #0d3a73); color: white; }
+
+.popup-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.popup-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0369a1, #0ea5e9);
+  color: white;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  transition: all 0.2s;
+}
+
+.popup-link:hover {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  transform: translateY(-1px);
+}
+
+/* Cluster styles */
+.marker-cluster {
+  background: transparent !important;
+}
+
+.marker-cluster div {
+  background: transparent !important;
+}
+
+/* Loading */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, #0d3a73 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  transition: opacity 0.6s;
+}
+
+#loading.done {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loading img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(201, 162, 39, 0.6);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+#loading h2 {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--white);
+  margin-top: 20px;
+  font-family: var(--font-heading);
+}
+
+#loading p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 8px;
+  font-family: var(--font-body);
+}
 </style>
 </head>
 <body>
-<div id="ldr">
+
+<div id="loading">
   <img src="assets/images/bago-city-logo.png" alt="Bago City Logo">
   <h2>Bago City Explorer</h2>
-  <p>Discover landmarks, culture and natural beauty...</p>
-  <div class="bw"><div class="bf"></div></div>
+  <p>Loading interactive map...</p>
 </div>
+
 <div id="map"></div>
 
 <div class="hdr">
   <a href="javascript:history.back()" class="bk" aria-label="Go back">&#8592;</a>
   <div class="hi">
     <h1>Bago City Explorer</h1>
-    <p>Discover the landmarks, culture and natural beauty of Bago City</p>
+    <p>Interactive map of Bago City</p>
   </div>
-  <span class="hdr-badge" id="spot-count">15 spots</span>
+  <span class="hdr-badge" id="spot-count">45 locations</span>
   <img src="assets/images/bago-city-logo.png" alt="Bago City">
 </div>
 
-<div class="ui-top">
-  <div class="search-wrap">
-    <span class="search-ico" aria-label="Search">🔍</span>
-    <input class="si" id="srch" type="search" placeholder="Search landmarks, waterfalls, parks and barangays..." autocomplete="off" enterkeyhint="search" aria-label="Search attractions" onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch(this.value,true);this.blur();}">
-    <button class="search-clear" id="srch-clr" type="button" aria-label="Clear search" onclick="clearSearch()">×</button>
-  </div>
-  <div class="srch-drop" id="srch-drop">
-    <div class="srch-popular" id="srch-popular">
-      <div class="srch-popular-label">Popular Places</div>
-      <div class="srch-popular-chips" id="quick-picks"></div>
-    </div>
-  </div>
-</div>
-
-<div class="filter-container">
-  <div class="filter-scroll">
-    <button class="filter-chip active" data-filter="all" onclick="doFilter('all',this)">
-      <span>All Places</span>
-      <span class="cnt" id="filter-all-cnt">20</span>
-    </button>
-    <button class="filter-chip" data-filter="star" onclick="doFilter('star',this)">
-      <span>Nature & Waterfalls</span>
-      <span class="cnt" id="filter-star-cnt">7</span>
-    </button>
-    <button class="filter-chip" data-filter="heritage" onclick="doFilter('heritage',this)">
-      <span>Historical & Heritage</span>
-      <span class="cnt" id="filter-heritage-cnt">6</span>
-    </button>
-    <button class="filter-chip" data-filter="city" onclick="doFilter('city',this)">
-      <span>City Services</span>
-      <span class="cnt" id="filter-city-cnt">7</span>
-    </button>
-  </div>
-</div>
-
-<div class="legend" id="legend">
+<div class="legend">
   <div class="legend-title">Map Legend</div>
-  <div class="legend-row"><span class="legend-dot" style="background:linear-gradient(135deg,var(--orange),var(--gold))"></span> Must-see attraction</div>
-  <div class="legend-row"><span class="legend-dot" style="background:linear-gradient(135deg,#8e44ad,#9b59b6)"></span> Heritage site</div>
-  <div class="legend-row"><span class="legend-dot" style="background:linear-gradient(135deg,var(--orange),var(--gold))"></span> Tourist barangay</div>
-</div>
-
-<div class="fabs">
-  <button class="fab freset" id="btn-reset" onclick="resetMap()">🏠 Reset Map</button>
-  <button class="fab fshowall" id="btn-showall" onclick="showAllAttractions()">📍 Show All</button>
-  <button class="fab floc" id="btn-loc" onclick="locateUser()">📍 My Location</button>
-  <button class="fab fdark" id="btn-dark" onclick="toggleDarkMode()">🌙 Dark</button>
-  <button class="fab f3d" id="btn3d" onclick="do3D()">🏔️ 3D</button>
-</div>
-
-<div class="ov" id="ov" onclick="hidePan()"></div>
-<div class="pan" id="pan">
-  <button class="pc" onclick="hidePan()" aria-label="Close">×</button>
-  <div class="ph"></div>
-  <div class="pan-hero">
-    <div class="pan-ico star" id="pan-ico">⭐</div>
-    <div><div id="pname"></div></div>
+  <div class="legend-row">
+    <span class="legend-dot" style="background: linear-gradient(135deg, var(--orange), var(--gold))"></span>
+    <span>Tourist Attractions</span>
   </div>
-  <span id="ptype"></span>
-  <p id="pdesc"></p>
-  <div class="pr" id="pfacts"></div>
-  <div class="pr" id="pspots"></div>
-  <a class="gm" id="pgm" href="#" target="_blank" rel="noopener">📍 Open in Google Maps</a>
+  <div class="legend-row">
+    <span class="legend-dot" style="background: linear-gradient(135deg, #8e44ad, #9b59b6)"></span>
+    <span>Heritage Sites</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-dot" style="background: linear-gradient(135deg, #27ae60, #2ecc71)"></span>
+    <span>Barangays</span>
+  </div>
+  <div class="legend-row">
+    <span class="legend-dot" style="background: linear-gradient(135deg, var(--navy), #0d3a73)"></span>
+    <span>City Services</span>
+  </div>
+</div>
+
+<div class="stats-overlay">
+  <div class="stats-label">Total Locations</div>
+  <div class="stats-value" id="total-count">45</div>
 </div>
 
 <script>
-mapboxgl.accessToken="pk.eyJ1IjoiaWN0YmFnbyIsImEiOiJjbXB5czIxNzYwNGozMnJwdWRxbzltaml0In0.bB042ep_ICri40J2x2pPow";
+// Initialize map centered on Bago City
+const map = L.map('map', {
+  center: [10.5380, 122.8424],
+  zoom: 13,
+  zoomControl: true,
+  minZoom: 11,
+  maxZoom: 18
+});
 
-const BARANGAYS=[{"num":"01","name":"Abuanan","type":"u","lng":122.98420025684727,"lat":10.528539819452122,"dist":"25 km","area":"1,040 ha","pop":"5,700","fiesta":"Hublag Festival (Last Sat Feb)","desc":"An urban barangay in the northeast known for quarries and rice mills.","spots":""},{"num":"02","name":"Alianza","type":"r","lng":122.92403948142989,"lat":10.471727207865271,"dist":"15 km","area":"365 ha","pop":"3,211","fiesta":"February 2","desc":"A rural barangay known for agricultural lands and rice production.","spots":""},{"num":"03","name":"Atipuluan","type":"u","lng":122.94960955731095,"lat":10.510806037719178,"dist":"17.46 km","area":"562 ha","pop":"4,269","fiesta":"Pasiduong Festival (May 15)","desc":"An urban barangay along the main Negros South Road — key commercial hub.","spots":""},{"num":"04","name":"Bacong-Montilla","type":"r","lng":123.04456895242693,"lat":10.52549974342964,"dist":"29.50 km","area":"4,827 ha","pop":"7,844","fiesta":"Lumbayag Festival (Mar 26)","desc":"Largest barangay by land area. Vast agricultural and forest lands bordering Murcia.","spots":""},{"num":"05","name":"Bagroy","type":"r","lng":122.87897208420888,"lat":10.477054001912508,"dist":"11 km","area":"399 ha","pop":"1,694","fiesta":"February 11","desc":"Smallest population (1,694). Coastal barangay along the Guimaras Strait.","spots":""},{"num":"06","name":"Balingasag","type":"u","lng":122.8439774832295,"lat":10.532617670284175,"dist":"1.25 km","area":"436 ha","pop":"4,498","fiesta":"Zumbali Festival (May 31)","desc":"An urban barangay with commercial establishments near the city center.","spots":""},{"num":"07","name":"Binubuhan","type":"r","lng":123.00710623904017,"lat":10.45741223258939,"dist":"29.50 km","area":"2,352 ha","pop":"5,581","fiesta":"Lechon Festival (Apr 17)","desc":"A rural barangay in Cluster 8 with Ma-ao and Mailum.","spots":""},{"num":"08","name":"Busay","type":"t","lng":122.89328014830807,"lat":10.537861484006031,"dist":"7.26 km","area":"1,463 ha","pop":"6,896","fiesta":"Sinadya Festival (Mar 3)","desc":"A rural barangay with scenic mountain views toward Mt. Kanlaon.","spots":"⭐ Buenos Aires Mountain Resort"},{"num":"09","name":"Calumangan","type":"r","lng":122.88553878137543,"lat":10.566696921406646,"dist":"6.40 km","area":"1,007 ha","pop":"7,979","fiesta":"Kalumangan Festival (May 15)","desc":"A rural barangay known for rice mills and the Bago River watershed.","spots":""},{"num":"10","name":"Caridad","type":"u","lng":122.89319749672026,"lat":10.490554449294747,"dist":"12 km","area":"—","pop":"4,901","fiesta":"Dinagaw Festival (2nd Sat Mar)","desc":"An urban barangay forming part of the Bago City urban core.","spots":""},{"num":"11","name":"Don Jorge L. Araneta","type":"u","lng":122.94927723098942,"lat":10.461494579318394,"dist":"16.90 km","area":"2,143 ha","pop":"9,457","fiesta":"Manupak-tapas Festival (Dec 8)","desc":"Named after Gen. Juan A. Araneta who led the 1898 revolution.","spots":"⭐ Araneta Heritage Site"},{"num":"12","name":"Dulao","type":"r","lng":122.96005550957621,"lat":10.558628722037081,"dist":"17.8 km","area":"2,439 ha","pop":"10,111","fiesta":"Hataw Dance Festival (Dec 8)","desc":"A rural barangay traversed by the Bago River with fertile agricultural land.","spots":""},{"num":"13","name":"Ilijan","type":"t","lng":123.0456139219644,"lat":10.448583848724228,"dist":"36.99 km","area":"1,489 ha","pop":"5,581","fiesta":"December 11","desc":"Farthest barangay (36.99 km). President Quezon stayed here in 1942.","spots":"⭐ WWII Historical Site"},{"num":"14","name":"Lag-Asan","type":"r","lng":122.84523382739843,"lat":10.520407762342293,"dist":"1.60 km","area":"456 ha","pop":"11,794","fiesta":"Simadya Festival (Mar 3)","desc":"A rural barangay south of Poblacion with the Hundred Hills Nature Resort.","spots":"⭐ Hundred Hills Nature Resort"},{"num":"15","name":"Ma-ao","type":"t","lng":122.99228504093716,"lat":10.48782819895985,"dist":"21.70 km","area":"5,998 ha","pop":"14,916","fiesta":"Mabaw-Malaw Festival (Dec 30)","desc":"Most populated barangay (14,916). Home to the historic Ma-ao Sugar Central.","spots":"⭐ Ma-ao Sugar Central|⭐ MSC Ruins"},{"num":"16","name":"Mailum","type":"t","lng":123.05063481981637,"lat":10.469546480669388,"dist":"29.46 km","area":"3,200 ha","pop":"8,844","fiesta":"Ginom-Ginom Festival (Mar 19)","desc":"Prime ecotourism destination at the foot of Mt. Kanlaon.","spots":"⭐ Kipot Twin Falls (220 steps)|⭐ Pataan Mountain Resort"},{"num":"17","name":"Malingin","type":"r","lng":122.92411341066767,"lat":10.51149786259714,"dist":"12.20 km","area":"1,495 ha","pop":"6,649","fiesta":"Palakad Festival (Mar 19)","desc":"A rural barangay known for rice mills and farming communities.","spots":""},{"num":"18","name":"Napoles","type":"r","lng":122.89317526285295,"lat":10.517984329175057,"dist":"9.26 km","area":"1,279 ha","pop":"6,564","fiesta":"Kasalipan Festival (Mar 30)","desc":"A rural barangay known for rice mills and rice fields.","spots":""},{"num":"19","name":"Pacol","type":"r","lng":122.85895949332998,"lat":10.50141113020345,"dist":"7.20 km","area":"—","pop":"3,999","fiesta":"December 12","desc":"A rural barangay near the city center along the coastal area.","spots":""},{"num":"20","name":"Poblacion","type":"t","lng":122.83383286118658,"lat":10.53607977456109,"dist":"0 km","area":"311 ha","pop":"11,794","fiesta":"Fiesta of San Sebastian (Jan)","desc":"Main downtown - seat of local government. Smallest land area (311 ha).","spots":"⭐ Bantayan Park|⭐ Balay ni Tan Juan|⭐ Bago City Cathedral|⭐ Javellana Mansion"},{"num":"21","name":"Sagasa","type":"r","lng":122.89424548085672,"lat":10.468489883021228,"dist":"—","area":"—","pop":"—","fiesta":"—","desc":"A coastal rural barangay along the Guimaras Strait known for fishing.","spots":""},{"num":"22","name":"Sampinit","type":"r","lng":122.8566256071049,"lat":10.53815983453155,"dist":"11 km","area":"553 ha","pop":"6,856","fiesta":"Sinadya Festival (Mar 3)","desc":"A rural barangay east of the city center bordering Mt. Kanlaon Natural Park.","spots":""},{"num":"23","name":"Tabunan","type":"r","lng":122.93794694969182,"lat":10.570686757182422,"dist":"—","area":"—","pop":"—","fiesta":"—","desc":"A rural barangay in the north with mangrove forests and rice fields.","spots":""},{"num":"24","name":"Taloc","type":"u","lng":122.90992379594812,"lat":10.57849107881266,"dist":"—","area":"—","pop":"—","fiesta":"—","desc":"An urban barangay in the northwest bordering Bacolod City.","spots":""}];
+// Add OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 18
+}).addTo(map);
 
-const SPOTS=[
-  {name:"Kipot Summer Resort",icon:"🏖",cat:"Resort",tier:"star",lng:123.06982716530145,lat:10.477862241175968,desc:"Popular summer resort near Kipot Twin Falls in Brgy. Mailum.",spots:"Swimming · Recreation · Family",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop"},
-  {name:"Pataan Mountain Resort",icon:"🏔",cat:"Mountain Resort",tier:"star",lng:123.09226372370247,lat:10.482019585201646,desc:"Mountain getaway near Kanlaon Volcano with cool breeze and panoramic views.",spots:"Mountain resort · Hiking",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
-  {name:"Tinago Falls",icon:"💧",cat:"Waterfall",tier:"star",lng:123.09342702555657,lat:10.4761328896147,desc:"Stunning twin waterfalls in Brgy. Mailum — reached via 220 scenic steps through lush forest.",spots:"Nature · Ecotourism · Photo spot",image:"https://images.unsplash.com/photo-1432405972618-c6b0f908f94f?w=400&h=300&fit=crop"},
-  {name:"Gianna's Mountain Resort",icon:"🏔",cat:"Mountain Resort",tier:"star",lng:123.1032204120654,lat:10.483586883522356,desc:"Mountain resort with cool breeze and panoramic views.",spots:"Mountain resort · Hiking · Views",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
-  {name:"Bala-an Hills",icon:"⛰",cat:"Nature",tier:"star",lng:123.10303538322917,lat:10.480235988219139,desc:"Scenic hills offering panoramic views of the surrounding landscape. A nature destination for hikers and nature lovers.",spots:"Hiking · Views · Nature",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=300&fit=crop"},
-  {name:"Bungyod Agri Tourism Park",icon:"🌿",cat:"Agri-Tourism",tier:"star",lng:123.09050410258965,lat:10.479096601860814,desc:"Agricultural tourism park showcasing local farming practices.",spots:"Agritourism · Farm visit · Nature",image:"https://images.unsplash.com/photo-1464820453369-31d2c0b651af?w=400&h=300&fit=crop"},
-  {name:"Mailum Organic Village (MOVA)",icon:"🌱",cat:"Agri-Tourism",tier:"star",lng:123.0706571745684,lat:10.485367357044765,desc:"Organic farming village promoting sustainable agriculture.",spots:"Organic farming · Ecotourism · Community",image:"https://images.unsplash.com/photo-1464820453369-31d2c0b651af?w=400&h=300&fit=crop"},
-  {name:"Torresta Infinity Farm",icon:"🚜",cat:"Agri-Tourism",tier:"star",lng:123.07386894960827,lat:10.484125388280878,desc:"Infinity farm with scenic agricultural landscapes.",spots:"Farm tour · Nature · Views",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop"},
-  {name:"Maragandang Falls",icon:"💧",cat:"Waterfall",tier:"star",lng:123.0780370395538,lat:10.463099875402742,desc:"Beautiful waterfall in the Mailum area.",spots:"Waterfall · Nature · Photo spot",image:"https://images.unsplash.com/photo-1432405972618-c6b0f908f94f?w=400&h=300&fit=crop"},
-  {name:"Buenos Aires Mountain Resort",icon:"⛰",cat:"Mountain Resort",tier:"star",lng:123.04815740062239,lat:10.457006377209883,desc:"Scenic mountain resort in Brgy. Busay with breathtaking views of Negros.",spots:"Mountain resort · Hiking · Views",image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop"},
-  {name:"Ma-ao Sugar Central Public Market",icon:"🏪",cat:"Commercial",tier:"city",lng:122.95384952618106,lat:10.475143262674598,desc:"Public market at the historic Ma-ao Sugar Central area.",spots:"Fresh produce · Local products",image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"},
-  {name:"Buen Tierra Beach House",icon:"🏖",cat:"Resort",tier:"star",lng:122.85207210955127,lat:10.547386523769433,desc:"Beach house resort along the coast.",spots:"Beach · Resort · Relaxation",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop"},
-  {name:"Nana's Place",icon:"🏡",cat:"Resort",tier:"star",lng:122.84816255825815,lat:10.543035756438785,desc:"Cozy resort retreat.",spots:"Resort · Family · Accommodation",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop"},
-  {name:"Bago Public Market",icon:"🏪",cat:"Commercial",tier:"city",lng:122.83799043389978,lat:10.53936818360094,desc:"Main public market of Bago City.",spots:"Fresh produce · Local products",image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop"},
-  {name:"Manuel Y. Torres Memorial Coliseum",icon:"🏟",cat:"Cultural Center",tier:"heritage",lng:122.83501322677576,lat:10.537226158958923,desc:"The Manuel Y. Torres Memorial Coliseum and Cultural Center — a major cultural and events venue in Bago City.",spots:"Cultural events · Sports · Concerts",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"},
-  {name:"Saint John the Baptist Parish",icon:"⛪",cat:"Heritage",tier:"heritage",lng:122.83453506928456,lat:10.537283811975193,desc:"Spanish-colonial cathedral dedicated to Saint John the Baptist, patron saint of Bago City.",spots:"Religious heritage landmark",image:"https://images.unsplash.com/photo-1548625361-987822ebbd8a?w=400&h=300&fit=crop"},
-  {name:"Balay ni Tan Juan",icon:"🏡",cat:"Heritage",tier:"heritage",lng:122.83477865897227,lat:10.534489844937438,desc:"Well-preserved ancestral house showcasing Bago City cultural heritage.",spots:"Heritage museum",image:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop"},
-  {name:"Javellana Mansion",icon:"🏰",cat:"Heritage",tier:"heritage",lng:122.83605744838584,lat:10.536859752555511,desc:"Built in 1920 on a 440-ha sugar plantation, designed by an Italian architect. Also known as Balay Daku.",spots:"Heritage ancestral house",image:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"},
-  {name:"Bantayan Park",icon:"🌳",cat:"Heritage Park",tier:"star",lng:122.83162155649741,lat:10.537627445468019,desc:"Historic park — site of the November 5, 1898 revolution led by Gen. Juan Araneta.",spots:"Al Cinco de Noviembre · Heritage",image:"https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=400&h=300&fit=crop"},
-  {name:"Ma-ao Public Plaza",icon:"🏛️",cat:"Public Space",tier:"city",lng:122.99161502666759,lat:10.489965324482274,desc:"Public plaza in the Ma-ao area.",spots:"Community gathering · Events",image:"https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=400&h=300&fit=crop"},
-  {name:"Bago City Hall",icon:"🏛️",cat:"Government",tier:"city",lng:122.83512455511269,lat:10.53815531116121,desc:"Seat of the local government of Bago City.",spots:"Official government center",image:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"}
+// Barangays data with verified coordinates
+const BARANGAYS = [
+  {"num":"01","name":"Abuanan","type":"u","lng":122.98420025684727,"lat":10.528539819452122,"desc":"An urban barangay in the northeast known for quarries and rice mills.","pop":"5,700"},
+  {"num":"02","name":"Alianza","type":"r","lng":122.92403948142989,"lat":10.471727207865271,"desc":"A rural barangay known for agricultural lands and rice production.","pop":"3,211"},
+  {"num":"03","name":"Atipuluan","type":"u","lng":122.94960955731095,"lat":10.510806037719178,"desc":"An urban barangay along the main Negros South Road — key commercial hub.","pop":"4,269"},
+  {"num":"04","name":"Bacong-Montilla","type":"r","lng":123.04456895242693,"lat":10.52549974342964,"desc":"Largest barangay by land area. Vast agricultural and forest lands bordering Murcia.","pop":"7,844"},
+  {"num":"05","name":"Bagroy","type":"r","lng":122.87897208420888,"lat":10.477054001912508,"desc":"Smallest population. Coastal barangay along the Guimaras Strait.","pop":"1,694"},
+  {"num":"06","name":"Balingasag","type":"u","lng":122.8439774832295,"lat":10.532617670284175,"desc":"An urban barangay with commercial establishments near the city center.","pop":"4,498"},
+  {"num":"07","name":"Binubuhan","type":"r","lng":123.00710623904017,"lat":10.45741223258939,"desc":"A rural barangay in Cluster 8 with Ma-ao and Mailum.","pop":"5,581"},
+  {"num":"08","name":"Busay","type":"t","lng":122.89328014830807,"lat":10.537861484006031,"desc":"A rural barangay with scenic mountain views toward Mt. Kanlaon.","pop":"6,896"},
+  {"num":"09","name":"Calumangan","type":"r","lng":122.88553878137543,"lat":10.566696921406646,"desc":"A rural barangay known for rice mills and the Bago River watershed.","pop":"7,979"},
+  {"num":"10","name":"Caridad","type":"u","lng":122.89319749672026,"lat":10.490554449294747,"desc":"An urban barangay forming part of the Bago City urban core.","pop":"4,901"},
+  {"num":"11","name":"Don Jorge L. Araneta","type":"u","lng":122.94927723098942,"lat":10.461494579318394,"desc":"Named after Gen. Juan A. Araneta who led the 1898 revolution.","pop":"9,457"},
+  {"num":"12","name":"Dulao","type":"r","lng":122.96005550957621,"lat":10.558628722037081,"desc":"A rural barangay traversed by the Bago River with fertile agricultural land.","pop":"10,111"},
+  {"num":"13","name":"Ilijan","type":"t","lng":123.0456139219644,"lat":10.448583848724228,"desc":"Farthest barangay (36.99 km). President Quezon stayed here in 1942.","pop":"5,581"},
+  {"num":"14","name":"Lag-Asan","type":"r","lng":122.84523382739843,"lat":10.520407762342293,"desc":"A rural barangay south of Poblacion with the Hundred Hills Nature Resort.","pop":"11,794"},
+  {"num":"15","name":"Ma-ao","type":"t","lng":122.99228504093716,"lat":10.48782819895985,"desc":"Most populated barangay. Home to the historic Ma-ao Sugar Central.","pop":"14,916"},
+  {"num":"16","name":"Mailum","type":"t","lng":123.05063481981637,"lat":10.469546480669388,"desc":"Prime ecotourism destination at the foot of Mt. Kanlaon.","pop":"8,844"},
+  {"num":"17","name":"Malingin","type":"r","lng":122.92411341066767,"lat":10.51149786259714,"desc":"A rural barangay known for rice mills and farming communities.","pop":"6,649"},
+  {"num":"18","name":"Napoles","type":"r","lng":122.89317526285295,"lat":10.517984329175057,"desc":"A rural barangay known for rice mills and rice fields.","pop":"6,564"},
+  {"num":"19","name":"Pacol","type":"r","lng":122.85895949332998,"lat":10.50141113020345,"desc":"A rural barangay near the city center along the coastal area.","pop":"3,999"},
+  {"num":"20","name":"Poblacion","type":"t","lng":122.83383286118658,"lat":10.53607977456109,"desc":"Main downtown - seat of local government. Smallest land area.","pop":"11,794"},
+  {"num":"21","name":"Sagasa","type":"r","lng":122.89424548085672,"lat":10.468489883021228,"desc":"A coastal rural barangay along the Guimaras Strait known for fishing.","pop":"—"},
+  {"num":"22","name":"Sampinit","type":"r","lng":122.8566256071049,"lat":10.53815983453155,"desc":"A rural barangay east of the city center bordering Mt. Kanlaon Natural Park.","pop":"6,856"},
+  {"num":"23","name":"Tabunan","type":"r","lng":122.93794694969182,"lat":10.570686757182422,"desc":"A rural barangay in the north with mangrove forests and rice fields.","pop":"—"},
+  {"num":"24","name":"Taloc","type":"u","lng":122.90992379594812,"lat":10.57849107881266,"desc":"An urban barangay in the northwest bordering Bacolod City.","pop":"—"}
 ];
 
-const SPOTS_DEDUPED=SPOTS;
-
-const QUICK_PICKS=[
-  {q:"Tinago Falls",  label:"💧 Tinago Falls",  lng:123.09342702555657, lat:10.4761328896147},
-  {q:"Bantayan Park",     label:"🌳 Bantayan Park", lng:122.83162155649741, lat:10.537627445468019},
-  {q:"Buenos Aires Mountain Resort",label:"⛰️ Buenos Aires", lng:123.04815740062239, lat:10.457006377209883},
-  {q:"Pataan Mountain Resort",    label:"🏔 Pataan Resort",  lng:123.09226372370247, lat:10.482019585201646},
-  {q:"Poblacion",        label:"🏙️ Poblacion",      lng:122.83383286118658, lat:10.53607977456109},
-  {q:"Mailum",           label:"🏞️ Mailum",         lng:123.05063481981637, lat:10.469546480669388}
+// Tourist spots and attractions with verified coordinates
+const SPOTS = [
+  {name:"Pataan Mountain Resort",icon:"🏔",tier:"star",lng:123.09226372370247,lat:10.482019585201646,desc:"Mountain getaway near Kanlaon Volcano with cool breeze and panoramic views."},
+  {name:"Tinago Falls",icon:"💧",tier:"star",lng:123.09342702555657,lat:10.4761328896147,desc:"Stunning twin waterfalls reached via 220 scenic steps through lush forest."},
+  {name:"Gianna's Mountain Resort",icon:"🏔",tier:"star",lng:123.1032204120654,lat:10.483586883522356,desc:"Mountain resort with cool breeze and panoramic views."},
+  {name:"Bala-an Hills",icon:"⛰",tier:"star",lng:123.10303538322917,lat:10.480235988219139,desc:"Scenic hills offering panoramic views. A nature destination for hikers."},
+  {name:"Bungyod Agri Tourism Park",icon:"🌿",tier:"star",lng:123.09050410258965,lat:10.479096601860814,desc:"Agricultural tourism park showcasing local farming practices."},
+  {name:"Mailum Organic Village (MOVA)",icon:"🌱",tier:"star",lng:123.0706571745684,lat:10.485367357044765,desc:"Organic farming village promoting sustainable agriculture."},
+  {name:"Torresta Infinity Farm",icon:"🚜",tier:"star",lng:123.07386894960827,lat:10.484125388280878,desc:"Infinity farm with scenic agricultural landscapes."},
+  {name:"Kipot Summer Resort",icon:"🏖",tier:"star",lng:123.06982716530145,lat:10.477862241175968,desc:"Popular summer resort near Kipot Twin Falls."},
+  {name:"Maragandang Falls",icon:"💧",tier:"star",lng:123.0780370395538,lat:10.463099875402742,desc:"Beautiful waterfall in the Mailum area."},
+  {name:"Buenos Aires Mountain Resort",icon:"⛰",tier:"star",lng:123.04815740062239,lat:10.457006377209883,desc:"Scenic mountain resort with breathtaking views of Negros."},
+  {name:"Ma-ao Sugar Central Public Market",icon:"🏪",tier:"city",lng:122.95384952618106,lat:10.475143262674598,desc:"Public market at the historic Ma-ao Sugar Central area."},
+  {name:"Buen Tierra Beach House",icon:"🏖",tier:"star",lng:122.85207210955127,lat:10.547386523769433,desc:"Beach house resort along the coast."},
+  {name:"Nana's Place",icon:"🏡",tier:"star",lng:122.84816255825815,lat:10.543035756438785,desc:"Cozy resort retreat."},
+  {name:"Bago Public Market",icon:"🏪",tier:"city",lng:122.83799043389978,lat:10.53936818360094,desc:"Main public market of Bago City."},
+  {name:"Manuel Y. Torres Memorial Coliseum",icon:"🏟",tier:"heritage",lng:122.83501322677576,lat:10.537226158958923,desc:"Major cultural and events venue in Bago City."},
+  {name:"Saint John the Baptist Parish",icon:"⛪",tier:"heritage",lng:122.83453506928456,lat:10.537283811975193,desc:"Spanish-colonial cathedral dedicated to Saint John the Baptist."},
+  {name:"Balay ni Tan Juan",icon:"🏡",tier:"heritage",lng:122.83477865897227,lat:10.534489844937438,desc:"Well-preserved ancestral house showcasing cultural heritage."},
+  {name:"Javellana Mansion",icon:"🏰",tier:"heritage",lng:122.83605744838584,lat:10.536859752555511,desc:"Built in 1920 on a 440-ha sugar plantation. Also known as Balay Daku."},
+  {name:"Bantayan Park",icon:"🌳",tier:"star",lng:122.83162155649741,lat:10.537627445468019,desc:"Historic park — site of the November 5, 1898 revolution."},
+  {name:"Ma-ao Public Plaza",icon:"🏛️",tier:"city",lng:122.99161502666759,lat:10.489965324482274,desc:"Public plaza in the Ma-ao area."},
+  {name:"Bago City Hall",icon:"🏛️",tier:"city",lng:122.83512455511269,lat:10.53815531116121,desc:"Seat of the local government of Bago City."}
 ];
 
-const CENTER=[122.950,10.510];
-const BOUNDS=[[122.67,10.28],[123.25,10.70]];
-const INITIAL_ZOOM=11.2;
-const BM=[],LM=[];
-let is3D=false,activeEl=null,activeFilter="star",searchIndex=[];
-
-function spotTier(s){return s.tier||(s.cat==="Tourist Spot"||s.cat==="Park"||s.cat==="Nature Park"?"star":s.cat==="Heritage"||s.cat==="Religious"?"heritage":"city")}
-function isStarSpot(s){return spotTier(s)==="star"}
-function isHeritageSpot(s){return spotTier(s)==="heritage"}
-
-const map=new mapboxgl.Map({
-  container:"map",
-  style:"mapbox://styles/mapbox/streets-v12",
-  center:CENTER,
-  zoom:INITIAL_ZOOM,
-  minZoom:10.5,
-  maxZoom:17,
-  maxBounds:BOUNDS
-});
-map.setPadding({top:190,bottom:85,left:0,right:0});
-
-map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),"bottom-right");
-
-function buildSearchIndex(){
-  searchIndex=[];
-  BARANGAYS.forEach(b=>{
-    searchIndex.push({kind:"barangay",name:b.name,sub:b.type==="t"?"Tourist Barangay":"Barangay "+b.num,icon:"📍",tier:"barangay",lng:b.lng,lat:b.lat,data:b,searchText:[b.name,b.spots,b.desc,b.fiesta].join(" ").toLowerCase()});
-  });
-  SPOTS_DEDUPED.forEach(s=>{
-    const t=spotTier(s);
-    searchIndex.push({kind:"spot",name:s.name,sub:s.cat,icon:s.icon,tier:t,lng:s.lng,lat:s.lat,data:s,searchText:[s.name,s.cat,s.desc,s.spots].join(" ").toLowerCase()});
-  });
-}
-
-function initQuickPicks(){
-  const el=document.getElementById("quick-picks");
-  el.innerHTML=QUICK_PICKS.map(p=>`<button class="qp star" type="button" data-q="${p.q}">${p.label}</button>`).join("");
-  el.querySelectorAll(".qp").forEach(btn=>{
-    const p=QUICK_PICKS.find(x=>x.q===btn.dataset.q);
-    btn.onclick=()=>{
-      // Set search text
-      document.getElementById("srch").value=p.q;
-      document.getElementById("srch-clr").classList.add("on");
-      document.getElementById("srch-drop").classList.remove("on");
-      // Fly directly to the known coordinates — no fuzzy search
-      map.flyTo({center:[p.lng,p.lat],zoom:16,duration:900,essential:true});
-      // Find and highlight the matching marker
-      const hitLM=LM.find(x=>x.s.name===p.q);
-      const hitBM=BM.find(x=>x.b.name===p.q);
-      const hit=hitLM||hitBM;
-      if(hit){
-        if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
-        activeEl=hit.el;
-        hit.el.classList.add("sel");
-      }
-    };
-  });
-}
-
-function initFilterCounts(){
-  // Update filter chip counts
-  const starCount=SPOTS.filter(s=>spotTier(s)==='star').length;
-  const heritageCount=SPOTS.filter(s=>spotTier(s)==='heritage').length;
-  const cityCount=SPOTS.filter(s=>spotTier(s)==='city').length;
-  const totalCount=SPOTS.length;
-  
-  const starEl=document.getElementById('filter-star-cnt');
-  const heritageEl=document.getElementById('filter-heritage-cnt');
-  const cityEl=document.getElementById('filter-city-cnt');
-  const allEl=document.getElementById('filter-all-cnt');
-  
-  if(starEl) starEl.textContent=starCount;
-  if(heritageEl) heritageEl.textContent=heritageCount;
-  if(cityEl) cityEl.textContent=cityCount;
-  if(allEl) allEl.textContent=totalCount;
-  
-  // Update header badge
-  const sc=document.getElementById("spot-count");
-  if(sc) sc.textContent=starCount+" must-see";
-}
-
-document.getElementById("srch").addEventListener("input",e=>doSearch(e.target.value,false));
-document.getElementById("srch").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();doSearch(e.target.value,true);e.target.blur();}});
-document.getElementById("srch").addEventListener("focus",()=>{
-  const v=document.getElementById("srch").value;
-  if(v){
-    doSearch(v,false);
-  } else {
-    // Show popular picks when search is empty and focused
-    const drop=document.getElementById("srch-drop");
-    drop.classList.add("on");
-    document.getElementById("srch-popular").style.display="block";
+// Create custom marker icon
+function createCustomIcon(tier, icon) {
+  let color;
+  switch(tier) {
+    case 'star': color = '#F28C28'; break;
+    case 'heritage': color = '#8e44ad'; break;
+    case 'city': color = '#0A2E5C'; break;
+    default: color = '#27ae60';
   }
-});
-document.getElementById("srch").addEventListener("blur",()=>{
-  // Small delay so clicks on items register first
-  setTimeout(()=>{
-    if(!document.getElementById("srch").value){
-      document.getElementById("srch-drop").classList.remove("on");
-    }
-  },200);
+  
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `
+      <div style="
+        background-color: ${color};
+        width: 32px;
+        height: 32px;
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        border: 3px solid white;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+      ">
+        <div style="
+          transform: rotate(45deg);
+          text-align: center;
+          line-height: 26px;
+          font-size: 14px;
+        ">${icon}</div>
+      </div>
+    `,
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+  });
+}
+
+// Create cluster custom icon
+function createClusterIcon(cluster) {
+  const count = cluster.getChildCount();
+  let size = 'small';
+  if (count > 10) size = 'medium';
+  if (count > 20) size = 'large';
+  
+  return L.divIcon({
+    html: `
+      <div style="
+        background: linear-gradient(135deg, var(--navy), #0d3a73);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        border: 3px solid white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+      ">${count}</div>
+    `,
+    className: 'marker-cluster-custom',
+    iconSize: L.point(40, 40, true)
+  });
+}
+
+// Create marker cluster group
+const markers = L.markerClusterGroup({
+  iconCreateFunction: createClusterIcon,
+  maxClusterRadius: 60,
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: false,
+  zoomToBoundsOnClick: true
 });
 
-const _sc=document.getElementById("spot-count");
-if(_sc) _sc.textContent=SPOTS_DEDUPED.filter(isStarSpot).length+" must-see";
-
-map.on("load",()=>{
-  const ldr=document.getElementById("ldr");
-  ldr.classList.add("done");
-  setTimeout(()=>ldr.style.display="none",600);
-  initFilterCounts();
-
-  map.addSource("dem",{type:"raster-dem",url:"mapbox://mapbox.mapbox-terrain-dem-v1",tileSize:512});
-  map.setTerrain({source:"dem",exaggeration:0.3});
-  // Reduced fog effects for better performance
-  map.setFog({color:"rgb(255,230,200)","horizon-blend":.08,"high-color":"rgb(180,120,80)","space-color":"rgb(30,20,40)","star-intensity":.2});
-
-  BARANGAYS.forEach((b,i)=>{
-    const el=document.createElement("div");
-    el.className="bp "+b.type;
-    el.innerHTML="<div class=bpill>"+b.name+"</div>";
-    el.style.animationDelay=(i*30)+"ms";
-    el.onclick=()=>onTap(el,b.lng,b.lat,()=>{});
-    new mapboxgl.Marker({element:el,anchor:"center"}).setLngLat([b.lng,b.lat]).addTo(map);
-    BM.push({el,b});
+// Add barangays
+BARANGAYS.forEach(brgy => {
+  const marker = L.marker([brgy.lat, brgy.lng], {
+    icon: createCustomIcon('barangay', '📍')
   });
-
-  SPOTS_DEDUPED.forEach((s,i)=>{
-    const t=spotTier(s);
-    const el=document.createElement("div");
-    el.className="lm lm-"+t;
-    el.style.animationDelay=((BARANGAYS.length+i)*30)+"ms";
-    const sh=s.name.length>14?s.name.slice(0,13)+"…":s.name;
-    el.innerHTML="<div class=lmi>"+s.icon+"</div><div class=lmt>"+sh+"</div>";
-    const info={name:s.name,type:"landmark",cat:s.cat,tier:t,icon:s.icon,desc:s.desc,spots:s.spots,dist:"",pop:"",area:"",fiesta:""};
-    el.onclick=()=>onTap(el,s.lng,s.lat,()=>{});
-    new mapboxgl.Marker({element:el,anchor:"top"}).setLngLat([s.lng,s.lat]).addTo(map);
-    LM.push({el,s,info,t});
-  });
-
-  buildSearchIndex();
-  initQuickPicks();
   
-  // Set initial filter to "all" instead of "star"
-  doFilter("all",document.querySelector('[data-filter="all"]'));
-
-  function syncZ(){
-    const z=map.getZoom();
-    BM.forEach(({el})=>{
-      if(el.classList.contains("dim"))return;
-      if(activeFilter==="star"||activeFilter==="heritage"||activeFilter==="city"){el.style.opacity="0";el.style.pointerEvents="none";return;}
-      el.style.opacity=z<10.8?"0":z<11.2?"0.45":"1";
-      el.style.pointerEvents=z<10.8?"none":"auto";
-    });
-    LM.forEach(({el,t})=>{
-      if(el.classList.contains("dim"))return;
-      if(t==="star"){el.style.opacity="1";el.style.pointerEvents="auto";return;}
-      el.style.opacity=z<11?"0.35":z<11.8?"0.7":"1";
-      el.style.pointerEvents=z<10.8?"none":"auto";
-    });
-  }
-  map.on("zoom",syncZ);
-
-  setTimeout(()=>{
-    map.easeTo({pitch:25,duration:1400});
-    setTimeout(()=>map.easeTo({pitch:0,duration:1000}),2200);
-  },500);
+  const popupContent = `
+    <div class="popup-content">
+      <div class="popup-header">
+        <span class="popup-icon">📍</span>
+        <span class="popup-title">${brgy.name}</span>
+      </div>
+      <span class="popup-category barangay">Barangay ${brgy.num}</span>
+      <div class="popup-desc">${brgy.desc}</div>
+      <div class="popup-desc" style="font-weight: 600;">Population: ${brgy.pop}</div>
+      <a href="https://www.google.com/maps?q=${brgy.lat},${brgy.lng}" target="_blank" class="popup-link">
+        📍 View on Google Maps
+      </a>
+    </div>
+  `;
+  
+  marker.bindPopup(popupContent, { maxWidth: 300 });
+  markers.addLayer(marker);
 });
 
-function onTap(el,lng,lat,cb){
-  if(activeEl&&activeEl!==el)activeEl.classList.remove("sel");
-  activeEl=el;el.classList.add("sel");
-  map.easeTo({center:[lng,lat],zoom:Math.max(map.getZoom(),14),duration:600,easing:t=>1-Math.pow(1-t,3)});
-  setTimeout(cb,300);
-}
-
-function applyMarkerVisibility(type){
-  activeFilter=type;
-  BM.forEach(({el,b})=>{
-    let show=false;
-    if(type==="all")show=true;
-    else if(type==="u")show=b.type==="u";
-    else if(type==="r")show=b.type==="r";
-    else if(type==="t")show=b.type==="t";
-    el.classList.toggle("dim",!show);
-    if(show){el.style.opacity="1";el.style.pointerEvents="auto";}
-    else el.style.opacity="";
-  });
-  LM.forEach(({el,t})=>{
-    let show=false;
-    if(type==="all")show=true;
-    else if(type==="star")show=t==="star";
-    else if(type==="heritage")show=t==="heritage";
-    else if(type==="city")show=t==="city";
-    else show=false;
-    el.classList.toggle("dim",!show);
-    if(show){el.style.opacity="1";el.style.pointerEvents="auto";}
-    else el.style.opacity="";
-  });
-}
-
-function fitToVisible(){
-  const coords=[];
-  BM.forEach(({el,b})=>{if(!el.classList.contains("dim"))coords.push([b.lng,b.lat]);});
-  LM.forEach(({el,s})=>{if(!el.classList.contains("dim"))coords.push([s.lng,s.lat]);});
-  if(coords.length<2)return;
-  const bounds=coords.reduce((b,c)=>b.extend(c),new mapboxgl.LngLatBounds(coords[0],coords[0]));
-  map.fitBounds(bounds,{padding:{top:220,bottom:100,left:40,right:40},duration:900,maxZoom:14});
-}
-
-function doFilter(type,chip){
-  // Update active state on filter chips
-  document.querySelectorAll(".filter-chip").forEach(c=>c.classList.remove("active"));
-  if(chip)chip.classList.add("active");
-  
-  applyMarkerVisibility(type);
-  
-  if(type==="star"||type==="heritage"||type==="city"){
-    fitToVisible();
-  }else if(type==="all"){
-    // Show all markers at default view
-    map.flyTo({center:CENTER,zoom:INITIAL_ZOOM,pitch:0,bearing:0,duration:800});
-  }
-  
-  map.fire("zoom");
-}
-
-function highlightMatch(text,q){
-  if(!q)return text;
-  const i=text.toLowerCase().indexOf(q.toLowerCase());
-  if(i<0)return text;
-  return text.slice(0,i)+'<span class="srch-hl">'+text.slice(i,i+q.length)+"</span>"+text.slice(i+q.length);
-}
-
-function selectSearchResult(item){
-  document.getElementById("srch-drop").classList.remove("on");
-  document.getElementById("srch").value=item.name;
-  document.getElementById("srch-clr").classList.add("on");
-  
-  // Fly to location and highlight marker — tap marker to see details
-  map.flyTo({center:[item.lng,item.lat],zoom:16,duration:900,essential:true});
-  
-  // Highlight the marker
-  if(item.kind==="barangay"){
-    const hit=BM.find(x=>x.b.name===item.name);
-    if(hit){
-      if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
-      activeEl=hit.el;
-      hit.el.classList.add("sel");
-    }
-  }else{
-    const hit=LM.find(x=>x.s.name===item.name);
-    if(hit){
-      if(activeEl&&activeEl!==hit.el)activeEl.classList.remove("sel");
-      activeEl=hit.el;
-      hit.el.classList.add("sel");
-    }
-  }
-}
-
-// Debounce timer
-let _searchTimer = null;
-
-function doSearch(v,openFirst){
-  // Debounce — wait 300ms after user stops typing
-  clearTimeout(_searchTimer);
-  _searchTimer = setTimeout(()=>_doSearchNow(v,openFirst), 300);
-}
-
-function _doSearchNow(v,openFirst){
-  const q=v.trim();
-  const clr=document.getElementById("srch-clr");
-  const drop=document.getElementById("srch-drop");
-  clr.classList.toggle("on",!!q);
-
-  if(!q){
-    drop.classList.remove("on");
-    applyMarkerVisibility(activeFilter);
-    return;
-  }
-
-  // Hide popular picks when typing
-  const popular=document.getElementById("srch-popular");
-  if(popular) popular.style.display="none";
-
-  document.querySelectorAll(".ch").forEach(c=>c.classList.remove("on"));
-  const ql=q.toLowerCase();
-  // Get all matches, then sort: name matches first, spot/desc matches second
-  const allMatches=searchIndex.filter(item=>item.searchText.includes(ql));
-  allMatches.sort((a,b)=>{
-    const aName=a.name.toLowerCase().includes(ql)?0:1;
-    const bName=b.name.toLowerCase().includes(ql)?0:1;
-    return aName-bName;
-  });
-  const matches=allMatches.slice(0,8);
-
-  BM.forEach(({el,b})=>{
-    const m=b.name.toLowerCase().includes(ql)||(b.spots&&b.spots.toLowerCase().includes(ql))||b.desc.toLowerCase().includes(ql);
-    el.classList.toggle("dim",!m);
-    el.style.opacity=m?"1":"";
-    el.style.pointerEvents=m?"auto":"none";
-  });
-  LM.forEach(({el,s})=>{
-    const m=s.name.toLowerCase().includes(ql)||s.cat.toLowerCase().includes(ql)||s.desc.toLowerCase().includes(ql)||(s.spots&&s.spots.toLowerCase().includes(ql));
-    el.classList.toggle("dim",!m);
-    el.style.opacity=m?"1":"";
-    el.style.pointerEvents=m?"auto":"none";
-  });
-
-  if(matches.length){
-    drop.innerHTML=matches.map((item,i)=>{
-      const icoClass=item.tier==="star"?"star":item.tier==="heritage"?"heritage":item.tier==="barangay"?"barangay":"city";
-      return `<div class="srch-item" data-idx="${i}"><div class="srch-item-ico ${icoClass}">${item.icon}</div><div class="srch-item-body"><div class="srch-item-name">${highlightMatch(item.name,q)}</div><div class="srch-item-sub">${item.sub}</div></div></div>`;
-    }).join("");
-    drop.classList.add("on");
-    drop.querySelectorAll(".srch-item").forEach((row,i)=>row.onclick=()=>selectSearchResult(matches[i]));
-    // Only auto-fly if user pressed Enter (openFirst=true), not while typing
-    if(openFirst && matches[0]) selectSearchResult(matches[0]);
-  }else{
-    drop.innerHTML='<div class="srch-empty">No results — try "falls", "park", or a barangay name</div>';
-    drop.classList.add("on");
-  }
-}
-
-function clearSearch(){
-  document.getElementById("srch").value="";
-  document.getElementById("srch-clr").classList.remove("on");
-  document.getElementById("srch-drop").classList.remove("on");
-  const popular=document.getElementById("srch-popular");
-  if(popular) popular.style.display="none";
-  applyMarkerVisibility(activeFilter);
-  document.querySelector('[data-filter="'+activeFilter+'"]')?.classList.add("active");
-}
-
-function do3D(){
-  is3D=!is3D;
-  const btn=document.getElementById("btn3d");
-  if(is3D){
-    map.easeTo({pitch:58,bearing:-20,duration:900});
-    btn.innerHTML="🗺️ Flat";
-    btn.style.background="linear-gradient(135deg,#1a3050,#0369a1)";
-  }else{
-    map.easeTo({pitch:0,bearing:0,duration:800});
-    btn.innerHTML="🏔️ 3D";
-    btn.style.background="";
-  }
-}
-
-function resetMap(){
-  // Clear search
-  document.getElementById("srch").value="";
-  document.getElementById("srch-clr").classList.remove("on");
-  document.getElementById("srch-drop").classList.remove("on");
-  
-  // Reset to "All Places" filter
-  const allChip=document.querySelector('[data-filter="all"]');
-  doFilter('all',allChip);
-  
-  // Reset map view
-  map.flyTo({
-    center:CENTER,
-    zoom:INITIAL_ZOOM,
-    pitch:0,
-    bearing:0,
-    duration:1200,
-    easing:(t)=>t<.5?2*t*t:-1+(4-2*t)*t/2
+// Add tourist spots
+SPOTS.forEach(spot => {
+  const marker = L.marker([spot.lat, spot.lng], {
+    icon: createCustomIcon(spot.tier, spot.icon)
   });
   
-  // Clear any selected marker
-  if(activeEl){
-    activeEl.classList.remove("sel");
-    activeEl=null;
-  }
+  const popupContent = `
+    <div class="popup-content">
+      <div class="popup-header">
+        <span class="popup-icon">${spot.icon}</span>
+        <span class="popup-title">${spot.name}</span>
+      </div>
+      <span class="popup-category ${spot.tier}">${spot.tier === 'star' ? 'Tourist Attraction' : spot.tier === 'heritage' ? 'Heritage Site' : 'City Service'}</span>
+      <div class="popup-desc">${spot.desc}</div>
+      <a href="https://www.google.com/maps?q=${spot.lat},${spot.lng}" target="_blank" class="popup-link">
+        📍 View on Google Maps
+      </a>
+    </div>
+  `;
   
-  // Hide detail panel
-  hidePan();
-}
+  marker.bindPopup(popupContent, { maxWidth: 300 });
+  markers.addLayer(marker);
+});
 
-function showAllAttractions(){
-  // Clear search
-  document.getElementById("srch").value="";
-  document.getElementById("srch-clr").classList.remove("on");
-  document.getElementById("srch-drop").classList.remove("on");
-  
-  // Show all markers
-  BM.forEach(({el})=>{
-    el.classList.remove("dim");
-    el.style.opacity="1";
-    el.style.pointerEvents="auto";
-  });
-  LM.forEach(({el})=>{
-    el.classList.remove("dim");
-    el.style.opacity="1";
-    el.style.pointerEvents="auto";
-  });
-  
-  // Fit map to show all attractions
-  const coords=[];
-  BM.forEach(({b})=>coords.push([b.lng,b.lat]));
-  LM.forEach(({s})=>coords.push([s.lng,s.lat]));
-  
-  if(coords.length>0){
-    const bounds=coords.reduce((b,c)=>b.extend(c),new mapboxgl.LngLatBounds(coords[0],coords[0]));
-    map.fitBounds(bounds,{
-      padding:{top:240,bottom:120,left:60,right:60},
-      duration:1200,
-      maxZoom:13,
-      pitch:0,
-      bearing:0
-    });
-  }
-  
-  // Update filter to show all
-  const allChip=document.querySelector('[data-filter="all"]');
-  document.querySelectorAll(".filter-chip").forEach(c=>c.classList.remove("active"));
-  if(allChip)allChip.classList.add("active");
-  activeFilter="all";
-}
+// Add markers to map
+map.addLayer(markers);
 
-function doHome(){
-  resetMap();
-}
+// Update counts
+document.getElementById('spot-count').textContent = `${BARANGAYS.length + SPOTS.length} locations`;
+document.getElementById('total-count').textContent = BARANGAYS.length + SPOTS.length;
 
-function locateUser(){
-  if(!navigator.geolocation){
-    alert('Geolocation is not supported by your browser');
-    return;
-  }
-  
-  const btn=document.getElementById('btn-loc');
-  btn.innerHTML='🔄 Locating...';
-  btn.disabled=true;
-  
-  navigator.geolocation.getCurrentPosition(
-    position=>{
-      const{lng,lat}=position.coords;
-      map.flyTo({center:[lng,lat],zoom:15,duration:1200});
-      
-      new mapboxgl.Marker({color:'#3498db'})
-        .setLngLat([lng,lat])
-        .setPopup(new mapboxgl.Popup({offset:25}).setHTML('<div style="padding:8px;font-size:12px;font-weight:700;color:#333">📍 You are here</div>'))
-        .addTo(map);
-      
-      btn.innerHTML='📍 My Location';
-      btn.disabled=false;
-    },
-    error=>{
-      let msg='Unable to retrieve your location';
-      switch(error.code){
-        case error.PERMISSION_DENIED:
-          msg='Location access denied. Please enable location services in your browser settings.';
-          break;
-        case error.POSITION_UNAVAILABLE:
-          msg='Location information is unavailable.';
-          break;
-        case error.TIMEOUT:
-          msg='Location request timed out.';
-          break;
-      }
-      alert(msg);
-      btn.innerHTML='📍 My Location';
-      btn.disabled=false;
-    },
-    {
-      enableHighAccuracy:true,
-      timeout:10000,
-      maximumAge:0
-    }
-  );
-}
+// Hide loading screen
+setTimeout(() => {
+  document.getElementById('loading').classList.add('done');
+}, 1000);
 
-function toggleDarkMode(){
-  document.body.classList.toggle('dark-mode');
-  const btn=document.getElementById('btn-dark');
-  const isDark=document.body.classList.contains('dark-mode');
-  btn.innerHTML=isDark?'☀️ Light':'🌙 Dark';
-  
-  // Switch map style for dark mode
-  if(isDark){
-    map.setStyle('mapbox://styles/mapbox/dark-v11');
-  }else{
-    map.setStyle('mapbox://styles/mapbox/outdoors-v12');
-  }
-  
-  // Save preference
-  localStorage.setItem('bago_dark_mode',isDark);
-}
-
-// Load dark mode preference on page load
-if(localStorage.getItem('bago_dark_mode')==='true'){
-  document.body.classList.add('dark-mode');
-  document.getElementById('btn-dark').innerHTML='☀️ Light';
-}
-
-function showPan(p){
-  const isBrgy=!!p.num;
-  const isLm=p.type==="landmark";
-  const tier=p.tier||(isBrgy?(p.type==="t"?"barangay":"barangay"):isLm?spotTier(p):"city");
-
-  document.getElementById("pname").textContent=p.name;
-  const icoEl=document.getElementById("pan-ico");
-  icoEl.textContent=isLm?(p.icon||"📍"):(p.type==="t"?"🏞️":"📍");
-  icoEl.className="pan-ico "+(isLm?(p.tier||"city"):p.type==="t"?"star":"barangay");
-
-  const t=document.getElementById("ptype");
-  if(isBrgy){
-    t.textContent=p.type==="u"?"🏙️ Urban Barangay":p.type==="t"?"⭐ Tourist Barangay":"🌾 Rural Barangay";
-    t.style.background=p.type==="u"?"rgba(231,76,60,.2)":p.type==="t"?"rgba(243,156,18,.25)":"rgba(39,174,96,.2)";
-    t.style.color=p.type==="u"?"#ff7675":p.type==="t"?"#fdcb6e":"#55efc4";
-  }else{
-    const labels={star:"⭐ Must-See Attraction",heritage:"🏛️ Heritage Site",city:"🏢 City Service"};
-    t.textContent=labels[p.tier]||"📍 "+p.cat;
-    t.style.background=p.tier==="star"?"rgba(243,156,18,.25)":p.tier==="heritage"?"rgba(142,68,173,.25)":"rgba(52,152,219,.2)";
-    t.style.color=p.tier==="star"?"#fdcb6e":p.tier==="heritage"?"#d7bde2":"#74b9ff";
-  }
-
-  document.getElementById("pdesc").textContent=p.desc||"";
-  const f=[];
-  if(p.num)f.push("🔢 Brgy. No. "+p.num);
-  if(p.dist&&p.dist!=="—")f.push("📍 "+p.dist+" from city");
-  if(p.pop&&p.pop!=="—")f.push("👥 Pop. "+p.pop);
-  if(p.area&&p.area!=="—")f.push("📐 "+p.area);
-  if(p.fiesta&&p.fiesta!=="—")f.push("🎉 "+p.fiesta);
-  document.getElementById("pfacts").innerHTML=f.map(x=>"<span class=fp>"+x+"</span>").join("");
-  document.getElementById("pspots").innerHTML=p.spots?p.spots.split("|").map(s=>"<span class=sp>"+s.trim()+"</span>").join(""):"";
-  document.getElementById("pgm").href="https://maps.google.com/?q="+encodeURIComponent(p.name+" Bago City Negros Occidental");
-  document.getElementById("pan").classList.add("on");
-  document.getElementById("ov").classList.add("on");
-}
-
-function hidePan(){
-  document.getElementById("pan").classList.remove("on");
-  document.getElementById("ov").classList.remove("on");
-  if(activeEl){activeEl.classList.remove("sel");activeEl=null;}
-}
+// Fit map to show all markers
+setTimeout(() => {
+  map.fitBounds(markers.getBounds(), { padding: [50, 50] });
+}, 1200);
 </script>
+
 </body>
 </html>
