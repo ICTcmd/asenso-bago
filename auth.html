@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0A2E5C" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <title>Sign In — Asenso Bago</title>
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #F4E5D8 0%, #FFFFFF 100%);
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(10, 46, 92, 0.1);
+    }
+
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .auth-logo img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
+    }
+
+    .auth-logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0A2E5C;
+      margin-bottom: 4px;
+    }
+
+    .auth-logo p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      background: #F4E5D8;
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: white;
+      color: #C96827;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #E8DCD2;
+      border-radius: 12px;
+      font-size: 15px;
+      color: #333;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #C96827;
+      background: #FFF7F0;
+    }
+
+    .form-input::placeholder {
+      color: #999;
+    }
+
+    .error-message {
+      background: #FEE;
+      border: 1px solid #FCC;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+      display: none;
+      color: #C00;
+      font-size: 14px;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .success-message {
+      background: #EFE;
+      border: 1px solid #CFC;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+      display: none;
+      color: #060;
+      font-size: 14px;
+    }
+
+    .success-message.visible {
+      display: block;
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-auth-primary {
+      background: #C96827;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .btn-auth-primary:hover:not(:disabled) {
+      background: #AD541F;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(201, 104, 39, 0.3);
+    }
+
+    .btn-auth-primary:disabled {
+      background: #CCC;
+      cursor: not-allowed;
+    }
+
+    .btn-auth-secondary {
+      background: transparent;
+      color: #666;
+      border: 2px solid #E8DCD2;
+    }
+
+    .btn-auth-secondary:hover {
+      background: #F4E5D8;
+      border-color: #C96827;
+      color: #C96827;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #E8DCD2;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 500px) {
+      .auth-card {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <!-- Logo Header -->
+      <div class="auth-logo">
+        <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" />
+        <h1>Asenso Bago</h1>
+        <p>City of Bago, Negros Occidental</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin">Sign In</button>
+        <button class="auth-tab" id="tab-signup">Sign Up</button>
+      </div>
+
+      <!-- Error/Success Messages -->
+      <div class="error-message" id="error-message"></div>
+      <div class="success-message" id="success-message"></div>
+
+      <!-- Sign In Form -->
+      <form class="auth-form active" id="form-signin">
+        <div class="form-group">
+          <label class="form-label" for="signin-email">Email Address</label>
+          <input 
+            type="email" 
+            id="signin-email" 
+            class="form-input" 
+            placeholder="your.email@example.com"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signin-password">Password</label>
+          <input 
+            type="password" 
+            id="signin-password" 
+            class="form-input" 
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn-auth btn-auth-primary" id="btn-signin">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form class="auth-form" id="form-signup">
+        <div class="form-group">
+          <label class="form-label" for="signup-fullname">Full Name</label>
+          <input 
+            type="text" 
+            id="signup-fullname" 
+            class="form-input" 
+            placeholder="Juan Dela Cruz"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email Address</label>
+          <input 
+            type="email" 
+            id="signup-email" 
+            class="form-input" 
+            placeholder="your.email@example.com"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-phone">Phone Number (Optional)</label>
+          <input 
+            type="tel" 
+            id="signup-phone" 
+            class="form-input" 
+            placeholder="+63 XXX XXX XXXX"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Password</label>
+          <input 
+            type="password" 
+            id="signup-password" 
+            class="form-input" 
+            placeholder="At least 6 characters"
+            minlength="6"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password-confirm">Confirm Password</label>
+          <input 
+            type="password" 
+            id="signup-password-confirm" 
+            class="form-input" 
+            placeholder="Re-enter your password"
+            minlength="6"
+            required
+          />
+        </div>
+        <button type="submit" class="btn-auth btn-auth-primary" id="btn-signup">
+          Create Account
+        </button>
+      </form>
+
+      <!-- Back to App Button -->
+      <button class="btn-auth btn-auth-secondary" onclick="window.location.href='index.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:20px;height:20px">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/>
+        </svg>
+        Back to App
+      </button>
+
+      <!-- Footer -->
+      <div class="auth-footer">
+        🔒 Your information is secure and encrypted
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/auth.js"></script>
+
+</body>
+</html>
