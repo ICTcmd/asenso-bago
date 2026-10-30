@@ -2555,10 +2555,19 @@
   }
 </script>
 
-<!-- Supabase Authentication -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/supabase-config.js"></script>
-<script src="assets/js/app-auth.js"></script>
+<!-- Supabase Authentication (ES Module) -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  
+  // Make Supabase available globally for auth integration
+  window.supabaseClient = createClient(
+    'https://esvbibxavfrxkkfujhmz.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdmJpYnhhdmZyeGtrZnVqaG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg2NDY0NzksImV4cCI6MjA0NDIyMjQ3OX0.TBTf1nKH1J1LshZl3KaNy59z0QaqcVfhB8RH-9t8Gx0'
+  );
+  
+  // Load app-auth after Supabase is ready
+  import('./assets/js/app-auth-module.js');
+</script>
 
 </html>
 
