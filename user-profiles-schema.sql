@@ -17,19 +17,19 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- Enable Row Level Security
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies for profiles
+-- RLS Policies for profiles (drop existing if any, then recreate)
 
--- Users can view their own profile
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
 CREATE POLICY "Users can view own profile"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id);
 
--- Users can update their own profile
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
--- Users can insert their own profile (needed for signup)
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
 CREATE POLICY "Users can insert own profile"
   ON public.profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
@@ -44,6 +44,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger to auto-update updated_at on profile updates
+DROP TRIGGER IF EXISTS set_updated_at ON public.profiles;
 CREATE TRIGGER set_updated_at
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW
@@ -65,6 +66,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger to create profile when user signs up via Supabase Auth
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
