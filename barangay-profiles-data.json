@@ -1,0 +1,1071 @@
+[
+  {
+    "name": "Abuanan",
+    "type": "urban",
+    "landArea": "1,040.58 ha",
+    "distance": "21 km",
+    "puroks": 12,
+    "slug": "abuanan",
+    "officials": {
+      "captain": {
+        "name": "Hon. Michael I. Bermudez",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Fritz Aimer J. Dublar",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Roblito B. Diwatin",
+        "Armelo B. Diwatin",
+        "Shaira S. Madera",
+        "Leo J. Dublar",
+        "Alando S. Mandolado",
+        "Alfonso P. Parreño",
+        "Dalmacio B. Aribas Jr."
+      ],
+      "sk_kagawad": [
+        "Jeremiah M. Sotto",
+        "Grace L. Riopay",
+        "Jaime E. Ceferiano",
+        "Cristine Joy L. Baylon",
+        "Argie A. Agtas",
+        "Kian Jay A. Equibal",
+        "John David M. Flores"
+      ],
+      "secretary": "John David M. Flores",
+      "treasurer": "Sheril F. Sardo",
+      "sk_secretary": "Cesario L. Jalea",
+      "sk_treasurer": "Johnlyn E. Narciso"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_01-Brgy-Captain-Michael-I-Bermudez-Abuanan-2023.jpg",
+      "sk_chair": "004_01-SK-Chairman-Fritz-Aimer-J-Dublar-Abuanan-2023.jpg",
+      "logo": "002_brgy-abuanan-1.png"
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-abuanan"
+  },
+  {
+    "name": "Alianza",
+    "type": "rural",
+    "landArea": "365.87 ha",
+    "distance": "15 km",
+    "puroks": 10,
+    "slug": "alianza",
+    "officials": {
+      "captain": {
+        "name": "Mary Ann A. Terania",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Ma. Alcreza P. Alampayan",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Jose Sanny B. Gan",
+        "Renan V. Bermudez",
+        "Ronilo M. Mueco",
+        "Elton M. Anacleto",
+        "Ronilo B. Felix",
+        "Antonio S. Tubal Jr.",
+        "Marjon O. Flores"
+      ],
+      "sk_kagawad": [
+        "Kyla Faith O. Gan",
+        "Macy Alaine E. Albarico",
+        "Marlon A. Alo",
+        "John Paul C. Galupo",
+        "April Joy D. Delima",
+        "Aiza T. Baylon",
+        "Waren D. Dela Cruz"
+      ],
+      "secretary": "Waren D. Dela Cruz",
+      "treasurer": "Elsa M. Amardecer",
+      "sk_secretary": "Juliet C. Padilla",
+      "sk_treasurer": "Jennifer Nichole A. Buquid"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_02-Brgy-Captain-Mary-Ann-A-Terania-Alianza-2023.jpg",
+      "sk_chair": "004_02-SK-Chairman-Ma-Alcreza-P-Alampayan-Alianza-2023.jpg",
+      "logo": "002_brgy-alianza-1.png"
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-alianza"
+  },
+  {
+    "name": "Atipuluan",
+    "type": "urban",
+    "landArea": "916.89 ha",
+    "distance": "17.4 km",
+    "puroks": 10,
+    "slug": "atipuluan",
+    "officials": {
+      "captain": {
+        "name": "Elvira A. Zulueta",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Kristine J. Llegue",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Kent Daryl D. Memoria",
+        "Reynaldo B. Bermudez",
+        "Eric S. Oreta",
+        "Gregory L. Regalado",
+        "Juliet B. Bustamante",
+        "Aron V. Algara",
+        "Gerardo L. Matti"
+      ],
+      "sk_kagawad": [
+        "Raymart T. Bandiola",
+        "Kencel Hyes A. Rojas",
+        "Ann Gabrielle P. Gubala",
+        "Niel E. Oñate",
+        "Rina Joy N. Amante",
+        "Mariel G. Deles",
+        "Shamma Joy A. Ramos"
+      ],
+      "secretary": "Shamma Joy A. Ramos",
+      "treasurer": "Gina J. Guadalupe",
+      "sk_secretary": "Cristina S. Aligarbes",
+      "sk_treasurer": "Danica Rose B. Sueco"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_03-Brgy-Captain-Elvira-A-Zulueta-Atipuluan-2023.jpg",
+      "sk_chair": "004_03-SK-Chairman-Kristine-J.-Llegue-Atipuluan-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-atipuluan"
+  },
+  {
+    "name": "Bacong",
+    "type": "rural",
+    "landArea": "4,827.04 ha",
+    "distance": "29.5 km",
+    "puroks": 33,
+    "slug": "bacong",
+    "officials": {
+      "captain": {
+        "name": "Ronald L. Abindan",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Vince Joshua P. Abendan",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Edgar D. Aloquin",
+        "Marino P. Peruelo",
+        "Eugene O. Añover",
+        "Jemer B. Limco",
+        "George S. Sangoy Jr.",
+        "Elias S. Motin Jr.",
+        "Gerwin N. Gayagas"
+      ],
+      "sk_kagawad": [
+        "Jefer P. Abong",
+        "Althea Mae S. Eduria",
+        "Christian Mark G. Peruelo",
+        "Romeo Jake G. Placer",
+        "Randy F. Mariveles Jr.",
+        "Romelyn S. Quiatchon"
+      ],
+      "secretary": "Romelyn S. Quiatchon",
+      "treasurer": "Jay-ann P. Barcelona",
+      "sk_secretary": "Joseph T. Obsena",
+      "sk_treasurer": "Leo G. Delfin"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_04-Brgy-Captain-Ronald-L-Abindan-Bacong-2023.jpg",
+      "sk_chair": "004_04-SK-Chairman-Vince-Joshua-P-Abendan-Bacong-2023.jpg",
+      "logo": "002_brgy-bacong.png"
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bacong"
+  },
+  {
+    "name": "Bagroy",
+    "type": "rural",
+    "landArea": "399.86 ha",
+    "distance": "11 km",
+    "puroks": 5,
+    "slug": "bagroy",
+    "officials": {
+      "captain": {
+        "name": "Agustin C. Granada",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Joco T. Jamelarin",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Joseph T. Subiate",
+        "Cesar R. Doronila",
+        "Lito D. Dolorfo Jr.",
+        "Jimmy G. Tamayo",
+        "Guillermo P. Rapiñan",
+        "Marcelino P. Delos Reyes",
+        "Joemarie G. Pudadera"
+      ],
+      "sk_kagawad": [
+        "John Fame L. Opimo",
+        "Angelo S. Cortez",
+        "Bryan F. Santillan",
+        "Loren Joy P. Osorio",
+        "Charlwin N. Lagradilla",
+        "Nico D. Manican"
+      ],
+      "secretary": "Nico D. Manican",
+      "treasurer": "Krizyl M. Maquiling",
+      "sk_secretary": "Cherie Clain P. Balboa",
+      "sk_treasurer": "Hanny Grace R. Moronio"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_05-Brgy-Captain-Agustin-C-Granada-Bagroy-2023.jpg",
+      "sk_chair": null,
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bagroy"
+  },
+  {
+    "name": "Balingasag",
+    "type": "urban",
+    "landArea": "436.84 ha",
+    "distance": "1.25 km",
+    "puroks": 13,
+    "slug": "balingasag",
+    "officials": {
+      "captain": {
+        "name": "Asahel P. Gayatin",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Julianae V. Lavadia",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Rodel R. Pondales",
+        "Alex B. Peñaflor",
+        "Ma. Jiji E. Balboa",
+        "Ramon A. Barayoga",
+        "Nelson P. David Jr.",
+        "Richard B. Taparano",
+        "Amalia A. Maquiling"
+      ],
+      "sk_kagawad": [
+        "Christian O. Cetera",
+        "Jodell C. Pondales",
+        "Trisha A. Rivera",
+        "Rueden V. Alvarez",
+        "Sheme R. Vingco",
+        "Ella Jill B. Manlabe",
+        "Krisffer Michael P. Lumio"
+      ],
+      "secretary": "Krisffer Michael P. Lumio",
+      "treasurer": "Precious Gil L. Binabae",
+      "sk_secretary": "Santiago M. Degala Jr",
+      "sk_treasurer": "Nikki D. Panganiban"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_06-Brgy-Captain-Asahel-P-Gayatin-Balingasag-2023.jpg",
+      "sk_chair": "004_06-SK-Chairman-Julianae-V-Lavadia-Balingasag-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-balingasag"
+  },
+  {
+    "name": "Binubuhan",
+    "type": "rural",
+    "landArea": "2,152.72 ha",
+    "distance": "29.1 km",
+    "puroks": 13,
+    "slug": "binubuhan",
+    "officials": {
+      "captain": {
+        "name": "Remy B. Jalea",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Aldrea Kysha C. Gonzaga",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Zylan C. Serviano",
+        "Leah C. Eriman",
+        "Anamel L. Palma",
+        "Garry G.Bustamante",
+        "Adelfa C. Quillain",
+        "Juvie A. Claridad",
+        "Benny G. Almodia"
+      ],
+      "sk_kagawad": [
+        "JV A. Claridad",
+        "Linmark S. Maglantay",
+        "Sara Jane T. Almodia",
+        "Lycah Loren P. Selorio"
+      ],
+      "secretary": "Lycah Loren P. Selorio",
+      "treasurer": "Nalyn P. Fetiza",
+      "sk_secretary": "Joel S. Pagtaogan",
+      "sk_treasurer": "Mery Vic A. Valencia"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_07-Brgy-Captain-Remy-B-Jalea-Binubuhan-2023.jpg",
+      "sk_chair": "004_07-SK-Chairman-Aldrea-Kysha-C-Gonzaga-Binubuhan-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-binubuhan"
+  },
+  {
+    "name": "Busay",
+    "type": "rural",
+    "landArea": "1,463.46 ha",
+    "distance": "7.2 km",
+    "puroks": 20,
+    "slug": "busay",
+    "officials": {
+      "captain": {
+        "name": "Glenn F. Dagunan",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Chelyn A. Halpin",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Aljun M. Ceralbo",
+        "Eljane R. Luage",
+        "Devorah A. Agustin",
+        "Noeme J. Nicavera",
+        "Marciano L. Montaño",
+        "Jane Ann L. Agustin",
+        "Raul D. Venus"
+      ],
+      "sk_kagawad": [
+        "Nika M. Mamon",
+        "Bianca Luz M. Agustin",
+        "Guicer T. Ruiz",
+        "Ann Michaela G. Gumban",
+        "Jela C. Jalando-on"
+      ],
+      "secretary": "Jela C. Jalando-on",
+      "treasurer": "Liezel J. Pancho",
+      "sk_secretary": "Gina M. Tanaman",
+      "sk_treasurer": "Nezel Fria G. Legaspi"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_08-Brgy-Captain-Glenn-F-Dagunan-Busay-2023.jpg",
+      "sk_chair": "004_08-SK-Chairman-Chelyn-A-Halpin-Busay-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-busay"
+  },
+  {
+    "name": "Calumangan",
+    "type": "rural",
+    "landArea": "1,007.11 ha",
+    "distance": "6.4 km",
+    "puroks": 22,
+    "slug": "calumangan",
+    "officials": {
+      "captain": {
+        "name": "Roberto C. Saylo",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Carmela Dawn E. Antonio",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Melba M. Montaño",
+        "Jesus G. Dignadice Jr.",
+        "Ariel D. Montaño",
+        "Jelyn S. Akol",
+        "Roderick A. Suarez",
+        "Martizano U. Jalea Jr",
+        "Jimmy D. Candazo"
+      ],
+      "sk_kagawad": [
+        "Krezell Mae M. Candazo",
+        "R Jay G. Lobrido",
+        "Kate D. Montalbo",
+        "Asher G. Alvarez",
+        "Shamae R. Besa",
+        "Nathaniel T. Jalea",
+        "Jopay Maldeguia"
+      ],
+      "secretary": "Jopay Maldeguia",
+      "treasurer": "Joy S. Deocadis",
+      "sk_secretary": "Lorena C. Tagapan",
+      "sk_treasurer": "Regine Marie S. Operiano"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_09-Brgy-Captain-Roberto-C-Saylo-Calumangan-2023.jpg",
+      "sk_chair": "004_09-SK-Chairman-Carmela-Dawn-E-Antonio-Calumangan-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-calumangan"
+  },
+  {
+    "name": "Caridad",
+    "type": "urban",
+    "landArea": "553.44 ha",
+    "distance": "12 km",
+    "puroks": 8,
+    "slug": "caridad",
+    "officials": {
+      "captain": {
+        "name": "Nelida T. Gadian",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Ynna D. Ramirez",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Ronilo D. Valencia",
+        "Fe M. Mondidon",
+        "Carlos S. Torres",
+        "Rosie P. Torres",
+        "Ariel G. Polana",
+        "Nancy T. Cunanan",
+        "Gilda V. Hulguin"
+      ],
+      "sk_kagawad": [
+        "Ryu Ken S. Ciokon",
+        "Angel V. Hulguin",
+        "Miguel F. Buenafe",
+        "Edwardo Hechanova",
+        "Eric M. Peñaflor",
+        "Mishaira T. Varona",
+        "Vanessa H. Banay"
+      ],
+      "secretary": "Vanessa H. Banay",
+      "treasurer": "Jo Ann B. Soriano",
+      "sk_secretary": "Leizel S. Ciokon",
+      "sk_treasurer": "Kim J. Diaz"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_10-Brgy-Captain-Nelida-T-Gadian-Caridad-2023.jpg",
+      "sk_chair": "004_10-SK-Chairman-Ynna-D-Ramirez-Caridad-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-caridad"
+  },
+  {
+    "name": "Dulao",
+    "type": "rural",
+    "landArea": "2,439.91 ha",
+    "distance": "17.8 km",
+    "puroks": 20,
+    "slug": "dulao",
+    "officials": {
+      "captain": {
+        "name": "Rey A. Guzon",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Alleah Lyka T. Casiano",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Albert S. Casiano",
+        "Eliseo S. Carmona Sr.",
+        "Jheson M. Quinta",
+        "Jose Tirso M. Tomaro",
+        "Loremar M. Latoza",
+        "Rogelio D. Galvez",
+        "Rico D. Morales"
+      ],
+      "sk_kagawad": [
+        "Kyla Therese M. Dormido",
+        "Rafael D. Baylosis",
+        "Kriza Marie F. Fuentes",
+        "Judy Ann B. Galvez",
+        "Leramae Angel G. Bolisa",
+        "Junel B. Floralde",
+        "Aira Mae V. Jaro"
+      ],
+      "secretary": "Aira Mae V. Jaro",
+      "treasurer": "Chenny S. Singuelos",
+      "sk_secretary": "Nilo T. Morales",
+      "sk_treasurer": "Rene C. Advincula"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_12-Brgy-Captain-Rey-A-Guzon-Dulao-2023.jpg",
+      "sk_chair": "004_12-SK-Chairman-Alleah-Lyka-T-Casiano-Dulao-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-dulao"
+  },
+  {
+    "name": "Ilijan",
+    "type": "rural",
+    "landArea": "1,488.49 ha",
+    "distance": "30.9 km",
+    "puroks": 7,
+    "slug": "ilijan",
+    "officials": {
+      "captain": {
+        "name": "Hernani L. Abindan",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Ejan B. Dela Cruz",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Gary V. Jeruta",
+        "Reiniere Zynel F. Talento",
+        "Ricardo O. Cornelio",
+        "Cherry E. Emonaga",
+        "Jerry D.Alvarez",
+        "James B. Borde",
+        "Arnel N. Arguelles"
+      ],
+      "sk_kagawad": [
+        "Era P. Flores",
+        "Glenel T. Medel",
+        "Jess U. Flores",
+        "Efralyn Y. Flor",
+        "Jocelyn V. Ebcas",
+        "John Klieo D. Arguelles",
+        "Melvie B. Mandid"
+      ],
+      "secretary": "Melvie B. Mandid",
+      "treasurer": "Ronalie F. Ordinal",
+      "sk_secretary": "Charie A. Cadigal",
+      "sk_treasurer": "Carla L. Mellenes"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_13-Brgy-Captain-Hernani-L-Abindan-Ilijan-2023.jpg",
+      "sk_chair": "004_13-SK-Chairman-Ejan-Dela-Cruz-Ilijan-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ilijan"
+  },
+  {
+    "name": "Lag-asan",
+    "type": "rural",
+    "landArea": "436.34 ha",
+    "distance": "1.6 km",
+    "puroks": 18,
+    "slug": "lag-asan",
+    "officials": {
+      "captain": {
+        "name": "Jose Ermelo Z. Jara",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Al Christler E. De La Cruz",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Tobias S. Goroy",
+        "Judy F. Clamor",
+        "Fe S. Barcibal",
+        "Krysshia S. De la Cruz",
+        "Raoul Joseph J. Javellana",
+        "John Crispin B. Jara",
+        "Arnaldo E. Apruebo"
+      ],
+      "sk_kagawad": [
+        "Arianne Maree V. Arellano",
+        "Julex S. Nicor",
+        "Ivan Kennedy T. Arangote",
+        "Janine B. Masbaño",
+        "Alexis B. Salazar",
+        "Mark Kevin C. Abelardo",
+        "Darryl S. Rebenito"
+      ],
+      "secretary": "Darryl S. Rebenito",
+      "treasurer": "Philina A. Jambora",
+      "sk_secretary": "Mark D. Villanueva",
+      "sk_treasurer": "Jan Marie N. Salvaña"
+    },
+    "description": "Long time ago, the place was an important and busy trading port. Naturally, disagreements would arose and the combatants would run after each other. Sometimes robbers and other hoodlums fleeing the residents who pursued them usually got caught at this point.\n\nThis was so because they could go no farther unless they can cross by boats or rafts. Then people began calling the place, Lag-asan, from the local dialect meaning, a place where people ran after another.",
+    "images": {
+      "captain": "003_14-Brgy-Captain-Jose-Ermelo-Z-Jara-Lag-asan-2023.jpg",
+      "sk_chair": "004_14-SK-Chairman-Al-Christler-E-Dela-Cruz-Lag-asan-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-lag-asan"
+  },
+  {
+    "name": "Ma-ao",
+    "type": "urban",
+    "landArea": "3,938.33 ha",
+    "distance": "21.7 km",
+    "puroks": 53,
+    "slug": "ma-ao",
+    "officials": {
+      "captain": {
+        "name": "Jovito M. Gahaton",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Leo Therese B. Decatoria",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Raymundo C. Gerona",
+        "Neil O. Barrientos",
+        "Jose Pio G. Araneta",
+        "Araceli G. Pellejo",
+        "Marites B. Espeleta",
+        "Jocelyn T. Cachumbo",
+        "Joemarie A. Deocampo"
+      ],
+      "sk_kagawad": [
+        "Jie-Ann B. Catubay",
+        "Ma. Kia P. Laguyo",
+        "Jairey D. Ignacio",
+        "Edraine Lattrel G. Latido",
+        "Alexa Grace G. Famoso",
+        "Kent Ernie T. Morales",
+        "Emmanuel Carl D. De La Cruz"
+      ],
+      "secretary": "Emmanuel Carl D. De La Cruz",
+      "treasurer": "Ofelia A. Turco",
+      "sk_secretary": "Jemelyn I. Cuyos",
+      "sk_treasurer": "Rovic Serantes"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_15-Brgy-Captain-Jovito-M-Gahaton-Ma-ao-2023.jpg",
+      "sk_chair": "004_15-SK-Chairman-Leo-Therese-B-Decatoria-Ma-ao-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ma-ao"
+  },
+  {
+    "name": "Mailum",
+    "type": "rural",
+    "landArea": "3,283.61 ha",
+    "distance": "29.4 km",
+    "puroks": 22,
+    "slug": "mailum",
+    "officials": {
+      "captain": {
+        "name": "Melchor T. Sayco",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Mark Steven B.Capunong",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Rola P. Sanico",
+        "Anna Liza T. Mcomish",
+        "Charry D. Labrador",
+        "Ma. Johna C. Capunong",
+        "Romeo M. Bandiola",
+        "Regie Q. Teodoro",
+        "John S. Puntal"
+      ],
+      "sk_kagawad": [
+        "Roxan F. Ballenas",
+        "Rexan L. Hilarde",
+        "Christian Bryan J. Ojano",
+        "Annabella A. Sayco",
+        "Vincent C. Pasigado",
+        "Chairyl Joe L. Motin",
+        "Shane C. Hermogenes"
+      ],
+      "secretary": "Shane C. Hermogenes",
+      "treasurer": "Jenita C. Balceda",
+      "sk_secretary": "Theresa May B. Norbe",
+      "sk_treasurer": "Ronafe D. Pasigado"
+    },
+    "description": "long time ago, when the Spaniards came, the natives of this place were both astonished and scared to see these very tall people, with long mustaches and very white complexion. One beautiful lady who had a long hair came out with courage and welcomed the foreigners.\n\nThe Spaniards felt happy and paid their respect to the lady by saying, “buenos días señorita.” However the lady did not understand what the Spaniards said. While the foreigners were sitting on the bamboo bench to rest, one of the Spaniards asked the lady, “El nombre de este lugar?” The lady, not understanding, said, “Indi kami ma itom, mailum- ilum lang” (We are not dusky, just brownish).",
+    "images": {
+      "captain": "003_16-Brgy-Captain-Melchor-T-Sayco-Mailum-2023.jpg",
+      "sk_chair": "004_16-SK-Chairman-Mark-Steven-B-Capunong-Mailum-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-mailum"
+  },
+  {
+    "name": "Malingin",
+    "type": "rural",
+    "landArea": "1,409.01 ha",
+    "distance": "12.2 km",
+    "puroks": 22,
+    "slug": "malingin",
+    "officials": {
+      "captain": {
+        "name": "Henry T. Alvarez",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Janella T. Baylon",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Jose Ronie G. Epifanio",
+        "Milo J. De La Vega",
+        "Judy T. Guarra",
+        "Erwin D. Baylon",
+        "Jose Dennis D. Guarra",
+        "Rosendo G. Tabol",
+        "Jethro S. Seloterio"
+      ],
+      "sk_kagawad": [
+        "Krystel Elaine G. Alvarez",
+        "Arlene S. Susana",
+        "Ella Mea S. Prado",
+        "Dezryl F. Guarra",
+        "Venna Antonette P. Jaga",
+        "Kenneth D. Seloterio"
+      ],
+      "secretary": "Kenneth D. Seloterio",
+      "treasurer": "Ringo S. Guarra",
+      "sk_secretary": "Junel G. Trayco",
+      "sk_treasurer": "Kevin M. Gonzales"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_17-Brgy-Captain-Henry-T-Alvarez-Malingin-2023.jpg",
+      "sk_chair": "004_Janella-T.-Baylon-SK-Chairman-Malingin.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-malingin"
+  },
+  {
+    "name": "Napoles",
+    "type": "rural",
+    "landArea": "1,279.42 ha",
+    "distance": "9.2 km",
+    "puroks": 20,
+    "slug": "napoles",
+    "officials": {
+      "captain": {
+        "name": "Rebecca C.Eyoy",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Rica Joyce B. Orense",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Giban A. Mallorca",
+        "Wilson H. Larang",
+        "Jose Cristy G. Catahay",
+        "Wilson P. Hortillosa",
+        "Alan F. Palacios",
+        "Amy L. Gajetela",
+        "Jose Nico N. Candelario"
+      ],
+      "sk_kagawad": [
+        "Geraldine C. Flores",
+        "Kenny Jane V. Pantillo",
+        "Racky N. Batan",
+        "Faye B. Gerono",
+        "Lyra Mae T. Barneso",
+        "Emy Jean T. Esparas",
+        "Jay Ceasar C. Campos"
+      ],
+      "secretary": "Jay Ceasar C. Campos",
+      "treasurer": "Zenaida A. Hortillosa",
+      "sk_secretary": "France L. Laz",
+      "sk_treasurer": "Alyssa A. Hortillosa"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_18-Brgy-Captain-Rebecca-C-Eyoy-Napoles.jpg",
+      "sk_chair": "004_18-SK-Chairman-Rica-Joyce-B-Orense-Napoles-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-napoles"
+  },
+  {
+    "name": "Pacol",
+    "type": "rural",
+    "landArea": "753.21 ha",
+    "distance": "7.5 km",
+    "puroks": 8,
+    "slug": "pacol",
+    "officials": {
+      "captain": {
+        "name": "Fely G. Evangelio",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Tricia F. Tayongtong",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Beverly E. Fernandez",
+        "Ronilo T. Gascon",
+        "Rolando T. Gascon Jr.",
+        "Arnel H. Tenerife",
+        "Rey C. Duco",
+        "Gina T. Destar",
+        "Don Mar M. Muan"
+      ],
+      "sk_kagawad": [
+        "Rochelle E. Tayongtong",
+        "Jeffrey T. Antolo",
+        "Chery Rose B. Escare",
+        "Christian D. Rivera",
+        "Ellah Mae A. Osoya",
+        "Leomil A. Singuelas",
+        "Andry P. Canencia"
+      ],
+      "secretary": "Andry P. Canencia",
+      "treasurer": "Irma F. Padilla",
+      "sk_secretary": "Lilia B. Lamela",
+      "sk_treasurer": "Eza Mae M. Tenerife"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_19-Brgy-Captain-Fely-G-Evangelio-Pacol-2023.jpg",
+      "sk_chair": "004_19-SK-Chairman-Tricia-F-Tayongtong-Pacol-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-pacol"
+  },
+  {
+    "name": "Poblacion",
+    "type": "urban",
+    "landArea": "311.50 ha",
+    "distance": "0 km",
+    "puroks": 14,
+    "slug": "poblacion",
+    "officials": {
+      "captain": {
+        "name": "Aurelio G. Arquillas Jr.",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Gene Manuel B. Torres",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Angie Ann M. Javelosa",
+        "Jan Rudolph S. Obando",
+        "Patricia E. Mondia",
+        "Carl Benedict Y. Baylon",
+        "Rene G. Obando",
+        "Arminius A. Guevarra",
+        "Rogelio O. Alvarez"
+      ],
+      "sk_kagawad": [
+        "Jason A. Castillo",
+        "Darryl Bryan J. Bico",
+        "Leo Andrew P. Flores",
+        "Bianca G. Sabedonia",
+        "Jeefrey L. Tipawan",
+        "Joy Ann C. Marapo"
+      ],
+      "secretary": "Joy Ann C. Marapo",
+      "treasurer": "Cherryl G. Moises",
+      "sk_secretary": "Evelyn E. Dreyfus",
+      "sk_treasurer": "Kein I. Cosas"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_20-Brgy-Captain-Aurelio-G-Arquillas-Jr-Poblacion-2023.jpg",
+      "sk_chair": "004_20-SK-Chairman-Gene-Manuel-B.-Torres-Poblacion-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-poblacion"
+  },
+  {
+    "name": "Sagasa",
+    "type": "rural",
+    "landArea": "765.08 ha",
+    "distance": "12.2 km",
+    "puroks": 12,
+    "slug": "sagasa",
+    "officials": {
+      "captain": {
+        "name": "Noel T. Valenzuela",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Angela Marie D. Ga",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "JR P. Tongcua",
+        "Eddie E. Bimbao",
+        "Jeffrey A. Benavente",
+        "Andreme C. Dela Torre",
+        "Lizel D. Ynson",
+        "Joachem Andrie M. Araneta",
+        "Reynaldo M. Alingalan"
+      ],
+      "sk_kagawad": [
+        "Kyan G. Andresio",
+        "John Eliseo B. Amar",
+        "Daisy S. Maguad",
+        "Aubrey D. Tandog"
+      ],
+      "secretary": "Aubrey D. Tandog",
+      "treasurer": "Renalyn C. Martinez",
+      "sk_secretary": "Venus M. Orbita",
+      "sk_treasurer": "Luie T. Union"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_21-Brgy-Captain-Noel-D.-Valenzuela-Sagasa-2023.jpg",
+      "sk_chair": "004_SK-Chairman-Angela-Marie-D.-Ga-Sagasa-2025.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sagasa"
+  },
+  {
+    "name": "Sampinit",
+    "type": "rural",
+    "landArea": "419.92 ha",
+    "distance": "2.6 km",
+    "puroks": 15,
+    "slug": "sampinit",
+    "officials": {
+      "captain": {
+        "name": "Danilo U. Famoso",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Franceine Erich D. Villariez",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Leonila G. Famoso",
+        "Nilo Y. Millena",
+        "Rene S. Pailano",
+        "Yolanda L. Herbert",
+        "Beato A. Espende",
+        "Evelio S. Lobrido",
+        "Arman V. Maquirang"
+      ],
+      "sk_kagawad": [
+        "Froilan D. Dormido",
+        "Joan B. Villarte",
+        "Ahiezer Paul S. Flores",
+        "Vincent S. Villarin",
+        "Franz Michael A. Alelojo",
+        "John Karl S. Alison",
+        "Rickson John C. Jayawon"
+      ],
+      "secretary": "Rickson John C. Jayawon",
+      "treasurer": "Michelle Y. Lavadia",
+      "sk_secretary": "Sherlyn F. Banaag",
+      "sk_treasurer": "Hurry D. Magbanua"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_22-Brgy-Captain-Danilo-U-Famoso-Sampinit-2023.jpg",
+      "sk_chair": "004_22-SK-Chairman-Franceine-Erich-D-Villariez-Sampinit-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sampinit"
+  },
+  {
+    "name": "Tabunan",
+    "type": "rural",
+    "landArea": "1,263.57 ha",
+    "distance": "14.4 km",
+    "puroks": 13,
+    "slug": "tabunan",
+    "officials": {
+      "captain": {
+        "name": "Maria May C. Suarez",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Patrick John D. Palallos",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Romeo G. Capillo Jr.",
+        "Mary Jane M. Mondejar",
+        "Tomas L. Makilan",
+        "Danilo S. Suarez",
+        "George E. Junas",
+        "Romelo E. Catanyag",
+        "Jose Edgar V. Sancio"
+      ],
+      "sk_kagawad": [
+        "Alfred V. Alegia",
+        "Paolo N. Villanueva",
+        "Neil Bryan R. Escanier",
+        "Angela Victoria D. Coruña",
+        "Joey D. Cornel",
+        "Khaye Sharlene R. Isidro",
+        "Joshua James E. Catubig"
+      ],
+      "secretary": "Joshua James E. Catubig",
+      "treasurer": "Riah A. Matti",
+      "sk_secretary": "Christopher J. Sancio",
+      "sk_treasurer": "Jewel Deen V. Oquiana"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_23-Brgy-Captain-Maria-May-C-Suarez-Tabunan-2023.jpg",
+      "sk_chair": "004_SK-Chairman-Patrick-John-D.-Palallos-Tabunan-2025.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-tabunan"
+  },
+  {
+    "name": "Taloc",
+    "type": "urban",
+    "landArea": "1,575.95 ha",
+    "distance": "9.1 km",
+    "puroks": 26,
+    "slug": "taloc",
+    "officials": {
+      "captain": {
+        "name": "Delia M. Teovisio",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "Rowel A. Capillo",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "Lydee L. Borromeo",
+        "Cheeque Florence L. Bilolo",
+        "Rixie C. Dulaca",
+        "Merlita E. Valencia",
+        "Nelly G. Lazarte",
+        "Allan R. Carmona",
+        "Michael Angelo P. Casona"
+      ],
+      "sk_kagawad": [
+        "Kevin H. Carmona",
+        "Hannah Sofea T. Lobrido",
+        "Earl John M. Paildan",
+        "Adrian M. Cobrador",
+        "Juliane P. Cuayson",
+        "Martin B. Malunes",
+        "Katlene Ann M. Paredes"
+      ],
+      "secretary": "Katlene Ann M. Paredes",
+      "treasurer": "Maria Cristina M. Espacio",
+      "sk_secretary": "Junalie J. Magbanua",
+      "sk_treasurer": "Danica Marie Q. Seraspi"
+    },
+    "description": "",
+    "images": {
+      "captain": "003_24-Brgy-Captain-Delia-M-Teovisio-Taloc-2023.jpg",
+      "sk_chair": "004_24-SK-Chairman-Rowel-A-Capillo-Taloc-2023.jpg",
+      "logo": null
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-taloc"
+  }
+]

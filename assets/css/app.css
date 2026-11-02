@@ -3144,6 +3144,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(10, 46, 92, 0.08);
+  cursor: pointer;
 }
 
 .brgy-card:hover {

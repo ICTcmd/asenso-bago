@@ -2409,3 +2409,54 @@
 
 
 
+
+<!-- Barangay Card Click Handler -->
+<script>
+// Make barangay cards clickable
+document.addEventListener('DOMContentLoaded', function() {
+  // Define slug mapping for each barangay name
+  const barangaySlugMap = {
+    'Abuanan': 'abuanan',
+    'Alianza': 'alianza',
+    'Atipuluan': 'atipuluan',
+    'Bacong': 'bacong',
+    'Bagroy': 'bagroy',
+    'Balingasag': 'balingasag',
+    'Binubuhan': 'binubuhan',
+    'Busay': 'busay',
+    'Calumangan': 'calumangan',
+    'Caridad': 'caridad',
+    'Don Jorge L. Araneta': 'don-jorge-l-araneta',
+    'Dulao': 'dulao',
+    'Ilijan': 'ilijan',
+    'Lag-Asan': 'lag-asan',
+    'Ma-ao': 'ma-ao',
+    'Mailum': 'mailum',
+    'Malingin': 'malingin',
+    'Napoles': 'napoles',
+    'Pacol': 'pacol',
+    'Poblacion': 'poblacion',
+    'Sagasa': 'sagasa',
+    'Sampinit': 'sampinit',
+    'Tabunan': 'tabunan',
+    'Taloc': 'taloc'
+  };
+
+  // Add click event to all barangay cards
+  const brgyCards = document.querySelectorAll('.brgy-card');
+  brgyCards.forEach(card => {
+    const barangayName = card.getAttribute('data-name');
+    const slug = barangaySlugMap[barangayName];
+    
+    if (slug) {
+      card.addEventListener('click', function(e) {
+        // Don't navigate if clicking on a button or link inside the card
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a, button')) {
+          return;
+        }
+        window.location.href = `barangay-profile.html?id=${slug}`;
+      });
+    }
+  });
+});
+</script>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0066cc">
+  <title>Barangay Profile - Asenso Bago</title>
+  <link rel="icon" type="image/png" href="assets/images/bago-icon.png">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/barangay-profile.css">
+</head>
+<body>
+  
+  <!-- Navigation -->
+  <nav class="nav-fixed">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="nav-back-btn" onclick="history.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
+      </div>
+      <div class="nav-center">
+        <img src="assets/images/bago-icon.png" alt="Bago City" class="nav-logo">
+        <span class="nav-title">Asenso Bago</span>
+      </div>
+      <div class="nav-right">
+        <!-- Placeholder for symmetry -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Loading State -->
+  <div id="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading barangay profile...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <main id="profile-content" style="display: none;">
+    
+    <!-- Header with Logo -->
+    <div class="profile-header">
+      <div class="profile-header-bg"></div>
+      <div class="profile-header-content">
+        <img id="brgy-logo" src="" alt="" class="profile-logo">
+        <h1 id="brgy-name" class="profile-title"></h1>
+        <span id="brgy-type-badge" class="profile-badge"></span>
+      </div>
+    </div>
+
+    <div class="profile-body">
+      <div class="profile-grid">
+        
+        <!-- Main Content -->
+        <div class="profile-main">
+          
+          <!-- About Section -->
+          <section class="profile-section">
+            <h2 class="section-title">About</h2>
+            <p id="brgy-description" class="profile-description"></p>
+          </section>
+
+          <!-- Barangay Officials -->
+          <section class="profile-section">
+            <h2 class="section-title">Barangay Officials</h2>
+            
+            <!-- Punong Barangay -->
+            <div class="official-card captain-card">
+              <div class="official-photo-container">
+                <img id="captain-photo" src="" alt="" class="official-photo">
+              </div>
+              <div class="official-info">
+                <h3 id="captain-name" class="official-name"></h3>
+                <p class="official-title">Punong Barangay</p>
+              </div>
+            </div>
+
+            <!-- SK Chairperson -->
+            <div class="official-card sk-card">
+              <div class="official-photo-container">
+                <img id="sk-photo" src="" alt="" class="official-photo">
+              </div>
+              <div class="official-info">
+                <h3 id="sk-name" class="official-name"></h3>
+                <p class="official-title">SK Chairperson</p>
+              </div>
+            </div>
+
+            <!-- Barangay Kagawad -->
+            <div class="kagawad-section">
+              <h3 class="subsection-title">Barangay Kagawad</h3>
+              <ul id="kagawad-list" class="officials-list"></ul>
+            </div>
+
+            <!-- SK Kagawad -->
+            <div class="kagawad-section">
+              <h3 class="subsection-title">SK Kagawad</h3>
+              <ul id="sk-kagawad-list" class="officials-list"></ul>
+            </div>
+
+            <!-- Other Officials -->
+            <div class="other-officials">
+              <div class="official-row">
+                <span class="official-label">Barangay Secretary:</span>
+                <span id="secretary-name" class="official-value"></span>
+              </div>
+              <div class="official-row">
+                <span class="official-label">Barangay Treasurer:</span>
+                <span id="treasurer-name" class="official-value"></span>
+              </div>
+              <div class="official-row">
+                <span class="official-label">SK Secretary:</span>
+                <span id="sk-secretary-name" class="official-value"></span>
+              </div>
+              <div class="official-row">
+                <span class="official-label">SK Treasurer:</span>
+                <span id="sk-treasurer-name" class="official-value"></span>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+          
+          <!-- Fast Facts -->
+          <div class="sidebar-card">
+            <h3 class="sidebar-title">Fast Facts</h3>
+            <div class="fact-row">
+              <span class="fact-icon">🏘</span>
+              <div class="fact-content">
+                <span class="fact-label">Puroks</span>
+                <span id="fact-puroks" class="fact-value"></span>
+              </div>
+            </div>
+            <div class="fact-row">
+              <span class="fact-icon">📐</span>
+              <div class="fact-content">
+                <span class="fact-label">Land Area</span>
+                <span id="fact-land-area" class="fact-value"></span>
+              </div>
+            </div>
+            <div class="fact-row">
+              <span class="fact-icon">📍</span>
+              <div class="fact-content">
+                <span class="fact-label">Distance from City</span>
+                <span id="fact-distance" class="fact-value"></span>
+              </div>
+            </div>
+            <div class="fact-row">
+              <span class="fact-icon">🏙</span>
+              <div class="fact-content">
+                <span class="fact-label">Type</span>
+                <span id="fact-type" class="fact-value"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="sidebar-card">
+            <h3 class="sidebar-title">Quick Links</h3>
+            <a href="map.html" class="sidebar-link">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/>
+              </svg>
+              <span>View on Map</span>
+            </a>
+            <a href="index.html#barangays" class="sidebar-link">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+              </svg>
+              <span>All Barangays</span>
+            </a>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Error State -->
+  <div id="error-state" class="error-container" style="display: none;">
+    <div class="error-icon">⚠️</div>
+    <h2>Barangay Not Found</h2>
+    <p>The barangay profile you're looking for could not be found.</p>
+    <a href="index.html#barangays" class="btn-primary">View All Barangays</a>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/barangay-profile.js"></script>
+  
+</body>
+</html>
