@@ -3092,20 +3092,31 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   margin: 0 16px 16px;
-  padding: 16px 24px;
+  padding: 12px 16px;
   font-family: var(--font-heading);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--primary-navy);
   background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(242, 140, 40, 0.1));
   border: 2px solid var(--primary-gold);
-  border-radius: 16px;
+  border-radius: 12px;
   text-decoration: none;
   transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
-  min-height: 56px;
+  min-height: 48px;
+}
+
+.brgy-map-link-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.brgy-map-link-btn .brgy-arrow {
+  width: 16px;
+  height: 16px;
 }
 
 .brgy-map-link-btn:hover {
