@@ -72,6 +72,15 @@ function populateProfile(barangay) {
   const description = barangay.description || 
     `Barangay ${barangay.name} is ${barangay.type === 'urban' ? 'an urban' : 'a rural'} barangay located ${barangay.distance} from the city center.`;
   document.getElementById('brgy-description').textContent = description;
+  
+  // Illustration (if available)
+  if (barangay.images.illustration) {
+    const illustrationContainer = document.getElementById('brgy-illustration-container');
+    const illustrationImg = document.getElementById('brgy-illustration');
+    illustrationImg.src = `assets/images/barangays/${barangay.slug}-illustration.jpg`;
+    illustrationImg.alt = `${barangay.name} Illustration`;
+    illustrationContainer.style.display = 'block';
+  }
 
   // Captain
   const captainPhoto = barangay.images.captain
