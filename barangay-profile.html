@@ -13,6 +13,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="stylesheet" href="assets/css/barangay-profile.css">
@@ -144,28 +147,28 @@
           <div class="sidebar-card">
             <h3 class="sidebar-title">Fast Facts</h3>
             <div class="fact-row">
-              <span class="fact-icon">🏘</span>
+              <i data-lucide="building-2" class="fact-icon-lucide" style="width: 28px; height: 28px; color: var(--primary-orange); stroke-width: 2.5;"></i>
               <div class="fact-content">
                 <span class="fact-label">Puroks</span>
                 <span id="fact-puroks" class="fact-value"></span>
               </div>
             </div>
             <div class="fact-row">
-              <span class="fact-icon">📐</span>
+              <i data-lucide="ruler" class="fact-icon-lucide" style="width: 28px; height: 28px; color: var(--primary-orange); stroke-width: 2.5;"></i>
               <div class="fact-content">
                 <span class="fact-label">Land Area</span>
                 <span id="fact-land-area" class="fact-value"></span>
               </div>
             </div>
             <div class="fact-row">
-              <span class="fact-icon">📍</span>
+              <i data-lucide="map-pin" class="fact-icon-lucide" style="width: 28px; height: 28px; color: var(--primary-orange); stroke-width: 2.5;"></i>
               <div class="fact-content">
                 <span class="fact-label">Distance from City</span>
                 <span id="fact-distance" class="fact-value"></span>
               </div>
             </div>
             <div class="fact-row">
-              <span class="fact-icon">🏙</span>
+              <i data-lucide="building" class="fact-icon-lucide" style="width: 28px; height: 28px; color: var(--primary-orange); stroke-width: 2.5;"></i>
               <div class="fact-content">
                 <span class="fact-label">Type</span>
                 <span id="fact-type" class="fact-value"></span>
@@ -207,6 +210,13 @@
 
   <!-- Scripts -->
   <script src="assets/js/barangay-profile.js"></script>
+  
+  <!-- Initialize Lucide Icons -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
   
 </body>
 </html>
