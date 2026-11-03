@@ -126,9 +126,10 @@ function populateProfile(barangay) {
 
   // Fast Facts
   document.getElementById('fact-puroks').textContent = formatNumber(barangay.puroks);
+  document.getElementById('fact-households').textContent = barangay.households2025 || 'N/A';
   document.getElementById('fact-land-area').textContent = barangay.landArea;
   document.getElementById('fact-distance').textContent = barangay.distance;
-  document.getElementById('fact-type').textContent = barangay.type === 'urban' ? 'Urban' : 'Rural';
+  document.getElementById('fact-population').textContent = barangay.population2025 || 'N/A';
 
   // Reinitialize Lucide icons after content is loaded
   if (typeof lucide !== 'undefined') {

@@ -45,7 +45,9 @@
       "logo": "002_brgy-abuanan-1.png",
       "illustration": "005_barangay-sec1-img.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-abuanan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-abuanan",
+    "households2025": "1,446",
+    "population2025": "6,694"
   },
   {
     "name": "Alianza",
@@ -93,7 +95,9 @@
       "logo": "002_brgy-alianza-1.png",
       "illustration": "005_about-brgy-alianza.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-alianza"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-alianza",
+    "households2025": "803",
+    "population2025": "3,566"
   },
   {
     "name": "Atipuluan",
@@ -141,7 +145,9 @@
       "logo": null,
       "illustration": "005_about-brgy-atipuluan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-atipuluan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-atipuluan",
+    "households2025": "981",
+    "population2025": "4,436"
   },
   {
     "name": "Bacong",
@@ -188,7 +194,9 @@
       "logo": "002_brgy-bacong.png",
       "illustration": "005_about-brgy-bacong.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bacong"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bacong",
+    "households2025": "1,995",
+    "population2025": "9,245"
   },
   {
     "name": "Bagroy",
@@ -235,7 +243,9 @@
       "logo": null,
       "illustration": "005_about-brgy-bagroy.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bagroy"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bagroy",
+    "households2025": "429",
+    "population2025": "1,894"
   },
   {
     "name": "Balingasag",
@@ -283,7 +293,9 @@
       "logo": null,
       "illustration": "005_about-brgy-balingasag.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-balingasag"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-balingasag",
+    "households2025": "1,206",
+    "population2025": "5,424"
   },
   {
     "name": "Binubuhan",
@@ -328,7 +340,9 @@
       "logo": null,
       "illustration": "005_about-brgy-binubuhan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-binubuhan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-binubuhan",
+    "households2025": "1,497",
+    "population2025": "6,676"
   },
   {
     "name": "Busay",
@@ -374,7 +388,9 @@
       "logo": null,
       "illustration": "005_about-brgy-busay.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-busay"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-busay",
+    "households2025": "1,801",
+    "population2025": "8,234"
   },
   {
     "name": "Calumangan",
@@ -422,7 +438,9 @@
       "logo": null,
       "illustration": "005_about-brgy-calumangan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-calumangan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-calumangan",
+    "households2025": "2,442",
+    "population2025": "10,762"
   },
   {
     "name": "Caridad",
@@ -470,7 +488,9 @@
       "logo": null,
       "illustration": "005_about-brgy-caridad.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-caridad"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-caridad",
+    "households2025": "965",
+    "population2025": "4,316"
   },
   {
     "name": "Dulao",
@@ -518,7 +538,9 @@
       "logo": null,
       "illustration": "005_about-brgy-dulao.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-dulao"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-dulao",
+    "households2025": "2,530",
+    "population2025": "11,393"
   },
   {
     "name": "Ilijan",
@@ -566,7 +588,9 @@
       "logo": null,
       "illustration": "005_about-brgy-ilijan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ilijan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ilijan",
+    "households2025": "832",
+    "population2025": "3,957"
   },
   {
     "name": "Lag-asan",
@@ -614,7 +638,9 @@
       "logo": null,
       "illustration": "005_about-brgy-lagasan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-lag-asan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-lag-asan",
+    "households2025": "2,968",
+    "population2025": "14,458"
   },
   {
     "name": "Ma-ao",
@@ -662,7 +688,9 @@
       "logo": null,
       "illustration": "005_about-brgy-maao.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ma-ao"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ma-ao",
+    "households2025": "4,582",
+    "population2025": "20,218"
   },
   {
     "name": "Mailum",
@@ -710,7 +738,9 @@
       "logo": null,
       "illustration": "005_about-brgy-mailum.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-mailum"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-mailum",
+    "households2025": "2,454",
+    "population2025": "11,133"
   },
   {
     "name": "Malingin",
@@ -757,7 +787,9 @@
       "logo": null,
       "illustration": "005_about-brgy-malingin.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-malingin"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-malingin",
+    "households2025": "1,751",
+    "population2025": "7,952"
   },
   {
     "name": "Napoles",
@@ -805,7 +837,9 @@
       "logo": null,
       "illustration": null
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-napoles"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-napoles",
+    "households2025": "1,854",
+    "population2025": "8,369"
   },
   {
     "name": "Pacol",
@@ -853,7 +887,9 @@
       "logo": null,
       "illustration": "005_about-brgy-pacol.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-pacol"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-pacol",
+    "households2025": "1,150",
+    "population2025": "4,945"
   },
   {
     "name": "Poblacion",
@@ -900,7 +936,9 @@
       "logo": null,
       "illustration": "005_about-brgy-poblacion.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-poblacion"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-poblacion",
+    "households2025": "2,774",
+    "population2025": "12,948"
   },
   {
     "name": "Sagasa",
@@ -945,7 +983,9 @@
       "logo": null,
       "illustration": null
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sagasa"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sagasa",
+    "households2025": "1,226",
+    "population2025": "5,423"
   },
   {
     "name": "Sampinit",
@@ -993,7 +1033,9 @@
       "logo": null,
       "illustration": null
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sampinit"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sampinit",
+    "households2025": "2,385",
+    "population2025": "10,906"
   },
   {
     "name": "Tabunan",
@@ -1041,7 +1083,9 @@
       "logo": null,
       "illustration": "005_about-brgy-tabunan.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-tabunan"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-tabunan",
+    "households2025": "2,107",
+    "population2025": "10,534"
   },
   {
     "name": "Taloc",
@@ -1089,6 +1133,8 @@
       "logo": null,
       "illustration": "005_about-brgy-taloc.jpg"
     },
-    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-taloc"
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-taloc",
+    "households2025": "4,237",
+    "population2025": "18,980"
   }
 ]
