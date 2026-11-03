@@ -3283,13 +3283,16 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 /* Info and Tourist Badges */
 .brgy-info-badge,
 .brgy-tourist-badge {
-  display: inline-block;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  margin-right: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  margin-right: 4px;
+  max-width: fit-content;
 }
 
 .brgy-info-badge {
@@ -3302,6 +3305,12 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   color: #f28c28;
   font-weight: 700;
   border: 1px solid rgba(242, 140, 40, 0.2);
+}
+
+.brgy-tourist-badge svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 /* Enhanced Map Button */
