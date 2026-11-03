@@ -3204,15 +3204,20 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 /* Placeholder for barangays without logos */
 .brgy-logo-placeholder {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .brgy-logo-placeholder svg {
-  width: 32px;
-  height: 32px;
-  color: rgba(255, 255, 255, 0.7);
-  stroke-width: 1.5;
+  display: none; /* Hide the house icon */
+}
+
+/* Add a simple initial letter instead */
+.brgy-logo-placeholder::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .brgy-card-header h3 {
