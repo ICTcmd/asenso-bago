@@ -3179,19 +3179,40 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   pointer-events: none;
 }
 
-.brgy-number {
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 900;
-  color: #fff;
-  background: rgba(242, 140, 40, 0.9);
-  border-radius: 10px;
-  padding: 6px 11px;
+.brgy-logo-container {
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 8px rgba(242, 140, 40, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.brgy-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Placeholder for barangays without logos */
+.brgy-logo-placeholder {
+  background: linear-gradient(135deg, rgba(242, 140, 40, 0.15), rgba(201, 162, 39, 0.15));
+  border-color: rgba(242, 140, 40, 0.3);
+}
+
+.brgy-logo-placeholder svg {
+  width: 32px;
+  height: 32px;
+  color: rgba(10, 46, 92, 0.4);
+  stroke-width: 1.5;
 }
 
 .brgy-card-header h3 {
