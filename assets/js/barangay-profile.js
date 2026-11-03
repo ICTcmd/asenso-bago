@@ -129,6 +129,11 @@ function populateProfile(barangay) {
   document.getElementById('fact-land-area').textContent = barangay.landArea;
   document.getElementById('fact-distance').textContent = barangay.distance;
   document.getElementById('fact-type').textContent = barangay.type === 'urban' ? 'Urban' : 'Rural';
+
+  // Reinitialize Lucide icons after content is loaded
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 }
 
 /**
