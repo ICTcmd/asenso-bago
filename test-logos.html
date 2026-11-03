@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logo Test</title>
+  <style>
+    body { padding: 20px; font-family: Arial; }
+    .test-container { margin: 20px 0; }
+    .logo-test { 
+      width: 60px; 
+      height: 60px; 
+      border: 2px solid #ccc; 
+      padding: 6px;
+      display: inline-block;
+      margin: 10px;
+      background: white;
+    }
+    .logo-test img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    h2 { color: #D97732; }
+    .status { padding: 10px; margin: 5px 0; border-radius: 5px; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <h1>Barangay Logo Loading Test</h1>
+  
+  <h2>Test 1: Abuanan Logo</h2>
+  <div class="test-container">
+    <div class="logo-test">
+      <img src="assets/images/barangays/abuanan-logo.png" alt="Abuanan" 
+           onerror="document.getElementById('abuanan-status').className='status error'; document.getElementById('abuanan-status').innerHTML='❌ FAILED TO LOAD';"
+           onload="document.getElementById('abuanan-status').className='status success'; document.getElementById('abuanan-status').innerHTML='✅ LOADED SUCCESSFULLY';">
+    </div>
+    <div id="abuanan-status" class="status">Loading...</div>
+    <p><strong>Path:</strong> assets/images/barangays/abuanan-logo.png</p>
+  </div>
+
+  <h2>Test 2: Alianza Logo</h2>
+  <div class="test-container">
+    <div class="logo-test">
+      <img src="assets/images/barangays/alianza-logo.png" alt="Alianza"
+           onerror="document.getElementById('alianza-status').className='status error'; document.getElementById('alianza-status').innerHTML='❌ FAILED TO LOAD';"
+           onload="document.getElementById('alianza-status').className='status success'; document.getElementById('alianza-status').innerHTML='✅ LOADED SUCCESSFULLY';">
+    </div>
+    <div id="alianza-status" class="status">Loading...</div>
+    <p><strong>Path:</strong> assets/images/barangays/alianza-logo.png</p>
+  </div>
+
+  <h2>Test 3: Bacong Logo</h2>
+  <div class="test-container">
+    <div class="logo-test">
+      <img src="assets/images/barangays/bacong-logo.png" alt="Bacong"
+           onerror="document.getElementById('bacong-status').className='status error'; document.getElementById('bacong-status').innerHTML='❌ FAILED TO LOAD';"
+           onload="document.getElementById('bacong-status').className='status success'; document.getElementById('bacong-status').innerHTML='✅ LOADED SUCCESSFULLY';">
+    </div>
+    <div id="bacong-status" class="status">Loading...</div>
+    <p><strong>Path:</strong> assets/images/barangays/bacong-logo.png</p>
+  </div>
+
+  <hr>
+  <p><strong>Instructions:</strong> Open this file in your browser to test if the logos load correctly.</p>
+  <p>If logos show ✅ LOADED SUCCESSFULLY, the paths are correct.</p>
+  <p>If logos show ❌ FAILED TO LOAD, the files may be missing or paths are incorrect.</p>
+</body>
+</html>
