@@ -316,22 +316,11 @@ const ATTRACTIONS = [
 // Combine all locations
 const ALL_LOCATIONS = [...BARANGAYS, ...ATTRACTIONS];
 
-// Define Bago City boundaries (approximate)
-// These coordinates create a box around Bago City
-const bagoCityBounds = [
-  [10.4000, 122.7000],  // Southwest corner
-  [10.6500, 122.9500]   // Northeast corner
-];
-
 // Initialize map centered on Bago City
 const map = L.map('map', {
   center: [10.5380, 122.8424],
   zoom: 12,
-  zoomControl: false,
-  maxBounds: bagoCityBounds,           // Restrict map to Bago City area
-  maxBoundsViscosity: 1.0,             // Make bounds "solid" (can't pan outside)
-  minZoom: 11,                         // Prevent zooming out too far
-  maxZoom: 18                          // Allow zooming in for details
+  zoomControl: false
 });
 
 // Add tile layer (OpenStreetMap)
