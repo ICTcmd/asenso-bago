@@ -125,7 +125,7 @@ function populateProfile(barangay) {
   document.getElementById('sk-treasurer-name').textContent = barangay.officials.sk_treasurer || 'Vacant';
 
   // Fast Facts
-  document.getElementById('fact-puroks').textContent = barangay.puroks;
+  document.getElementById('fact-puroks').textContent = formatNumber(barangay.puroks);
   document.getElementById('fact-land-area').textContent = barangay.landArea;
   document.getElementById('fact-distance').textContent = barangay.distance;
   document.getElementById('fact-type').textContent = barangay.type === 'urban' ? 'Urban' : 'Rural';
@@ -134,6 +134,14 @@ function populateProfile(barangay) {
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
   }
+}
+
+/**
+ * Format numbers with thousand separators
+ */
+function formatNumber(num) {
+  if (!num && num !== 0) return '';
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 /**
