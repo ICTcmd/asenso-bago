@@ -8,16 +8,16 @@
 
 /* ── CSS Custom Properties (Design Tokens) ── */
 :root {
-  /* Colors - Navy, Gold, Orange Palette */
-  --color-navy-primary: #0A2E5C;
-  --color-navy-dark: #072344;
-  --color-navy-light: #104682;
-  --color-gold: #C9A227;
+  /* Colors - Professional Orange Theme */
+  --color-navy-primary: #0A2342;      /* Deep Navy for sidebar */
+  --color-navy-dark: #072344;         /* Darker navy */
+  --color-navy-light: #123B66;        /* Sidebar navy */
+  --color-gold: #C9A227;              /* Keep gold accent */
   --color-gold-light: #D4B045;
   --color-gold-dark: #A68619;
-  --color-orange: #F28C28;
-  --color-orange-light: #FFA459;
-  --color-orange-dark: #D67616;
+  --color-orange: #D97732;            /* PRIMARY ORANGE - main theme */
+  --color-orange-light: #F3A65A;      /* Secondary orange */
+  --color-orange-dark: #C56620;       /* Darker orange */
   
   /* Semantic Colors */
   --color-success: #059669;
@@ -26,18 +26,18 @@
   --color-info: #3B82F6;
   
   /* Backgrounds */
-  --color-bg-page: #F4F6F9;
+  --color-bg-page: #F7F7F5;           /* Warm page background */
   --color-bg-elevated: #FFFFFF;
-  --color-bg-subtle: #F8FAFC;
+  --color-bg-subtle: #FFF4E8;         /* Light orange tint */
   
   /* Text Colors */
-  --color-text-primary: #172033;
-  --color-text-secondary: #64748B;
+  --color-text-primary: #252525;      /* Charcoal */
+  --color-text-secondary: #6B7280;    /* Secondary text */
   --color-text-tertiary: #94A3B8;
   --color-text-inverse: #FFFFFF;
   
   /* Border Colors */
-  --color-border-light: #E2E8F0;
+  --color-border-light: #E8E5E0;      /* Warm border */
   --color-border-medium: #CBD5E1;
   --color-border-dark: #94A3B8;
   
@@ -1055,7 +1055,7 @@ body {
    ═══════════════════════════════════════════════════════════ */
 .cta-banner {
   margin: var(--space-2) var(--space-4);
-  background: linear-gradient(135deg, var(--color-navy-primary) 0%, var(--color-navy-light) 100%);
+  background: linear-gradient(135deg, #D97732 0%, #F3A65A 100%);
   border-radius: var(--radius-xl);
   padding: var(--space-6) var(--space-5);
   display: flex;
@@ -1106,7 +1106,7 @@ body {
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
   font-weight: var(--font-bold);
-  color: var(--color-navy-primary);
+  color: #D97732;
   cursor: pointer;
   width: 100%;
   -webkit-tap-highlight-color: transparent;
@@ -1200,10 +1200,10 @@ body {
    ═══════════════════════════════════════════════════════════ */
 .bible-verse-card {
   margin: var(--space-2) var(--space-4);
-  background: linear-gradient(135deg, #1A3A2A, #0D2018);
+  background: #FFF4E8;
   border-radius: var(--radius-xl);
   padding: var(--space-4) var(--space-5);
-  border-left: 4px solid var(--color-gold);
+  border-left: 4px solid #D97732;
   box-shadow: var(--shadow-sm);
 }
 
@@ -1221,7 +1221,7 @@ body {
 .bible-verse-label {
   font-size: var(--text-xs);
   font-weight: var(--font-extrabold);
-  color: var(--color-gold);
+  color: #D97732;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1229,7 +1229,7 @@ body {
 .bible-verse-text {
   font-size: var(--text-sm);
   font-style: italic;
-  color: #E8F5E9;
+  color: #252525;
   line-height: 1.7;
   margin-bottom: var(--space-2);
 }
@@ -1237,7 +1237,7 @@ body {
 .bible-verse-ref {
   font-size: var(--text-xs);
   font-weight: var(--font-extrabold);
-  color: var(--color-gold);
+  color: #D97732;
 }
 
 /* ═══════════════════════════════════════════════════════════
