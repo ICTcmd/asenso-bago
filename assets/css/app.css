@@ -2137,9 +2137,9 @@ body {
   }
   
   .sidebar-link.active {
-    background: rgba(242,140,40,0.15);
+    background: rgba(217,119,50,0.15);
     color: var(--color-text-inverse);
-    border-left: 3px solid var(--color-orange);
+    border-left: 3px solid #D97732;
     padding-left: calc(var(--space-3) - 3px);
   }
   
@@ -2491,7 +2491,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 /* ── News Page Redesign ── */
 .news-hero {
-  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
+  background: linear-gradient(135deg, #D97732 0%, #F3A65A 100%);
   padding: 28px 20px 24px;
   position: relative; overflow: hidden;
 }
