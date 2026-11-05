@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legislative Documents - Bago City</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .legislative-header {
+      background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
+      padding: 2rem 1rem;
+      color: white;
+      text-align: center;
+    }
+
+    .legislative-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .legislative-header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .filter-section {
+      padding: 1.5rem 1rem;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-tab {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 2px solid #e5e7eb;
+      background: white;
+      font-size: 0.875rem;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+      background: #0A2E5C;
+      color: white;
+      border-color: #0A2E5C;
+    }
+
+    .search-box {
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #0A2E5C;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: #6b7280;
+    }
+
+    .documents-container {
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .document-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .document-card:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-color: #0A2E5C;
+    }
+
+    .document-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .document-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0A2E5C, #104682);
+    }
+
+    .document-icon svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    .document-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .document-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #111827;
+      margin-bottom: 0.25rem;
+    }
+
+    .document-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .document-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-ordinance {
+      background: #EFF6FF;
+      color: #1E40AF;
+    }
+
+    .badge-resolution {
+      background: #F0FDF4;
+      color: #15803D;
+    }
+
+    .document-year {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .year-group {
+      margin-bottom: 2rem;
+    }
+
+    .year-header {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e5e7eb;
+      position: sticky;
+      top: 120px;
+      background: #f9fafb;
+      z-index: 5;
+    }
+
+    .document-count {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6b7280;
+    }
+
+    .no-results svg {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      color: #d1d5db;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="legislative-header">
+    <h1>📜 Legislative Documents</h1>
+    <p>City Ordinances and Resolutions Archive</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-tabs" id="yearFilters">
+      <button class="filter-tab active" data-year="all">All Years</button>
+      <button class="filter-tab" data-year="2024">2024</button>
+      <button class="filter-tab" data-year="2023">2023</button>
+      <button class="filter-tab" data-year="2022">2022</button>
+      <button class="filter-tab" data-year="2021">2021</button>
+    </div>
+
+    <div class="filter-tabs" id="typeFilters">
+      <button class="filter-tab active" data-type="all">All Documents</button>
+      <button class="filter-tab" data-type="ORDINANCES">Ordinances</button>
+      <button class="filter-tab" data-type="RESOLUTIONS">Resolutions</button>
+    </div>
+
+    <div class="search-box">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search by document number...">
+    </div>
+  </div>
+
+  <!-- Documents Container -->
+  <div class="documents-container" id="documentsContainer">
+    <div class="loading">Loading documents...</div>
+  </div>
+
+  <!-- Back Button (from main app.css) -->
+  <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
+    <button onclick="window.location.href='index.html'" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0A2E5C, #104682); color: white; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 24px; height: 24px;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    </button>
+  </div>
+
+  <script src="assets/js/legislative.js"></script>
+</body>
+</html>
