@@ -131,12 +131,22 @@ function populateProfile(barangay) {
   document.getElementById('fact-distance').textContent = barangay.distance;
   document.getElementById('fact-population').textContent = barangay.population2025 || 'N/A';
 
-  // Reinitialize Lucide icons after content is loaded
+  // Force Lucide icons to reinitialize after DOM updates
+  // Using double RAF for better timing after browser paint
   if (typeof lucide !== 'undefined') {
-    // Use setTimeout to ensure DOM is fully updated before rendering icons
-    setTimeout(() => {
-      lucide.createIcons();
-    }, 100);
+    console.log('Attempting to initialize Lucide icons...');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        lucide.createIcons();
+        console.log('Lucide icons initialized');
+        
+        // Check if icons were created
+        const iconElements = document.querySelectorAll('[data-lucide]');
+        console.log(`Found ${iconElements.length} data-lucide elements`);
+      });
+    });
+  } else {
+    console.error('Lucide library not loaded');
   }
 }
 
