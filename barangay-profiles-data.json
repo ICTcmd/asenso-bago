@@ -142,7 +142,7 @@
     "images": {
       "captain": "003_03-Brgy-Captain-Elvira-A-Zulueta-Atipuluan-2023.jpg",
       "sk_chair": "004_03-SK-Chairman-Kristine-J.-Llegue-Atipuluan-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-atipuluan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-atipuluan",
@@ -240,7 +240,7 @@
     "images": {
       "captain": "003_05-Brgy-Captain-Agustin-C-Granada-Bagroy-2023.jpg",
       "sk_chair": null,
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-bagroy.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-bagroy",
@@ -290,7 +290,7 @@
     "images": {
       "captain": "003_06-Brgy-Captain-Asahel-P-Gayatin-Balingasag-2023.jpg",
       "sk_chair": "004_06-SK-Chairman-Julianae-V-Lavadia-Balingasag-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-balingasag.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-balingasag",
@@ -337,7 +337,7 @@
     "images": {
       "captain": "003_07-Brgy-Captain-Remy-B-Jalea-Binubuhan-2023.jpg",
       "sk_chair": "004_07-SK-Chairman-Aldrea-Kysha-C-Gonzaga-Binubuhan-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-binubuhan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-binubuhan",
@@ -385,7 +385,7 @@
     "images": {
       "captain": "003_08-Brgy-Captain-Glenn-F-Dagunan-Busay-2023.jpg",
       "sk_chair": "004_08-SK-Chairman-Chelyn-A-Halpin-Busay-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-busay.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-busay",
@@ -435,7 +435,7 @@
     "images": {
       "captain": "003_09-Brgy-Captain-Roberto-C-Saylo-Calumangan-2023.jpg",
       "sk_chair": "004_09-SK-Chairman-Carmela-Dawn-E-Antonio-Calumangan-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-calumangan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-calumangan",
@@ -485,7 +485,7 @@
     "images": {
       "captain": "003_10-Brgy-Captain-Nelida-T-Gadian-Caridad-2023.jpg",
       "sk_chair": "004_10-SK-Chairman-Ynna-D-Ramirez-Caridad-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-caridad.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-caridad",
@@ -535,7 +535,7 @@
     "images": {
       "captain": "003_12-Brgy-Captain-Rey-A-Guzon-Dulao-2023.jpg",
       "sk_chair": "004_12-SK-Chairman-Alleah-Lyka-T-Casiano-Dulao-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-dulao.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-dulao",
@@ -585,7 +585,7 @@
     "images": {
       "captain": "003_13-Brgy-Captain-Hernani-L-Abindan-Ilijan-2023.jpg",
       "sk_chair": "004_13-SK-Chairman-Ejan-Dela-Cruz-Ilijan-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-ilijan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ilijan",
@@ -635,7 +635,7 @@
     "images": {
       "captain": "003_14-Brgy-Captain-Jose-Ermelo-Z-Jara-Lag-asan-2023.jpg",
       "sk_chair": "004_14-SK-Chairman-Al-Christler-E-Dela-Cruz-Lag-asan-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-lagasan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-lag-asan",
@@ -685,7 +685,7 @@
     "images": {
       "captain": "003_15-Brgy-Captain-Jovito-M-Gahaton-Ma-ao-2023.jpg",
       "sk_chair": "004_15-SK-Chairman-Leo-Therese-B-Decatoria-Ma-ao-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-maao.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-ma-ao",
@@ -735,7 +735,7 @@
     "images": {
       "captain": "003_16-Brgy-Captain-Melchor-T-Sayco-Mailum-2023.jpg",
       "sk_chair": "004_16-SK-Chairman-Mark-Steven-B-Capunong-Mailum-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-mailum.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-mailum",
@@ -784,7 +784,7 @@
     "images": {
       "captain": "003_17-Brgy-Captain-Henry-T-Alvarez-Malingin-2023.jpg",
       "sk_chair": "004_Janella-T.-Baylon-SK-Chairman-Malingin.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-malingin.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-malingin",
@@ -834,7 +834,7 @@
     "images": {
       "captain": "003_18-Brgy-Captain-Rebecca-C-Eyoy-Napoles.jpg",
       "sk_chair": "004_18-SK-Chairman-Rica-Joyce-B-Orense-Napoles-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": null
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-napoles",
@@ -884,7 +884,7 @@
     "images": {
       "captain": "003_19-Brgy-Captain-Fely-G-Evangelio-Pacol-2023.jpg",
       "sk_chair": "004_19-SK-Chairman-Tricia-F-Tayongtong-Pacol-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-pacol.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-pacol",
@@ -933,7 +933,7 @@
     "images": {
       "captain": "003_20-Brgy-Captain-Aurelio-G-Arquillas-Jr-Poblacion-2023.jpg",
       "sk_chair": "004_20-SK-Chairman-Gene-Manuel-B.-Torres-Poblacion-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-poblacion.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-poblacion",
@@ -980,7 +980,7 @@
     "images": {
       "captain": "003_21-Brgy-Captain-Noel-D.-Valenzuela-Sagasa-2023.jpg",
       "sk_chair": "004_SK-Chairman-Angela-Marie-D.-Ga-Sagasa-2025.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": null
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sagasa",
@@ -1030,7 +1030,7 @@
     "images": {
       "captain": "003_22-Brgy-Captain-Danilo-U-Famoso-Sampinit-2023.jpg",
       "sk_chair": "004_22-SK-Chairman-Franceine-Erich-D-Villariez-Sampinit-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": null
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-sampinit",
@@ -1080,7 +1080,7 @@
     "images": {
       "captain": "003_23-Brgy-Captain-Maria-May-C-Suarez-Tabunan-2023.jpg",
       "sk_chair": "004_SK-Chairman-Patrick-John-D.-Palallos-Tabunan-2025.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-tabunan.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-tabunan",
@@ -1130,7 +1130,7 @@
     "images": {
       "captain": "003_24-Brgy-Captain-Delia-M-Teovisio-Taloc-2023.jpg",
       "sk_chair": "004_24-SK-Chairman-Rowel-A-Capillo-Taloc-2023.jpg",
-      "logo": null,
+      "logo": true,
       "illustration": "005_about-brgy-taloc.jpg"
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-taloc",
