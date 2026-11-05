@@ -133,7 +133,10 @@ function populateProfile(barangay) {
 
   // Reinitialize Lucide icons after content is loaded
   if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
+    // Use setTimeout to ensure DOM is fully updated before rendering icons
+    setTimeout(() => {
+      lucide.createIcons();
+    }, 100);
   }
 }
 
