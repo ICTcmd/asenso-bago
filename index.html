@@ -1643,7 +1643,7 @@
       <!-- Menu Card -->
       <div class="menu-card">
 
-        <div class="menu-row" onclick="showToast('My Profile', 'Profile management coming soon!')" style="cursor: pointer;">
+        <div class="menu-row" data-action="my-profile" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0zM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
@@ -1655,7 +1655,7 @@
           </svg>
         </div>
 
-        <div class="menu-row" onclick="showToast('My Applications', 'Application tracking coming soon!')" style="cursor: pointer;">
+        <div class="menu-row" data-action="my-applications" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z"/>
@@ -1667,7 +1667,7 @@
           </svg>
         </div>
 
-        <div class="menu-row" onclick="showToast('Notifications', 'Push notifications coming soon!')" style="cursor: pointer;">
+        <div class="menu-row" data-action="notifications" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 0 0-5-5.917V4a1 1 0 1 0-2 0v1.083A6 6 0 0 0 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 1 1-6 0v-1m6 0H9"/>
@@ -1679,7 +1679,7 @@
           </svg>
         </div>
 
-        <div class="menu-row" onclick="showToast('Privacy & Security', 'Privacy settings coming soon!')" style="cursor: pointer;">
+        <div class="menu-row" data-action="privacy" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
@@ -1691,7 +1691,7 @@
           </svg>
         </div>
 
-        <div class="menu-row" onclick="showToast('Help & Support', 'Support center coming soon!')" style="cursor: pointer;">
+        <div class="menu-row" data-action="help" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9 5.25h.008v.008H12v-.008z"/>
@@ -1703,7 +1703,7 @@
           </svg>
         </div>
 
-        <div class="menu-row" onclick="showToast('About Asenso Bago', 'Version 1.0.0 - Official app of Bago City Government')" style="cursor: pointer;">
+        <div class="menu-row" data-action="about" style="cursor: pointer;">
           <div class="menu-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zm-9-3.75h.008v.008H12V8.25z"/>
@@ -2740,3 +2740,229 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       AUTHENTICATION MODAL
+       Sign In / Sign Up forms with Supabase integration
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="auth-modal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-overlay"></div>
+    <div class="auth-modal-content">
+      <button class="auth-modal-close" onclick="window.authManager.closeAuthModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- Sign In Form -->
+      <div id="signin-form" class="auth-form">
+        <div class="auth-header">
+          <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="Asenso Bago" class="auth-logo" />
+          <h2>Welcome Back</h2>
+          <p>Sign in to your Asenso Bago account</p>
+        </div>
+        
+        <form id="signin-form-element" onsubmit="handleSignIn(event)">
+          <div class="form-group">
+            <label for="signin-email">Email Address</label>
+            <input type="email" id="signin-email" class="form-input" required placeholder="your.email@example.com" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" class="form-input" required placeholder="Enter your password" />
+          </div>
+          
+          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">
+            Sign In
+          </button>
+        </form>
+        
+        <div class="auth-divider">
+          <span>Don't have an account?</span>
+        </div>
+        
+        <button class="btn-link" onclick="window.authManager.showSignUpModal()" style="width: 100%;">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="signup-form" class="auth-form" style="display: none;">
+        <div class="auth-header">
+          <img src="assets/images/May Gugma Nga Panghimanwa Logo Final.png" alt="Asenso Bago" class="auth-logo" />
+          <h2>Create Account</h2>
+          <p>Join Asenso Bago to access all services</p>
+        </div>
+        
+        <form id="signup-form-element" onsubmit="handleSignUp(event)">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" required placeholder="Juan Dela Cruz" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" class="form-input" required placeholder="your.email@example.com" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-phone">Phone Number (Optional)</label>
+            <input type="tel" id="signup-phone" class="form-input" placeholder="09XX XXX XXXX" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" class="form-input" required placeholder="At least 6 characters" minlength="6" />
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-password-confirm">Confirm Password</label>
+            <input type="password" id="signup-password-confirm" class="form-input" required placeholder="Re-enter password" minlength="6" />
+          </div>
+          
+          <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">
+            Create Account
+          </button>
+        </form>
+        
+        <div class="auth-divider">
+          <span>Already have an account?</span>
+        </div>
+        
+        <button class="btn-link" onclick="window.authManager.showSignInModal()" style="width: 100%;">
+          Sign In
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container for notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCRIPTS
+       Load Supabase and authentication modules
+  ═══════════════════════════════════════════════════════════ -->
+  
+  <!-- Utility Functions -->
+  <script src="assets/js/utils.js"></script>
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Supabase Configuration -->
+  <script src="assets/js/supabase-config.js"></script>
+  
+  <!-- Authentication Manager -->
+  <script src="assets/js/auth-manager.js"></script>
+  
+  <!-- Profile Manager -->
+  <script src="assets/js/profile-manager.js"></script>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    // AUTHENTICATION HANDLERS
+    // ═══════════════════════════════════════════════════════════
+    
+    async function handleSignIn(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('signin-email').value;
+      const password = document.getElementById('signin-password').value;
+      
+      await window.authManager.signIn(email, password);
+    }
+    
+    async function handleSignUp(event) {
+      event.preventDefault();
+      
+      const fullName = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const phone = document.getElementById('signup-phone').value;
+      const password = document.getElementById('signup-password').value;
+      const passwordConfirm = document.getElementById('signup-password-confirm').value;
+      
+      // Validate passwords match
+      if (password !== passwordConfirm) {
+        showToast('Password Mismatch', 'Passwords do not match. Please try again.');
+        return;
+      }
+      
+      await window.authManager.signUp(email, password, fullName, phone);
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // INITIALIZE APP
+    // ═══════════════════════════════════════════════════════════
+    
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Initialize authentication
+      if (window.authManager) {
+        await window.authManager.init();
+      }
+      
+      // Initialize profile manager
+      if (window.profileManager) {
+        window.profileManager.init();
+      }
+      
+      // Setup splash screen buttons
+      const getStartedBtn = document.getElementById('get-started-btn');
+      const getStartedBtnDesktop = document.getElementById('get-started-btn-desktop');
+      const signInLinks = document.querySelectorAll('.btn-link');
+      
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', () => {
+          document.getElementById('splash').style.display = 'none';
+          document.getElementById('main-app').style.display = 'flex';
+          document.getElementById('bottom-nav').style.display = 'flex';
+        });
+      }
+      
+      if (getStartedBtnDesktop) {
+        getStartedBtnDesktop.addEventListener('click', () => {
+          document.getElementById('splash').style.display = 'none';
+          document.getElementById('main-app').style.display = 'flex';
+          document.getElementById('bottom-nav').style.display = 'flex';
+        });
+      }
+      
+      // Handle sign in links on splash screen
+      signInLinks.forEach(link => {
+        if (link.textContent.includes('Sign in')) {
+          link.addEventListener('click', () => {
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('bottom-nav').style.display = 'flex';
+            if (window.authManager) {
+              window.authManager.showSignInModal();
+            }
+          });
+        }
+      });
+      
+      // Setup CTA banner button
+      const ctaBtn = document.querySelector('.cta-btn');
+      if (ctaBtn) {
+        ctaBtn.addEventListener('click', () => {
+          if (window.authManager) {
+            window.authManager.showSignUpModal();
+          }
+        });
+      }
+      
+      // Setup profile sign in button
+      const profileSignInBtn = document.querySelector('.signin-btn');
+      if (profileSignInBtn) {
+        profileSignInBtn.addEventListener('click', () => {
+          if (window.authManager && !window.authManager.isAuthenticated()) {
+            window.authManager.showSignInModal();
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
