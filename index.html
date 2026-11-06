@@ -2646,6 +2646,29 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- Barangay Logo Fallback Handler -->
+<script>
+// Handle missing barangay logos with fallback
+document.addEventListener('DOMContentLoaded', function() {
+  const brgyLogos = document.querySelectorAll('.brgy-logo');
+  const fallbackLogo = 'assets/images/bago-icon.png';
+  
+  brgyLogos.forEach(logo => {
+    // Add error handler for each logo
+    logo.addEventListener('error', function() {
+      console.log('Logo failed to load:', this.src);
+      this.src = fallbackLogo;
+      this.alt = 'Bago City Logo';
+    });
+    
+    // Also check if image is already broken
+    if (!logo.complete || logo.naturalWidth === 0) {
+      logo.src = fallbackLogo;
+    }
+  });
+});
+</script>
+
 <!-- Tourism Category Filter -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
