@@ -2306,6 +2306,15 @@
   document.querySelectorAll('.service-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const action = btn.getAttribute('data-action');
+      const target = btn.getAttribute('data-target');
+      
+      // Handle data-target attribute (for page navigation)
+      if (target) {
+        navigateTo(target);
+        return;
+      }
+      
+      // Handle data-action attribute (for special actions)
       switch (action) {
         case 'health':
           navigateTo('page-programs');
@@ -2318,6 +2327,7 @@
           break;
         case 'about':
           navigateTo('page-barangays');
+          break;
           break;
         default:
           showToast('Coming soon! Check back for updates.');
@@ -2641,29 +2651,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         window.location.href = `barangay-profile.html?id=${slug}`;
       });
-    }
-  });
-});
-</script>
-
-<!-- Barangay Logo Fallback Handler -->
-<script>
-// Handle missing barangay logos with fallback
-document.addEventListener('DOMContentLoaded', function() {
-  const brgyLogos = document.querySelectorAll('.brgy-logo');
-  const fallbackLogo = 'assets/images/bago-icon.png';
-  
-  brgyLogos.forEach(logo => {
-    // Add error handler for each logo
-    logo.addEventListener('error', function() {
-      console.log('Logo failed to load:', this.src);
-      this.src = fallbackLogo;
-      this.alt = 'Bago City Logo';
-    });
-    
-    // Also check if image is already broken
-    if (!logo.complete || logo.naturalWidth === 0) {
-      logo.src = fallbackLogo;
     }
   });
 });
