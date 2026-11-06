@@ -9,9 +9,9 @@
 /* ── CSS Custom Properties (Design Tokens) ── */
 :root {
   /* Colors - Professional Orange Theme */
-  --color-navy-primary: #0A2342;      /* Deep Navy for sidebar */
-  --color-navy-dark: #072344;         /* Darker navy */
-  --color-navy-light: #123B66;        /* Sidebar navy */
+  --color-navy-primary: #C5510D;      /* Deep Burnt Orange - replaces navy */
+  --color-navy-dark: #A64608;         /* Darker burnt orange */
+  --color-navy-light: #E67236;        /* Lighter warm orange */
   --color-gold: #C9A227;              /* Keep gold accent */
   --color-gold-light: #D4B045;
   --color-gold-dark: #A68619;
@@ -23,7 +23,7 @@
   --color-success: #059669;
   --color-warning: #F59E0B;
   --color-error: #DC2626;
-  --color-info: #3B82F6;
+  --color-info: #D97732;              /* Changed from blue to orange */
   
   /* Backgrounds */
   --color-bg-page: #F7F7F5;           /* Warm page background */
