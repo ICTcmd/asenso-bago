@@ -413,42 +413,30 @@ body {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: linear-gradient(160deg, var(--color-navy-primary) 0%, var(--color-navy-light) 50%, var(--color-navy-primary) 100%);
+  background: #FFFAF5;
 }
 #splash[style*="display: none"] { pointer-events: none !important; z-index: -1 !important; }
 
-/* Mobile splash — full screen, elegant */
+/* Mobile splash — premium warm-white design */
 .splash-mobile {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, var(--color-navy-primary) 0%, var(--color-navy-light) 50%, var(--color-navy-primary) 100%);
+  background: linear-gradient(180deg, #FFFAF5 0%, #FFF4E8 100%);
 }
 
-/* Animated background glow */
+/* Subtle orange glow accent at top */
 .splash-mobile::before {
   content: '';
   position: absolute;
-  top: -100px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(242, 140, 40, 0.15) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
-}
-.splash-mobile::after {
-  content: '';
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 65%);
+  width: 80%;
+  height: 200px;
+  background: radial-gradient(ellipse at top, rgba(217, 119, 50, 0.08) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -459,33 +447,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-16) var(--space-8) var(--space-8);
+  padding: var(--space-16) var(--space-6) var(--space-6);
   position: relative;
   z-index: 1;
   text-align: center;
+  gap: var(--space-10);
 }
 
 /* Logo lockup */
 .splash-logo-lockup {
   position: relative;
-  margin-bottom: var(--space-10);
   width: 100%;
 }
-
-/* Background watermark */
-.splash-logo-bg {
-  position: absolute;
-  inset: -40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  opacity: 0.06;
-  pointer-events: none;
-  filter: blur(2px);
-}
-.splash-bg-seal { width: 160px; height: 160px; }
-.splash-bg-app  { width: 160px; height: 160px; }
 
 /* Foreground logos side by side */
 .splash-logos-row {
@@ -496,84 +469,234 @@ body {
   position: relative;
   z-index: 1;
 }
+
 .splash-logo-seal {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.15));
+  background: #FFFFFF;
   border-radius: var(--radius-full);
-  border: 2px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.05);
-  padding: var(--space-1);
+  padding: var(--space-3);
+  box-shadow: 0 4px 12px rgba(217, 119, 50, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(217, 119, 50, 0.1);
 }
+
 .splash-logo-divider {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent);
+  width: 2px;
+  height: 70px;
+  background: linear-gradient(to bottom, transparent, rgba(217, 119, 50, 0.2), transparent);
+  border-radius: 1px;
 }
+
 .splash-logo-app {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 24px rgba(242,140,40,0.3));
+  background: #FFFFFF;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2);
+  box-shadow: 0 4px 12px rgba(217, 119, 50, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(217, 119, 50, 0.1);
 }
 
 /* Text block */
-.splash-text-block { position: relative; z-index: 1; }
+.splash-text-block {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
 .splash-city-name {
   font-family: var(--font-heading);
-  font-size: var(--text-3xl);
+  font-size: 32px;
   font-weight: var(--font-black);
-  color: var(--color-text-inverse);
-  letter-spacing: 0.025em;
-  margin-bottom: var(--space-1);
+  color: #0A2342;
+  letter-spacing: 0.015em;
+  margin: 0;
+  line-height: 1.2;
 }
+
 .splash-city-sub {
-  font-size: var(--text-xs);
-  color: rgba(255,255,255,0.7);
+  font-size: 11px;
+  color: #D97732;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: var(--space-4);
-  font-weight: var(--font-semibold);
+  letter-spacing: 0.12em;
+  font-weight: var(--font-bold);
+  margin: 0;
 }
-.splash-divider-line {
-  width: 48px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-orange), transparent);
-  margin: 0 auto var(--space-4);
-  border-radius: var(--radius-sm);
-}
+
 .splash-tagline {
-  font-size: var(--text-base);
-  color: rgba(255,255,255,0.85);
+  font-size: 16px;
+  color: #6B7280;
   line-height: 1.6;
-  max-width: 300px;
+  max-width: 280px;
+  margin: 0;
+  font-weight: var(--font-medium);
+}
   margin: 0 auto;
 }
 
 /* Footer buttons */
 .splash-mobile-footer {
-  padding: 0 var(--space-6) max(40px, env(safe-area-inset-bottom, 40px));
+  padding: 0 var(--space-6) max(32px, env(safe-area-inset-bottom, 32px));
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
   position: relative;
   z-index: 1;
 }
-.splash-mobile-footer .btn-primary {
-  background: linear-gradient(135deg, var(--color-orange), var(--color-orange-light));
-  box-shadow: var(--shadow-xl);
-  padding: var(--space-4);
-  font-size: var(--text-base);
-  border-radius: var(--radius-lg);
+
+.splash-get-started {
+  background: #D97732 !important;
+  color: #FFFFFF !important;
+  height: 54px !important;
+  border-radius: 12px !important;
+  font-size: 16px !important;
+  font-weight: var(--font-bold) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 14px rgba(217, 119, 50, 0.25), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+  width: 100% !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
-.splash-mobile-footer .btn-link { 
-  color: rgba(255,255,255,0.5);
-  font-size: var(--text-sm);
+
+.splash-get-started:hover {
+  background: #C26122 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(217, 119, 50, 0.3), 0 3px 8px rgba(0, 0, 0, 0.1) !important;
 }
-.splash-mobile-footer .btn-link span { 
-  color: rgba(255,255,255,0.85);
-  font-weight: var(--font-bold);
+
+.splash-get-started:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px rgba(217, 119, 50, 0.2), 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+}
+
+.splash-signin-link {
+  color: #6B7280 !important;
+  font-size: 14px !important;
+  font-weight: var(--font-medium) !important;
+  text-align: center !important;
+  background: none !important;
+  border: none !important;
+  padding: var(--space-2) !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.splash-signin-link span {
+  color: #D97732 !important;
+  font-weight: var(--font-bold) !important;
+  text-decoration: none !important;
+}
+
+.splash-signin-link:hover span {
+  text-decoration: underline !important;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-height: 700px) {
+  .splash-mobile-body {
+    padding: var(--space-10) var(--space-6) var(--space-4);
+    gap: var(--space-6);
+  }
+  
+  .splash-logo-seal,
+  .splash-logo-app {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .splash-city-name {
+    font-size: 28px;
+  }
+  
+  .splash-tagline {
+    font-size: 14px;
+  }
+}
+
+@media (max-height: 600px) {
+  .splash-mobile-body {
+    padding: var(--space-8) var(--space-6) var(--space-3);
+    gap: var(--space-4);
+  }
+  
+  .splash-logo-seal,
+  .splash-logo-app {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .splash-logo-divider {
+    height: 50px;
+  }
+  
+  .splash-city-name {
+    font-size: 24px;
+  }
+  
+  .splash-city-sub {
+    font-size: 10px;
+  }
+  
+  .splash-tagline {
+    font-size: 13px;
+    max-width: 240px;
+  }
+  
+  .splash-get-started {
+    height: 48px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .splash-mobile-body {
+    padding: var(--space-6) var(--space-6) var(--space-2);
+    gap: var(--space-3);
+    justify-content: flex-start;
+  }
+  
+  .splash-logo-seal,
+  .splash-logo-app {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .splash-logo-divider {
+    height: 40px;
+  }
+  
+  .splash-city-name {
+    font-size: 22px;
+  }
+  
+  .splash-tagline {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  
+  .splash-mobile-footer {
+    padding: 0 var(--space-6) var(--space-4);
+    gap: var(--space-2);
+  }
+  
+  .splash-get-started {
+    height: 44px !important;
+    font-size: 14px !important;
+  }
+  
+  .splash-signin-link {
+    font-size: 13px !important;
+  }
 }
 
 /* Desktop splash — hidden on mobile */
