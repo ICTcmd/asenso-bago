@@ -2686,10 +2686,11 @@ body {
   .splash-prog-logo { width: 40px; height: 40px; border-radius: 20px; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.12); object-fit: cover; }
 
   .splash-desktop-right {
-    display: flex; flex-direction: column; justify-content: space-between;
+    display: flex; flex-direction: column; justify-content: flex-start;
     padding: 60px;
     background: linear-gradient(160deg, #0A2E5C 0%, #0D3A6F 60%, #104682 100%);
     position: relative; overflow: hidden;
+    gap: 60px;
   }
   .splash-desktop-right::before {
     content: '';
