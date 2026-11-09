@@ -541,7 +541,7 @@ body {
 
 /* Footer buttons */
 .splash-mobile-footer {
-  padding: 0 var(--space-6) max(80px, env(safe-area-inset-bottom, 80px));
+  padding: 0 var(--space-6) max(120px, env(safe-area-inset-bottom, 120px));
   display: flex;
   flex-direction: column;
   gap: 14px;
