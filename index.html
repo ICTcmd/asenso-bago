@@ -2354,6 +2354,11 @@
   // --- Service Grid Items -----------------------------------------------------
   document.querySelectorAll('.service-item').forEach(btn => {
     btn.addEventListener('click', () => {
+      // Skip if this is a link element (it will navigate normally)
+      if (btn.tagName === 'A') {
+        return;
+      }
+      
       const action = btn.getAttribute('data-action');
       const target = btn.getAttribute('data-target');
       
