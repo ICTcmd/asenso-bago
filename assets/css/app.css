@@ -1769,11 +1769,11 @@ body {
 .profile-card {
   display: flex; 
   align-items: center; 
-  gap: var(--space-4);
+  gap: var(--space-3);
   margin: 0 var(--space-4) var(--space-3);
   background: linear-gradient(135deg, var(--color-navy-primary) 0%, var(--color-navy-light) 100%);
   border-radius: var(--radius-2xl); 
-  padding: var(--space-5);
+  padding: var(--space-4);
   box-shadow: var(--shadow-xl);
 }
 .avatar {
@@ -1793,19 +1793,27 @@ body {
   color: var(--color-text-inverse); 
 }
 .profile-info { 
-  flex: 1; 
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 .profile-info h3 { 
   font-family: var(--font-heading);
   font-size: var(--text-lg); 
   font-weight: var(--font-extrabold); 
-  color: var(--color-text-inverse); 
+  color: var(--color-text-inverse);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .profile-info p  { 
   font-size: var(--text-xs); 
   color: rgba(255,255,255,0.6); 
   margin-top: var(--space-1); 
-  font-weight: var(--font-medium); 
+  font-weight: var(--font-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .signin-btn {
   background: var(--color-bg-elevated); 
