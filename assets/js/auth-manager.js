@@ -119,16 +119,22 @@ class AuthManager {
     if (!this.currentUser) return null;
 
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
       const { data, error } = await this.supabase
         .from('profiles')
-        .select('*')
+        .select('id, email, full_name, phone_number')
         .eq('id', this.currentUser.id)
-        .single();
+        .single()
+        .abortSignal(controller.signal);
+      clearTimeout(timeout);
 
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Failed to load profile:', error);
+      if (error.name !== 'AbortError') {
+        console.error('Failed to load profile:', error);
+      }
       return null;
     }
   }
@@ -138,20 +144,26 @@ class AuthManager {
     if (!this.currentUser) return { success: false };
 
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
       const { data, error } = await this.supabase
         .from('profiles')
         .update(updates)
         .eq('id', this.currentUser.id)
         .select()
-        .single();
+        .single()
+        .abortSignal(controller.signal);
+      clearTimeout(timeout);
 
       if (error) throw error;
 
       showToast('Profile Updated', 'Your profile has been updated successfully.');
       return { success: true, data };
     } catch (error) {
-      console.error('Failed to update profile:', error);
-      showToast('Update Failed', error.message || 'Failed to update profile');
+      if (error.name !== 'AbortError') {
+        console.error('Failed to update profile:', error);
+        showToast('Update Failed', error.message || 'Failed to update profile');
+      }
       return { success: false, error };
     }
   }

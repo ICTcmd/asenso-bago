@@ -3,8 +3,7 @@
    Professional Civic Technology Design
    ═══════════════════════════════════════════════════════════ */
 
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+/* Google Fonts loaded via <link rel="preload"> in index.html for non-blocking render */
 
 /* ── CSS Custom Properties (Design Tokens) ── */
 :root {
