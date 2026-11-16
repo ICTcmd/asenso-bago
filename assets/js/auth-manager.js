@@ -104,6 +104,11 @@ class AuthManager {
       const { error } = await this.supabase.auth.signOut();
       if (error) throw error;
 
+      // Clear cached profile from sessionStorage on sign-out
+      if (this.currentUser) {
+        try { sessionStorage.removeItem(`profile_${this.currentUser.id}`); } catch (_) {}
+      }
+
       this.currentUser = null;
       showToast('Signed Out', 'You have been signed out successfully.');
       return { success: true };
@@ -114,10 +119,21 @@ class AuthManager {
     }
   }
 
-  // Load user profile from database
+  // Load user profile from database — with sessionStorage caching
+  // Profile only fetched from DB once per browser session; cleared on sign-out
   async loadUserProfile() {
     if (!this.currentUser) return null;
 
+    // ── Check sessionStorage cache first ─────────────────────────────────────
+    const cacheKey = `profile_${this.currentUser.id}`;
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (_) { /* sessionStorage unavailable — continue to DB fetch */ }
+
+    // ── Cache miss — fetch from Supabase ─────────────────────────────────────
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 5000);
@@ -130,6 +146,10 @@ class AuthManager {
       clearTimeout(timeout);
 
       if (error) throw error;
+
+      // Store in sessionStorage so next page navigation skips the DB
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch (_) {}
+
       return data;
     } catch (error) {
       if (error.name !== 'AbortError') {
@@ -139,7 +159,7 @@ class AuthManager {
     }
   }
 
-  // Update user profile
+  // Update user profile — clears the cache so next load gets fresh data
   async updateProfile(updates) {
     if (!this.currentUser) return { success: false };
 
@@ -156,6 +176,9 @@ class AuthManager {
       clearTimeout(timeout);
 
       if (error) throw error;
+
+      // Invalidate cache so the updated profile is shown immediately
+      try { sessionStorage.removeItem(`profile_${this.currentUser.id}`); } catch (_) {}
 
       showToast('Profile Updated', 'Your profile has been updated successfully.');
       return { success: true, data };
