@@ -7,7 +7,7 @@
 // ── CONFIG — API key loaded from chatbot-config.js ────────
 // The actual key is in chatbot-config.js which is NOT committed to Git
 const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : 'YOUR_GEMINI_API_KEY_HERE';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
 const SYSTEM_PROMPT = `You are the official AI assistant of the City Government of Bago, Negros Occidental, Philippines. Your name is "Bago City Assistant".
