@@ -21,6 +21,16 @@
   <script>
     // Set platform class before page renders to prevent layout flash
     document.documentElement.className = window.innerWidth >= 900 ? 'is-desktop' : 'is-mobile';
+
+    // Force service worker to update immediately for all users
+    // This ensures everyone gets new CSP headers and updated JS files
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(reg => {
+          reg.update(); // Check for new SW version
+        });
+      });
+    }
   </script>
   <script type="application/ld+json">
   {
