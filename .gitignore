@@ -72,3 +72,6 @@ ENV/
 *.bak
 *.backup
 *.old
+
+# API keys — never commit these
+assets/js/chatbot-config.js
