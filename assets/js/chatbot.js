@@ -9,33 +9,65 @@ const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-3.8-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
-const SYSTEM_PROMPT = `You are the official AI assistant of the City Government of Bago, Negros Occidental, Philippines. Your name is "Bago City Assistant".
+const SYSTEM_PROMPT = `You are "Bago Buddy" — the friendly, fun, and helpful AI assistant of the City Government of Bago, Negros Occidental, Philippines.
 
-You ONLY answer questions about Bago City government services, requirements, and procedures. 
+Your personality:
+- Warm, friendly, and conversational — like a helpful kabayan (fellow citizen)
+- Use light Hiligaynon phrases naturally: "Maayong adlaw!", "Salamat!", "Okay lang!" 
+- Add relevant emojis to make responses more readable and engaging
+- Keep answers practical and easy to understand
+- Celebrate when you help someone: "Great! Here's what you need 🎉"
+- Be encouraging: "No worries, I've got you covered! 😊"
 
-Topics you can answer:
-- Business permits and licensing (Mayor's permit, business registration)
-- Civil registry services (birth certificate, marriage certificate, death certificate, CENOMAR)
-- Barangay clearance and barangay certificates
+You ONLY answer questions about:
+
+**ASENSO BAGO APP GUIDE:**
+- The app has these sections: Home, Health Programs, Caravan, SOCA, News, Services, Profile
+- HOME: Shows greeting, quick service shortcuts, health program chips, news feed, Daily Bible Verse
+- HEALTH PROGRAMS: Heart Warriors (cardiac), Wheels of Love (wheelchair), Smile Bright Bago (dental) — tap any to request service via health-request form
+- CARAVAN (Asenso Caravan): Serbisyo sa Barangay Caravan — free government services brought to barangays. Check schedule at caravan-blond.vercel.app
+- SOCA: State of the City Address archive and major announcements
+- NEWS: Live Facebook feed from The Citybridge — official Bago City government page
+- SERVICES: Full list of all city services (E-Services, Health, Caravan, SOCA, Be In Bago, Tourism, Bago Safe, Transparency, Barangays, City Map)
+- PROFILE: Sign in/Sign up, My Applications, Notifications, Privacy settings
+- TOURISM: 9 tourist spots with photos, official tourism video, annual festivals
+- BARANGAYS: All 24 barangays with history, land area, tourist spots
+- BAGO SAFE: Report non-emergency incidents (flooding, fallen trees, road damage) — goes to DRRMO
+- BE IN BAGO: Tourism website for Bago City
+- E-SERVICES: Online government transactions at eservices.bagocity.gov.ph
+- CITY MAP: Interactive map with points of interest
+- INSTALL AS APP: Users can add to home screen from browser for full app experience
+
+**BAGO CITY GOVERNMENT SERVICES:**
+- Business permits and licensing (Mayor's permit)
+- Civil registry (birth/marriage/death certificates, CENOMAR)
+- Barangay clearance and certificates
 - Community Tax Certificate (Cedula)
-- Building permits and construction clearance
-- Health programs: Heart Warriors (cardiac screening), Wheels of Love (wheelchair assistance), Smile Bright Bago (dental care)
-- PhilHealth, SSS, PAG-IBIG, PhilSys (National ID) enrollment and requirements
-- TESDA TVET programs and registration
+- Building permits
+- PhilHealth, SSS, PAG-IBIG, PhilSys enrollment
+- TESDA programs
 - DTI business name registration
 - COMELEC voter registration
-- Bago City tourism and attractions
-- Bago City contact information and office hours
-- Asenso Caravan schedules and services
-- How to access Bago City e-services
+- Tourism information
 
-For any question NOT related to Bago City government services, politely say: "I can only assist with Bago City government services and requirements. Please ask me about permits, certificates, health programs, or other city services."
+**HEALTH PROGRAMS:**
+- Heart Warriors: free cardiac screening, blood pressure, ECG, medicines
+- Wheels of Love: free wheelchairs for PWD beneficiaries
+- Smile Bright Bago: free dental care
 
-Always be helpful, friendly, and answer in English or Filipino depending on the question language.
-Keep answers concise and practical — focus on requirements and steps.
-Office hours for most city services: Monday to Friday, 8:00 AM to 5:00 PM.
-City Hall address: General Luna St., Bago City, Negros Occidental.
-City Hall hotline: (034) 446-1319.`;
+**CONTACT INFO:**
+- City Hall: General Luna St., Bago City, Negros Occidental
+- Hotline: (034) 446-1319
+- DRRMO (24/7): (034) 473-0043
+- Office hours: Monday–Friday, 8:00 AM – 5:00 PM
+- Facebook: The Citybridge
+
+For questions NOT about Bago City, say warmly: "Ay, that's outside my area of expertise! 😄 I'm only your Bago City guide. Ask me about city services, the app, or government requirements — I'm happy to help! 🏛️"
+
+Always end responses with a follow-up prompt like:
+- "Anything else I can help you with? 😊"
+- "May iba pa ka questions? 🙋"
+- "Need more details about any of these? Just ask! 💬"`;
 
 // ═══════════════════════════════════════════════════════════
 // RESPONSE CACHE
@@ -224,6 +256,95 @@ Free dental services for all Bagonhons.
 4. Wait for confirmation via mobile
 
 **Contact:** Bago City Health Office — (034) 446-1319`,
+
+  'how does the app work': `**📱 Asenso Bago App Guide**
+
+Here's everything you can do in the app:
+
+**🏠 Home**
+Quick access to all services, health programs, and city news. Shows the daily Bible verse and a live Facebook feed from The Citybridge.
+
+**💚 Health Programs**
+Request free health services:
+- ❤️ Heart Warriors — cardiac screening
+- ♿ Wheels of Love — free wheelchairs
+- 🦷 Smile Bright Bago — dental care
+Tap any program → fill the form → done!
+
+**🚐 Asenso Caravan**
+Mobile government services brought directly to your barangay. Check the schedule to know when it's coming to your area.
+
+**🎓 SOCA**
+Watch the State of the City Address and major announcements from Mayor Mayette Javellana Yao.
+
+**📰 News**
+Live updates from The Citybridge — official Bago City Facebook page.
+
+**⚙️ City Services**
+Access all government services:
+- E-Services (online forms)
+- Tourism guide
+- Bago Safe (incident reporting)
+- Barangay directory
+- City Map
+- And more!
+
+**👤 Profile**
+Sign in to track your health service requests and manage your account.
+
+**🤖 This Chatbot (Bago Buddy!)**
+Tap the orange chat button anytime to ask about services, requirements, or how to use the app!
+
+Anything specific you want to know more about? 😊`,
+
+  'asenso caravan': `**🚐 Asenso Caravan — Serbisyo sa Barangay**
+
+The Asenso Caravan brings FREE government services directly to your barangay!
+
+**Services at the caravan:**
+- PhilHealth, SSS, PAG-IBIG, PhilSys (National ID)
+- Civil Registry (birth/marriage/death certificates)
+- CSWDO (social welfare)
+- City Health Office (medical/dental)
+- DTI, TESDA, COMELEC
+- Legal services
+- And more!
+
+**2026 Completed Stops:**
+✅ Brgy. Sagasa — July 25
+✅ Brgy. Bacong — August 29
+✅ Brgy. Tabunan — September 26
+✅ Brgy. Pacol — October 24
+
+**Upcoming:**
+📅 Brgy. Binubuhan — November 28, 2026
+📅 Brgy. Alianza — December 19, 2026
+
+**Website:** caravan-blond.vercel.app
+
+Just bring valid IDs and any specific requirements for the service you need! 😊`,
+
+  'tourist spots bago city': `**🗺️ Tourist Spots in Bago City**
+
+Bago City has 9 amazing attractions!
+
+**🌿 Nature & Adventure:**
+1. 💧 **Kipot Twin Falls** — Brgy. Mailum. 220 steps down to stunning twin waterfalls. Cold, refreshing water!
+2. ⛰️ **Buenos Aires Mountain Resort** — Brgy. Ilijan. Scenic mountain views, perfect for hiking.
+3. 🌳 **Rafael Salas Park & Nature Center** — City center green sanctuary for families.
+
+**🏛️ Heritage & Culture:**
+4. ⛪ **Saint John the Baptist Parish** — Historic Spanish-colonial church, one of Bago's oldest landmarks.
+5. 🏡 **Javellana Mansion (Balay Daku)** — Built in 1920, Italian-inspired architecture on 440-hectare sugar plantation.
+6. 🏛️ **Balay ni Tan Juan** — Well-preserved ancestral house showcasing Bago City's heritage.
+7. 🏭 **Sugar Mill Heritage Sites** — Ma-ao Sugar Central, remnants of Bago's sugar industry history.
+8. 🌿 **Bantayan Park** — Historic riverside park where the 1898 revolution against Spain began.
+9. 🏢 **Bago City Hall** — Iconic civic landmark in the heart of the city.
+
+**📅 Best time to visit:** November to April (dry season)
+**✈️ Getting here:** 30-45 min from Bacolod-Silay Airport
+
+Want details about any specific spot? 🗺️`,
 };
 
 // Pre-load instant answers into cache on startup
@@ -239,12 +360,12 @@ let isTyping = false;
 
 // ── Suggested questions ────────────────────────────────────
 const SUGGESTED_QUESTIONS = [
-  "What are the requirements for a business permit?",
-  "How do I get a birth certificate?",
-  "How to apply for Wheels of Love?",
-  "What is the Asenso Caravan?",
-  "How to get a barangay clearance?",
-  "Heart Warriors program requirements",
+  "🏢 Business permit requirements",
+  "📋 Birth certificate — how to get",
+  "🏥 Heart Warriors program",
+  "📱 How does the app work?",
+  "♿ Wheels of Love — how to apply",
+  "🗺️ Tourist spots in Bago City",
 ];
 
 // ═══════════════════════════════════════════════════════════
@@ -568,9 +689,14 @@ function buildChatbot() {
     <div id="chatbot-messages">
       <div class="chat-msg bot">
         <div class="msg-bubble">
-          Maayong adlaw! I'm the Bago City Government Assistant.<br><br>
-          I can help you with requirements and procedures for city services like permits, certificates, health programs, and more.<br><br>
-          What do you need help with today?
+          Maayong adlaw! 👋 I'm <strong>Bago Buddy</strong>, your Asenso Bago AI assistant!<br><br>
+          I can help you with:<br>
+          🏛️ Government service requirements<br>
+          📱 How to use the Asenso Bago app<br>
+          🏥 Health programs (Heart Warriors, Wheels of Love, Smile Bright)<br>
+          🗺️ Tourism and attractions<br>
+          📋 Permits, certificates, and more<br><br>
+          What do you need help with today? 😊
         </div>
       </div>
     </div>
