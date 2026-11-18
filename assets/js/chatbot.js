@@ -470,7 +470,22 @@ function addMessage(text, role) {
   const messages = document.getElementById('chatbot-messages');
   const msg = document.createElement('div');
   msg.className = `chat-msg ${role}`;
-  msg.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+
+  // Render markdown for bot messages
+  let formatted = text;
+  if (role === 'bot') {
+    formatted = text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')   // **bold**
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')               // *italic*
+      .replace(/^###\s+(.+)$/gm, '<strong>$1</strong>')   // ### heading
+      .replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #e5e7eb;margin:8px 0;">')  // ---
+      .replace(/^\d+\.\s/gm, '<br>$&')                    // numbered lists
+      .replace(/^[\*\-]\s/gm, '<br>• ')                   // bullet lists
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+  }
+
+  msg.innerHTML = `<div class="msg-bubble">${formatted}</div>`;
   messages.appendChild(msg);
   messages.scrollTop = messages.scrollHeight;
 }
@@ -563,7 +578,7 @@ async function callGemini(userMessage) {
     contents: requestContents,
     generationConfig: {
       temperature: 0.4,
-      maxOutputTokens: 500,
+      maxOutputTokens: 2048,
       topP: 0.9,
     },
   };
