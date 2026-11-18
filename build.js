@@ -16,8 +16,13 @@ if (geminiKey) {
   const configContent = `// Auto-generated during build — do not edit manually\nconst CHATBOT_CONFIG = { geminiKey: '${geminiKey}' };\n`;
   fs.writeFileSync('./assets/js/chatbot-config.js', configContent);
   console.log('Chatbot config generated successfully.');
+
+  // Also inject directly into chatbot.js for reliability
+  let chatbot = fs.readFileSync('./assets/js/chatbot.js', 'utf8');
+  chatbot = chatbot.replace('__GEMINI_API_KEY__', geminiKey);
+  fs.writeFileSync('./assets/js/chatbot.js', chatbot);
+  console.log('Gemini API key injected into chatbot.js');
 } else {
-  // Write a placeholder so the file always exists
   const placeholder = `// API key not set — add GEMINI_API_KEY in Vercel environment variables\nconst CHATBOT_CONFIG = { geminiKey: '' };\n`;
   fs.writeFileSync('./assets/js/chatbot-config.js', placeholder);
   console.log('Warning: GEMINI_API_KEY not set. Chatbot will show placeholder.');

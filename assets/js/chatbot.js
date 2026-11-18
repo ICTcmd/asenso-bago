@@ -4,9 +4,8 @@
 // Answers questions about Bago City government services only
 // ═══════════════════════════════════════════════════════════
 
-// ── CONFIG — API key loaded from chatbot-config.js ────────
-// The actual key is in chatbot-config.js which is NOT committed to Git
-const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : 'YOUR_GEMINI_API_KEY_HERE';
+// ── CONFIG — API key injected at build time ────────────────
+const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : '__GEMINI_API_KEY__';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
