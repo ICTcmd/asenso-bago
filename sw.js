@@ -70,6 +70,18 @@ self.addEventListener('fetch', e => {
 
   if (url.origin !== self.location.origin) return;
 
+  // Never cache JS files - always fetch fresh so updates work immediately
+  if (url.pathname.endsWith('.js')) {
+    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    return;
+  }
+
+  // Never cache chatbot JS - always fetch fresh so updates take effect immediately
+  if (url.pathname.includes('chatbot')) {
+    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    return;
+  }
+
   // Never cache map.html or index.html â€” always fetch fresh
   if (url.pathname === '/map.html' || url.pathname === '/index.html' || url.pathname === '/') {
     e.respondWith(
