@@ -2114,13 +2114,19 @@
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').then(reg => {
-        // Check for updates every time the page loads
+      // Unregister ALL old service workers first, then register fresh
+      // This fixes stale cache issues for all users automatically
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        const unregisterAll = registrations.map(reg => reg.unregister());
+        return Promise.all(unregisterAll);
+      }).then(() => {
+        // Now register the fresh service worker
+        return navigator.serviceWorker.register('sw.js');
+      }).then(reg => {
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New version available  show update banner
               showUpdateBanner(newWorker);
             }
           });
