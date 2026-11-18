@@ -37,8 +37,203 @@ Office hours for most city services: Monday to Friday, 8:00 AM to 5:00 PM.
 City Hall address: General Luna St., Bago City, Negros Occidental.
 City Hall hotline: (034) 446-1319.`;
 
-// ── Conversation history ───────────────────────────────────
-let conversationHistory = [];
+// ═══════════════════════════════════════════════════════════
+// RESPONSE CACHE
+// Stores AI answers in localStorage for 7 days
+// Same question → instant answer, no API call needed
+// ═══════════════════════════════════════════════════════════
+const CACHE_KEY    = 'bago_chatbot_cache';
+const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function normalizeQuestion(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s]/g, '')   // remove punctuation
+    .replace(/\s+/g, ' ')          // collapse spaces
+    // normalize common Filipino/English variants
+    .replace(/\b(paano|how to|how do i|how can i|pano)\b/g, 'how')
+    .replace(/\b(kumuha|makakuha|get|obtain|apply for|request)\b/g, 'get')
+    .replace(/\b(requirement|requirements|req|kakailanganin|kailangan)\b/g, 'requirements')
+    .replace(/\b(birth cert|birth certificate|bc)\b/g, 'birth certificate')
+    .replace(/\b(biz permit|business permit|mayors permit|mayor permit)\b/g, 'business permit')
+    .replace(/\b(brgy|barangay) (clearance|certificate|cert)\b/g, 'barangay clearance')
+    .replace(/\b(cedula|community tax|ctc)\b/g, 'cedula')
+    .trim();
+}
+
+function getCachedAnswer(question) {
+  try {
+    const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+    const key   = normalizeQuestion(question);
+    const entry = cache[key];
+    if (!entry) return null;
+    if (Date.now() - entry.ts > CACHE_TTL_MS) {
+      delete cache[key];
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+      return null;
+    }
+    return entry.answer;
+  } catch { return null; }
+}
+
+function setCachedAnswer(question, answer) {
+  try {
+    const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+    const key   = normalizeQuestion(question);
+    cache[key]  = { answer, ts: Date.now() };
+    // Keep only last 50 entries to avoid bloating localStorage
+    const keys  = Object.keys(cache);
+    if (keys.length > 50) {
+      const oldest = keys.sort((a, b) => cache[a].ts - cache[b].ts)[0];
+      delete cache[oldest];
+    }
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch {}
+}
+
+// ── Pre-built answers for the most common questions ────────
+// These are served instantly — no API call ever needed
+const INSTANT_ANSWERS = {
+  'business permit requirements': `**Business Permit (Mayor's Permit) Requirements — Bago City**
+
+**New Business:**
+1. Barangay Clearance
+2. DTI Business Name Registration (for sole proprietors)
+3. SEC Registration (for corporations/partnerships)
+4. Cedula (Community Tax Certificate)
+5. Sketch/Location Map of business
+6. Contract of Lease (if renting)
+7. Fire Safety Inspection Certificate
+8. Sanitary Permit
+9. Building Permit (for new structures)
+
+**Renewal:**
+1. Previous year's Mayor's Permit
+2. Latest Barangay Clearance
+3. Cedula
+4. Official Receipt of previous payments
+
+**Where:** Bago City Hall, Business Permits & Licensing Office
+**Hours:** Monday–Friday, 8:00 AM – 5:00 PM
+**Contact:** (034) 446-1319`,
+
+  'birth certificate requirements': `**Birth Certificate — Bago City Civil Registry**
+
+**How to get a copy:**
+1. Go to the Bago City Civil Registry Office, City Hall
+2. Fill out the request form
+3. Present valid ID
+4. Pay the processing fee
+
+**Requirements:**
+- Valid government-issued ID
+- Filled request form
+- Payment of fees
+
+**PSA Birth Certificate (National copy):**
+- Apply at PSA Bacolod or online at **serbilis.psa.gov.ph**
+- Requirements: valid ID + payment (₱365 per copy)
+
+**Processing time:** 1–3 business days (local), 1–2 weeks (PSA)
+**Office hours:** Monday–Friday, 8:00 AM – 5:00 PM`,
+
+  'barangay clearance requirements': `**Barangay Clearance Requirements**
+
+Go to your **home barangay hall** and bring:
+1. Valid government-issued ID
+2. Proof of residency (utility bill, lease contract)
+3. Cedula (Community Tax Certificate)
+4. Completed application form (available at barangay)
+
+**Processing:** Same day, 15–30 minutes
+**Fee:** ₱50–₱100 (varies per barangay)
+**Hours:** Monday–Friday, 8:00 AM – 5:00 PM
+
+The clearance is valid for **6 months** from date of issue.`,
+
+  'cedula requirements': `**Cedula (Community Tax Certificate) — Bago City**
+
+**Requirements:**
+1. Valid government-issued ID
+2. Fill out the application form at the City Treasurer's Office
+
+**Where:** City Treasurer's Office, Bago City Hall
+**Fee:** Based on income (minimum ₱5.00)
+**Processing:** Same day, 10–15 minutes
+**Hours:** Monday–Friday, 8:00 AM – 5:00 PM`,
+
+  'heart warriors requirements': `**Heart Warriors Program — Requirements**
+
+Heart Warriors provides **free cardiac screening** to Bagonhons.
+
+**Requirements:**
+1. Valid ID
+2. Referral from your barangay health center (optional but helpful)
+3. Must be a resident of Bago City
+
+**How to apply:**
+1. Open the Asenso Bago app
+2. Go to Health Services → Heart Warriors
+3. Fill out the request form
+4. Wait for confirmation via your mobile number
+
+**Services provided:**
+- Blood pressure monitoring
+- ECG/EKG screening
+- Cardiac consultation
+- Free medicines (when available)
+
+**Contact:** Bago City Health Office — (034) 446-1319`,
+
+  'wheels of love requirements': `**Wheels of Love Program — Requirements**
+
+Wheels of Love provides **free wheelchairs** to qualified PWD beneficiaries.
+
+**Requirements:**
+1. PWD ID (issued by Bago City OSWD)
+2. Medical certificate from a licensed physician
+3. Proof of residency in Bago City
+4. Filled application form
+
+**How to apply:**
+1. Open the Asenso Bago app → Health Services → Wheels of Love
+2. Fill the form and upload your PWD ID photo
+3. You will be contacted for verification
+
+**Contact:** Bago City CSWDO — (034) 446-1319`,
+
+  'smile bright bago requirements': `**Smile Bright Bago — Dental Program Requirements**
+
+Free dental services for all Bagonhons.
+
+**Services available:**
+- Tooth extraction
+- Oral cleaning/prophylaxis
+- Check-up and consultation
+- Tooth restoration
+
+**Requirements:**
+1. Valid ID or Barangay Certificate
+2. Must be a Bago City resident
+
+**How to apply:**
+1. Go to the Asenso Bago app → Health Services → Smile Bright Bago
+2. Fill out the dental request form
+3. Select preferred date and time
+4. Wait for confirmation via mobile
+
+**Contact:** Bago City Health Office — (034) 446-1319`,
+};
+
+// Pre-load instant answers into cache on startup
+function preloadCache() {
+  Object.entries(INSTANT_ANSWERS).forEach(([question, answer]) => {
+    if (!getCachedAnswer(question)) {
+      setCachedAnswer(question, answer);
+    }
+  });
+}
 let isChatOpen = false;
 let isTyping = false;
 
@@ -403,6 +598,9 @@ function buildChatbot() {
   // Show suggestions
   buildSuggestions();
 
+  // Pre-load common answers into cache
+  preloadCache();
+
   // Check API key
   if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
     document.getElementById('chatbot-no-key').style.display = 'block';
@@ -521,20 +719,21 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // Clear input
   input.value = '';
   input.style.height = 'auto';
-
-  // Hide suggestions permanently
   document.getElementById('chatbot-suggestions').innerHTML = '';
-
-  // Show user message
   addMessage(text, 'user');
-
-  // Add to history
   conversationHistory.push({ role: 'user', parts: [{ text }] });
 
-  // Show typing
+  // ── Check cache first ──────────────────────────────────
+  const cached = getCachedAnswer(text);
+  if (cached) {
+    addMessage(cached + '\n\n<em style="font-size:11px;color:#9ca3af;">Instant answer from cache</em>', 'bot');
+    conversationHistory.push({ role: 'model', parts: [{ text: cached }] });
+    return;
+  }
+
+  // ── Cache miss — call Gemini ───────────────────────────
   isTyping = true;
   document.getElementById('chatbot-send').disabled = true;
   showTyping();
@@ -544,6 +743,8 @@ async function sendMessage() {
     hideTyping();
     addMessage(response, 'bot');
     conversationHistory.push({ role: 'model', parts: [{ text: response }] });
+    // Save to cache for next time
+    setCachedAnswer(text, response);
   } catch (err) {
     hideTyping();
     addMessage('Sorry, I had trouble connecting. Please try again in a moment.', 'bot');
