@@ -6,7 +6,7 @@
 
 // ── CONFIG — API key injected at build time ────────────────
 const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : '__GEMINI_API_KEY__';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-3.8-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
 const SYSTEM_PROMPT = `You are the official AI assistant of the City Government of Bago, Negros Occidental, Philippines. Your name is "Bago City Assistant".
@@ -544,20 +544,28 @@ async function callGemini(userMessage) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
 
+  // Build contents with system prompt prepended as first user turn
+  const contents = [
+    { role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] },
+    ...conversationHistory.slice(1) // skip the first entry we just included
+  ];
+
+  // For subsequent messages use full history
+  const requestContents = conversationHistory.length <= 1
+    ? [{ role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] }]
+    : [
+        { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
+        { role: 'model', parts: [{ text: 'Understood. I will only answer questions about Bago City government services.' }] },
+        ...conversationHistory
+      ];
+
   const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: conversationHistory,
+    contents: requestContents,
     generationConfig: {
       temperature: 0.4,
       maxOutputTokens: 500,
       topP: 0.9,
     },
-    safetySettings: [
-      { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-    ],
   };
 
   const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
