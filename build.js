@@ -10,20 +10,20 @@ fs.writeFileSync(swPath, sw);
 console.log('Service worker cache version set to:', version);
 
 // Generate chatbot-config.js from Vercel environment variable
-// Set GEMINI_API_KEY in Vercel Dashboard → Settings → Environment Variables
-const geminiKey = process.env.GEMINI_API_KEY || '';
-if (geminiKey) {
-  const configContent = `// Auto-generated during build — do not edit manually\nconst CHATBOT_CONFIG = { geminiKey: '${geminiKey}' };\n`;
+// Set GROQ_API_KEY in Vercel Dashboard → Settings → Environment Variables
+const groqKey = process.env.GROQ_API_KEY || '';
+if (groqKey) {
+  const configContent = `// Auto-generated during build — do not edit manually\nconst CHATBOT_CONFIG = { groqKey: '${groqKey}' };\n`;
   fs.writeFileSync('./assets/js/chatbot-config.js', configContent);
   console.log('Chatbot config generated successfully.');
 
   // Also inject directly into chatbot.js for reliability
   let chatbot = fs.readFileSync('./assets/js/chatbot.js', 'utf8');
-  chatbot = chatbot.replace('__GEMINI_API_KEY__', geminiKey);
+  chatbot = chatbot.replace('__GROQ_API_KEY__', groqKey);
   fs.writeFileSync('./assets/js/chatbot.js', chatbot);
-  console.log('Gemini API key injected into chatbot.js');
+  console.log('Groq API key injected into chatbot.js');
 } else {
-  const placeholder = `// API key not set — add GEMINI_API_KEY in Vercel environment variables\nconst CHATBOT_CONFIG = { geminiKey: '' };\n`;
+  const placeholder = `// API key not set — add GROQ_API_KEY in Vercel environment variables\nconst CHATBOT_CONFIG = { groqKey: '' };\n`;
   fs.writeFileSync('./assets/js/chatbot-config.js', placeholder);
-  console.log('Warning: GEMINI_API_KEY not set. Chatbot will show placeholder.');
+  console.log('Warning: GROQ_API_KEY not set. Chatbot will show placeholder.');
 }
