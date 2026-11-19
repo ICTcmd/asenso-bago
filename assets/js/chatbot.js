@@ -6,7 +6,7 @@
 
 // ── CONFIG — API key injected at build time ────────────────
 const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : '__GEMINI_API_KEY__';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
 const SYSTEM_PROMPT = `You are "Bago Buddy" — the friendly, fun, and helpful AI assistant of the City Government of Bago, Negros Occidental, Philippines.
