@@ -882,17 +882,10 @@ async function sendMessage() {
 }
 
 // ── Call Google Gemini API ─────────────────────────────────
-async function callGemini(userMessage) {
+async function callGemini(userMessage, retryCount = 0) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout = setTimeout(() => controller.abort(), 30000); // 30 seconds
 
-  // Build contents with system prompt prepended as first user turn
-  const contents = [
-    { role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] },
-    ...conversationHistory.slice(1) // skip the first entry we just included
-  ];
-
-  // For subsequent messages use full history
   const requestContents = conversationHistory.length <= 1
     ? [{ role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] }]
     : [
@@ -910,23 +903,33 @@ async function callGemini(userMessage) {
     },
   };
 
-  const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-    signal: controller.signal,
-  });
+  try {
+    const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
 
-  clearTimeout(timeout);
+    clearTimeout(timeout);
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `API error ${res.status}`);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text
+      || 'I could not generate a response. Please try again.';
+
+  } catch (err) {
+    clearTimeout(timeout);
+    // Retry once on timeout
+    if (err.name === 'AbortError' && retryCount < 1) {
+      return callGemini(userMessage, retryCount + 1);
+    }
+    throw err;
   }
-
-  const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text
-    || 'I could not generate a response. Please try again.';
 }
 
 // ── Initialize when DOM is ready ───────────────────────────
