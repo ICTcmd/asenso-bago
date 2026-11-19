@@ -355,9 +355,6 @@ function preloadCache() {
     }
   });
 }
-let isChatOpen = false;
-let isTyping = false;
-
 // ── Conversation history + runtime state ──────────────────
 let conversationHistory = [];
 let isChatOpen = false;
