@@ -1,13 +1,13 @@
 ﻿// ═══════════════════════════════════════════════════════════
 // BAGO CITY AI ASSISTANT
-// Powered by Google Gemini
+// Powered by Groq (llama-3.3-70b-versatile)
 // Answers questions about Bago City government services only
 // ═══════════════════════════════════════════════════════════
 
 // ── CONFIG — API key injected at build time ────────────────
-const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : '__GEMINI_API_KEY__';
-const GEMINI_MODEL = 'gemini-3.8-flash';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const GROQ_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.groqKey : '__GROQ_API_KEY__';
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
 const SYSTEM_PROMPT = `You are "Bago Buddy" — the friendly, fun, and helpful AI assistant of the City Government of Bago, Negros Occidental, Philippines.
@@ -705,7 +705,7 @@ function buildChatbot() {
     <div id="chatbot-suggestions"></div>
 
     <div id="chatbot-no-key">
-      &#x26A0;&#xFE0F; API key not configured. Please add your Gemini API key in chatbot.js.
+      &#x26A0;&#xFE0F; API key not configured. Please add your Groq API key in chatbot.js.
     </div>
 
     <div id="chatbot-input-area">
@@ -729,7 +729,7 @@ function buildChatbot() {
   preloadCache();
 
   // Check API key
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === '__GEMINI_API_KEY__') {
+  if (!GROQ_API_KEY || GROQ_API_KEY === '__GROQ_API_KEY__') {
     document.getElementById('chatbot-no-key').style.display = 'block';
     document.getElementById('chatbot-input-area').style.display = 'none';
   }
@@ -840,7 +840,7 @@ function hideTyping() {
 // ── Send message ───────────────────────────────────────────
 async function sendMessage() {
   if (isTyping) return;
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === '__GEMINI_API_KEY__') return;
+  if (!GROQ_API_KEY || GROQ_API_KEY === '__GROQ_API_KEY__') return;
 
   const input = document.getElementById('chatbot-input');
   const text = input.value.trim();
@@ -866,7 +866,7 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await callGemini(text);
+    const response = await callGroq(text);
     hideTyping();
     addMessage(response, 'bot');
     conversationHistory.push({ role: 'model', parts: [{ text: response }] });
@@ -882,32 +882,35 @@ async function sendMessage() {
   }
 }
 
-// ── Call Google Gemini API ─────────────────────────────────
-async function callGemini(userMessage, retryCount = 0) {
+// ── Call Groq API ──────────────────────────────────────────
+async function callGroq(userMessage, retryCount = 0) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45000); // 45 seconds
 
-  const requestContents = conversationHistory.length <= 1
-    ? [{ role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] }]
-    : [
-        { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
-        { role: 'model', parts: [{ text: 'Understood. I will only answer questions about Bago City government services.' }] },
-        ...conversationHistory
-      ];
+  // Build messages array for OpenAI-style format
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...conversationHistory.map(msg => ({
+      role: msg.role === 'model' ? 'assistant' : 'user',
+      content: msg.parts[0].text
+    }))
+  ];
 
   const body = {
-    contents: requestContents,
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: 2048,
-      topP: 0.9,
-    },
+    model: GROQ_MODEL,
+    messages: messages,
+    temperature: 0.4,
+    max_tokens: 2048,
+    top_p: 0.9,
   };
 
   try {
-    const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const res = await fetch(GROQ_API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
       body: JSON.stringify(body),
       signal: controller.signal,
     });
@@ -920,14 +923,14 @@ async function callGemini(userMessage, retryCount = 0) {
     }
 
     const data = await res.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text
+    return data?.choices?.[0]?.message?.content
       || 'I could not generate a response. Please try again.';
 
   } catch (err) {
     clearTimeout(timeout);
     // Retry once on timeout
     if (err.name === 'AbortError' && retryCount < 1) {
-      return callGemini(userMessage, retryCount + 1);
+      return callGroq(userMessage, retryCount + 1);
     }
     throw err;
   }
