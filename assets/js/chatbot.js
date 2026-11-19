@@ -6,7 +6,7 @@
 
 // ── CONFIG — API key injected at build time ────────────────
 const GEMINI_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.geminiKey : '__GEMINI_API_KEY__';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-3.8-flash:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 // ── System prompt — strictly limits chatbot to Bago City services ──
 const SYSTEM_PROMPT = `You are "Bago Buddy" — the friendly, fun, and helpful AI assistant of the City Government of Bago, Negros Occidental, Philippines.
@@ -728,7 +728,7 @@ function buildChatbot() {
   preloadCache();
 
   // Check API key
-  if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === '__GEMINI_API_KEY__') {
     document.getElementById('chatbot-no-key').style.display = 'block';
     document.getElementById('chatbot-input-area').style.display = 'none';
   }
@@ -839,7 +839,7 @@ function hideTyping() {
 // ── Send message ───────────────────────────────────────────
 async function sendMessage() {
   if (isTyping) return;
-  if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') return;
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === '__GEMINI_API_KEY__') return;
 
   const input = document.getElementById('chatbot-input');
   const text = input.value.trim();
@@ -884,7 +884,7 @@ async function sendMessage() {
 // ── Call Google Gemini API ─────────────────────────────────
 async function callGemini(userMessage, retryCount = 0) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000); // 30 seconds
+  const timeout = setTimeout(() => controller.abort(), 45000); // 45 seconds
 
   const requestContents = conversationHistory.length <= 1
     ? [{ role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUser: ' + userMessage }] }]
