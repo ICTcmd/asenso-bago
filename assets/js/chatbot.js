@@ -1,6 +1,6 @@
 ﻿// ═══════════════════════════════════════════════════════════
 // BAGO CITY AI ASSISTANT
-// Powered by Groq (llama-3.3-70b-versatile)
+// Powered by Groq (llama-3.3-70b-versatile) - Fast & Reliable
 // Answers questions about Bago City government services only
 // ═══════════════════════════════════════════════════════════
 
