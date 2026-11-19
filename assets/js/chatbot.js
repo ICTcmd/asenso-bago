@@ -1,4 +1,4 @@
-// ═══════════════════════════════════════════════════════════
+﻿// ═══════════════════════════════════════════════════════════
 // BAGO CITY AI ASSISTANT
 // Powered by Google Gemini
 // Answers questions about Bago City government services only
@@ -358,7 +358,10 @@ function preloadCache() {
 let isChatOpen = false;
 let isTyping = false;
 
-// ── Suggested questions ────────────────────────────────────
+// ── Conversation history + runtime state ──────────────────
+let conversationHistory = [];
+let isChatOpen = false;
+let isTyping = false;
 const SUGGESTED_QUESTIONS = [
   "🏢 Business permit requirements",
   "📋 Birth certificate — how to get",
