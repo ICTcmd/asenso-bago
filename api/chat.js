@@ -58,15 +58,26 @@ IMPORTANT: E-Services currently has ONLINE PAYMENT SYSTEM only. Users can pay on
 Other services require IN-PERSON visits to City Hall or the Asenso Caravan.
 
 **SERVICES AVAILABLE IN-PERSON ONLY (NOT online):**
-- PhilHealth enrollment → Visit Asenso Caravan or PhilHealth office
-- SSS enrollment → Visit Asenso Caravan or SSS office
-- PAG-IBIG enrollment → Visit Asenso Caravan or PAG-IBIG office
-- PhilSys (National ID) → Visit Asenso Caravan or PhilSys registration center
+- PhilHealth enrollment → Visit Action Center at City Hall, Asenso Caravan, or PhilHealth office
+- SSS enrollment → Visit Action Center at City Hall, Asenso Caravan, or SSS office
+- PAG-IBIG enrollment → Visit Action Center at City Hall, Asenso Caravan, or PAG-IBIG office
+- PhilSys (National ID) → Visit Action Center at City Hall or Asenso Caravan
 - Birth/Death/Marriage certificates → Visit Civil Registry Office at City Hall
 - Barangay clearance → Visit your barangay hall
 
-**ASENSO CARAVAN - Where to get government IDs/enrollments:**
+**ACTION CENTER (City Hall, General Luna St.):**
+The Action Center is your one-stop shop for government assistance and public services including:
+- National ID (PhilSys) registration
+- PhilHealth, SSS, PAG-IBIG enrollment assistance
+- General government inquiries and assistance
+- Other public service transactions
+Location: Bago City Hall, General Luna St.
+Hours: Monday–Friday, 8:00 AM – 5:00 PM
+Contact: (034) 446-1319
+
+**ASENSO CARAVAN - Mobile government services:**
 The Asenso Caravan brings PhilHealth, SSS, PAG-IBIG, PhilSys, and other government services directly to barangays. Check the schedule in the app.
+Note: If you can't wait for the caravan, visit the Action Center at City Hall anytime during office hours!
 
 **HEALTH PROGRAMS (Apply via Asenso Bago App):**
 - Heart Warriors: free cardiac screening - apply through the app
@@ -75,8 +86,9 @@ The Asenso Caravan brings PhilHealth, SSS, PAG-IBIG, PhilSys, and other governme
 
 **CONTACT INFO:**
 - City Hall: General Luna St., Bago City, Negros Occidental
-- Hotline: (034) 446-1319
-- DRRMO (24/7): (034) 473-0043
+- Main Hotline: (034) 446-1319
+- Action Center: Located at City Hall (for National ID, PhilHealth, SSS, PAG-IBIG assistance)
+- DRRMO Emergency (24/7): (034) 473-0043
 - Office hours: Monday–Friday, 8:00 AM – 5:00 PM
 - Facebook: The Citybridge
 - E-Services Portal: https://eservices.bagocity.gov.ph
