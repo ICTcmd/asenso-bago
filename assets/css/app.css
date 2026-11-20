@@ -3132,7 +3132,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 }
 .home-hero-bg {
   position: absolute; inset: 0;
-  background: url('assets/images/bago-city-logo.png') right -30px center / 180px no-repeat;
+  background: url('../images/bago-city-logo.png') right -30px center / 180px no-repeat;
   opacity: 0.06; pointer-events: none;
 }
 .home-hero-content { position: relative; z-index: 1; }
