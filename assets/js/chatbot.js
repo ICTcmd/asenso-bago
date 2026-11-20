@@ -306,6 +306,14 @@ const SUGGESTED_QUESTIONS = [
   "🗺️ Tourist spots in Bago City",
 ];
 
+// ── Draggable button state ────────────────────────────────
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let buttonStartX = 0;
+let buttonStartY = 0;
+const DRAG_THRESHOLD = 5; // Minimum pixels to consider it a drag vs click
+
 // ═══════════════════════════════════════════════════════════
 // BUILD THE CHATBOT UI
 // ═══════════════════════════════════════════════════════════
@@ -323,7 +331,7 @@ function buildChatbot() {
       border-radius: 50%;
       background: linear-gradient(135deg, #D97732, #F3A65A);
       border: none;
-      cursor: pointer;
+      cursor: move; /* Show drag cursor */
       box-shadow: 0 4px 16px rgba(217,119,50,0.4), 0 2px 8px rgba(0,0,0,0.15);
       display: flex;
       align-items: center;
@@ -331,10 +339,17 @@ function buildChatbot() {
       z-index: 9000;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
+      touch-action: none; /* Prevent scroll while dragging */
+      user-select: none; /* Prevent text selection while dragging */
     }
-    #chatbot-btn:hover { transform: scale(1.08); }
-    #chatbot-btn:active { transform: scale(0.95); }
-    #chatbot-btn svg { width: 28px; height: 28px; color: white; }
+    #chatbot-btn.dragging {
+      cursor: grabbing;
+      transition: none; /* Disable transitions while dragging */
+      box-shadow: 0 8px 24px rgba(217,119,50,0.6), 0 4px 12px rgba(0,0,0,0.25);
+    }
+    #chatbot-btn:hover:not(.dragging) { transform: scale(1.08); }
+    #chatbot-btn:active:not(.dragging) { transform: scale(0.95); }
+    #chatbot-btn svg { width: 28px; height: 28px; color: white; pointer-events: none; }
 
     /* Notification dot */
     #chatbot-btn .notif-dot {
@@ -668,7 +683,9 @@ function buildChatbot() {
   // No API key check needed - backend handles authentication
 
   // Event listeners
-  btn.addEventListener('click', openChat);
+  btn.addEventListener('click', handleButtonClick);
+  btn.addEventListener('mousedown', startDrag);
+  btn.addEventListener('touchstart', startDrag, { passive: false });
   backdrop.addEventListener('click', closeChat);
   document.getElementById('chatbot-close').addEventListener('click', closeChat);
   document.getElementById('chatbot-send').addEventListener('click', sendMessage);
@@ -683,6 +700,120 @@ function buildChatbot() {
     e.target.style.height = 'auto';
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
   });
+
+  // Load saved button position
+  loadButtonPosition();
+}
+
+// ── Draggable button functions ─────────────────────────────
+function loadButtonPosition() {
+  try {
+    const saved = localStorage.getItem('chatbot-button-position');
+    if (saved) {
+      const { bottom, right } = JSON.parse(saved);
+      const btn = document.getElementById('chatbot-btn');
+      btn.style.bottom = bottom;
+      btn.style.right = right;
+    }
+  } catch (e) {
+    console.error('Failed to load button position:', e);
+  }
+}
+
+function saveButtonPosition() {
+  try {
+    const btn = document.getElementById('chatbot-btn');
+    const position = {
+      bottom: btn.style.bottom,
+      right: btn.style.right
+    };
+    localStorage.setItem('chatbot-button-position', JSON.stringify(position));
+  } catch (e) {
+    console.error('Failed to save button position:', e);
+  }
+}
+
+function startDrag(e) {
+  e.preventDefault();
+  
+  const btn = document.getElementById('chatbot-btn');
+  const touch = e.type === 'touchstart' ? e.touches[0] : e;
+  
+  // Record starting positions
+  dragStartX = touch.clientX;
+  dragStartY = touch.clientY;
+  
+  const rect = btn.getBoundingClientRect();
+  buttonStartX = rect.left;
+  buttonStartY = rect.top;
+  
+  isDragging = false; // Not dragging yet (might just be a click)
+  
+  // Add move and end listeners
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', endDrag);
+  document.addEventListener('touchmove', drag, { passive: false });
+  document.addEventListener('touchend', endDrag);
+}
+
+function drag(e) {
+  e.preventDefault();
+  
+  const touch = e.type === 'touchmove' ? e.touches[0] : e;
+  const deltaX = touch.clientX - dragStartX;
+  const deltaY = touch.clientY - dragStartY;
+  
+  // Check if movement exceeds threshold
+  if (!isDragging && (Math.abs(deltaX) > DRAG_THRESHOLD || Math.abs(deltaY) > DRAG_THRESHOLD)) {
+    isDragging = true;
+    document.getElementById('chatbot-btn').classList.add('dragging');
+  }
+  
+  if (isDragging) {
+    const btn = document.getElementById('chatbot-btn');
+    const newX = buttonStartX + deltaX;
+    const newY = buttonStartY + deltaY;
+    
+    // Keep button within viewport bounds
+    const maxX = window.innerWidth - btn.offsetWidth;
+    const maxY = window.innerHeight - btn.offsetHeight;
+    
+    const clampedX = Math.max(0, Math.min(newX, maxX));
+    const clampedY = Math.max(0, Math.min(newY, maxY));
+    
+    // Convert to bottom/right positioning
+    const bottom = window.innerHeight - clampedY - btn.offsetHeight;
+    const right = window.innerWidth - clampedX - btn.offsetWidth;
+    
+    btn.style.bottom = `${bottom}px`;
+    btn.style.right = `${right}px`;
+  }
+}
+
+function endDrag(e) {
+  e.preventDefault();
+  
+  // Remove move and end listeners
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('mouseup', endDrag);
+  document.removeEventListener('touchmove', drag);
+  document.removeEventListener('touchend', endDrag);
+  
+  const btn = document.getElementById('chatbot-btn');
+  btn.classList.remove('dragging');
+  
+  // Save position if it was actually dragged
+  if (isDragging) {
+    saveButtonPosition();
+    isDragging = false;
+  }
+}
+
+function handleButtonClick(e) {
+  // Only open chat if it wasn't a drag
+  if (!isDragging) {
+    openChat();
+  }
 }
 
 // ── Build suggestion chips ─────────────────────────────────
