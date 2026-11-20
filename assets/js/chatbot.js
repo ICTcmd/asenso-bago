@@ -734,8 +734,6 @@ function saveButtonPosition() {
 }
 
 function startDrag(e) {
-  e.preventDefault();
-  
   const btn = document.getElementById('chatbot-btn');
   const touch = e.type === 'touchstart' ? e.touches[0] : e;
   
@@ -754,6 +752,11 @@ function startDrag(e) {
   document.addEventListener('mouseup', endDrag);
   document.addEventListener('touchmove', drag, { passive: false });
   document.addEventListener('touchend', endDrag);
+  
+  // Prevent default only if we're actually dragging (will be set in drag function)
+  if (e.type === 'touchstart') {
+    e.preventDefault();
+  }
 }
 
 function drag(e) {
@@ -791,8 +794,6 @@ function drag(e) {
 }
 
 function endDrag(e) {
-  e.preventDefault();
-  
   // Remove move and end listeners
   document.removeEventListener('mousemove', drag);
   document.removeEventListener('mouseup', endDrag);
@@ -802,18 +803,21 @@ function endDrag(e) {
   const btn = document.getElementById('chatbot-btn');
   btn.classList.remove('dragging');
   
-  // Save position if it was actually dragged
+  // If it was a drag, save position
   if (isDragging) {
     saveButtonPosition();
-    isDragging = false;
+  } else {
+    // If it wasn't a drag (just a click), open the chat
+    openChat();
   }
+  
+  // Reset dragging state
+  isDragging = false;
 }
 
 function handleButtonClick(e) {
-  // Only open chat if it wasn't a drag
-  if (!isDragging) {
-    openChat();
-  }
+  // This function is no longer needed, clicks are handled in endDrag
+  // Kept for compatibility
 }
 
 // ── Build suggestion chips ─────────────────────────────────
