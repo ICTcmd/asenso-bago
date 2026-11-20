@@ -1,74 +1,11 @@
 ﻿// ═══════════════════════════════════════════════════════════
 // BAGO CITY AI ASSISTANT
-// Powered by Groq (llama-3.3-70b-versatile) - Fast & Reliable
+// Powered by Groq (openai/gpt-oss-120b) via secure backend
 // Answers questions about Bago City government services only
 // ═══════════════════════════════════════════════════════════
 
-// ── CONFIG — API key injected at build time ────────────────
-const GROQ_API_KEY = (typeof CHATBOT_CONFIG !== 'undefined') ? CHATBOT_CONFIG.groqKey : '__GROQ_API_KEY__';
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'openai/gpt-oss-120b';
-
-// ── System prompt — strictly limits chatbot to Bago City services ──
-const SYSTEM_PROMPT = `You are "Bago Buddy" — the friendly, fun, and helpful AI assistant of the City Government of Bago, Negros Occidental, Philippines.
-
-Your personality:
-- Warm, friendly, and conversational — like a helpful kabayan (fellow citizen)
-- Use light Hiligaynon phrases naturally: "Maayong adlaw!", "Salamat!", "Okay lang!" 
-- Add relevant emojis to make responses more readable and engaging
-- Keep answers practical and easy to understand
-- Celebrate when you help someone: "Great! Here's what you need 🎉"
-- Be encouraging: "No worries, I've got you covered! 😊"
-
-You ONLY answer questions about:
-
-**ASENSO BAGO APP GUIDE:**
-- The app has these sections: Home, Health Programs, Caravan, SOCA, News, Services, Profile
-- HOME: Shows greeting, quick service shortcuts, health program chips, news feed, Daily Bible Verse
-- HEALTH PROGRAMS: Heart Warriors (cardiac), Wheels of Love (wheelchair), Smile Bright Bago (dental) — tap any to request service via health-request form
-- CARAVAN (Asenso Caravan): Serbisyo sa Barangay Caravan — free government services brought to barangays. Check schedule at caravan-blond.vercel.app
-- SOCA: State of the City Address archive and major announcements
-- NEWS: Live Facebook feed from The Citybridge — official Bago City government page
-- SERVICES: Full list of all city services (E-Services, Health, Caravan, SOCA, Be In Bago, Tourism, Bago Safe, Transparency, Barangays, City Map)
-- PROFILE: Sign in/Sign up, My Applications, Notifications, Privacy settings
-- TOURISM: 9 tourist spots with photos, official tourism video, annual festivals
-- BARANGAYS: All 24 barangays with history, land area, tourist spots
-- BAGO SAFE: Report non-emergency incidents (flooding, fallen trees, road damage) — goes to DRRMO
-- BE IN BAGO: Tourism website for Bago City
-- E-SERVICES: Online government transactions at eservices.bagocity.gov.ph
-- CITY MAP: Interactive map with points of interest
-- INSTALL AS APP: Users can add to home screen from browser for full app experience
-
-**BAGO CITY GOVERNMENT SERVICES:**
-- Business permits and licensing (Mayor's permit)
-- Civil registry (birth/marriage/death certificates, CENOMAR)
-- Barangay clearance and certificates
-- Community Tax Certificate (Cedula)
-- Building permits
-- PhilHealth, SSS, PAG-IBIG, PhilSys enrollment
-- TESDA programs
-- DTI business name registration
-- COMELEC voter registration
-- Tourism information
-
-**HEALTH PROGRAMS:**
-- Heart Warriors: free cardiac screening, blood pressure, ECG, medicines
-- Wheels of Love: free wheelchairs for PWD beneficiaries
-- Smile Bright Bago: free dental care
-
-**CONTACT INFO:**
-- City Hall: General Luna St., Bago City, Negros Occidental
-- Hotline: (034) 446-1319
-- DRRMO (24/7): (034) 473-0043
-- Office hours: Monday–Friday, 8:00 AM – 5:00 PM
-- Facebook: The Citybridge
-
-For questions NOT about Bago City, say warmly: "Ay, that's outside my area of expertise! 😄 I'm only your Bago City guide. Ask me about city services, the app, or government requirements — I'm happy to help! 🏛️"
-
-Always end responses with a follow-up prompt like:
-- "Anything else I can help you with? 😊"
-- "May iba pa ka questions? 🙋"
-- "Need more details about any of these? Just ask! 💬"`;
+// ── NO API KEY HERE — All requests go through secure backend ──
+// The API key is safely stored in Vercel environment variables
 
 // ═══════════════════════════════════════════════════════════
 // RESPONSE CACHE
@@ -728,12 +665,8 @@ function buildChatbot() {
   // Pre-load common answers into cache
   preloadCache();
 
-  // Check API key
-  if (!GROQ_API_KEY || GROQ_API_KEY === '__GROQ_API_KEY__') {
-    document.getElementById('chatbot-no-key').style.display = 'block';
-    document.getElementById('chatbot-input-area').style.display = 'none';
-  }
-
+  // No API key check needed - backend handles authentication
+};
   // Event listeners
   btn.addEventListener('click', openChat);
   backdrop.addEventListener('click', closeChat);
@@ -840,7 +773,6 @@ function hideTyping() {
 // ── Send message ───────────────────────────────────────────
 async function sendMessage() {
   if (isTyping) return;
-  if (!GROQ_API_KEY || GROQ_API_KEY === '__GROQ_API_KEY__') return;
 
   const input = document.getElementById('chatbot-input');
   const text = input.value.trim();
@@ -860,16 +792,16 @@ async function sendMessage() {
     return;
   }
 
-  // ── Cache miss — call Gemini ───────────────────────────
+  // ── Cache miss — call secure backend ───────────────────────
   isTyping = true;
   document.getElementById('chatbot-send').disabled = true;
   showTyping();
 
   try {
-    const response = await callGroq(text);
+    const response = await callSecureBackend(text);
     hideTyping();
     addMessage(response, 'bot');
-    conversationHistory.push({ role: 'model', parts: [{ text: response }] });
+    conversationHistory.push({ role: 'assistant', content: response });
     // Save to cache for next time
     setCachedAnswer(text, response);
   } catch (err) {
@@ -882,55 +814,43 @@ async function sendMessage() {
   }
 }
 
-// ── Call Groq API ──────────────────────────────────────────
-async function callGroq(userMessage, retryCount = 0) {
+// ── Call Secure Backend API ────────────────────────────────
+async function callSecureBackend(userMessage, retryCount = 0) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45000); // 45 seconds
 
-  // Build messages array for OpenAI-style format
-  const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...conversationHistory.map(msg => ({
-      role: msg.role === 'model' ? 'assistant' : 'user',
-      content: msg.parts[0].text
-    }))
-  ];
-
-  const body = {
-    model: GROQ_MODEL,
-    messages: messages,
-    temperature: 0.4,
-    max_tokens: 2048,
-    top_p: 0.9,
-  };
+  // Build conversation history in OpenAI format
+  const history = conversationHistory.map(msg => ({
+    role: msg.role === 'model' ? 'assistant' : msg.role,
+    content: msg.parts ? msg.parts[0].text : msg.content
+  }));
 
   try {
-    const res = await fetch(GROQ_API_URL, {
+    const res = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_API_KEY}`
-      },
-      body: JSON.stringify(body),
-      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: userMessage,
+        conversationHistory: history
+      }),
+      signal: controller.signal
     });
 
     clearTimeout(timeout);
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err?.error?.message || `API error ${res.status}`);
+      throw new Error(err?.error || `API error ${res.status}`);
     }
 
     const data = await res.json();
-    return data?.choices?.[0]?.message?.content
-      || 'I could not generate a response. Please try again.';
+    return data?.answer || 'I could not generate a response. Please try again.';
 
   } catch (err) {
     clearTimeout(timeout);
     // Retry once on timeout
     if (err.name === 'AbortError' && retryCount < 1) {
-      return callGroq(userMessage, retryCount + 1);
+      return callSecureBackend(userMessage, retryCount + 1);
     }
     throw err;
   }

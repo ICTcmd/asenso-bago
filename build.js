@@ -9,21 +9,21 @@ sw = sw.replace('__CACHE_VERSION__', version);
 fs.writeFileSync(swPath, sw);
 console.log('Service worker cache version set to:', version);
 
-// Generate chatbot-config.js from Vercel environment variable
-// Set GROQ_API_KEY in Vercel Dashboard → Settings → Environment Variables
+// Verify environment variables are set (for logging purposes)
 const groqKey = process.env.GROQ_API_KEY || '';
-if (groqKey) {
-  const configContent = `// Auto-generated during build — do not edit manually\nconst CHATBOT_CONFIG = { groqKey: '${groqKey}' };\n`;
-  fs.writeFileSync('./assets/js/chatbot-config.js', configContent);
-  console.log('Chatbot config generated successfully.');
+const groqModel = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
-  // Also inject directly into chatbot.js for reliability
-  let chatbot = fs.readFileSync('./assets/js/chatbot.js', 'utf8');
-  chatbot = chatbot.replace('__GROQ_API_KEY__', groqKey);
-  fs.writeFileSync('./assets/js/chatbot.js', chatbot);
-  console.log('Groq API key injected into chatbot.js');
+if (groqKey) {
+  console.log('✓ GROQ_API_KEY is configured');
+  console.log('✓ GROQ_MODEL:', groqModel);
+  console.log('✓ Chatbot will use secure backend API endpoint');
 } else {
-  const placeholder = `// API key not set — add GROQ_API_KEY in Vercel environment variables\nconst CHATBOT_CONFIG = { groqKey: '' };\n`;
-  fs.writeFileSync('./assets/js/chatbot-config.js', placeholder);
-  console.log('Warning: GROQ_API_KEY not set. Chatbot will show placeholder.');
+  console.warn('⚠ Warning: GROQ_API_KEY not set. Chatbot will not work.');
+}
+
+// Clean up old chatbot-config.js if it exists (no longer needed)
+const oldConfigPath = './assets/js/chatbot-config.js';
+if (fs.existsSync(oldConfigPath)) {
+  fs.unlinkSync(oldConfigPath);
+  console.log('✓ Removed old chatbot-config.js (no longer needed - using secure backend)');
 }
