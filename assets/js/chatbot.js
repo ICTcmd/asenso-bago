@@ -666,7 +666,7 @@ function buildChatbot() {
   preloadCache();
 
   // No API key check needed - backend handles authentication
-};
+
   // Event listeners
   btn.addEventListener('click', openChat);
   backdrop.addEventListener('click', closeChat);
