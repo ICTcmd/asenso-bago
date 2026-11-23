@@ -109,7 +109,7 @@ Always end responses with a follow-up prompt like:
     // Build messages array
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
-      ...(Array isArray(conversationHistory) ? conversationHistory : []),
+      ...(Array.isArray(conversationHistory) ? conversationHistory : []),
       { role: 'user', content: message.trim() }
     ];
 
