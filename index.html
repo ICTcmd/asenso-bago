@@ -2931,7 +2931,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Setup splash screen buttons
       const getStartedBtn = document.getElementById('get-started-btn');
       const getStartedBtnDesktop = document.getElementById('get-started-btn-desktop');
-      const signInLinks = document.querySelectorAll('.btn-link');
+      const signInLinks = document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link');
       
       if (getStartedBtn) {
         getStartedBtn.addEventListener('click', () => {
@@ -2949,7 +2949,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
       
-      // Handle sign in links on splash screen
+      // Handle sign in links ONLY on splash screen
       signInLinks.forEach(link => {
         if (link.textContent.includes('Sign in')) {
           link.addEventListener('click', () => {
