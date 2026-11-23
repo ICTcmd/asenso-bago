@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="assets/css/app.css" />
   <title>Sign In — Asenso Bago</title>
   <style>
+    /* Reset any conflicting styles from app.css */
+    .auth-page-wrapper * {
+      position: static !important;
+    }
+
     .auth-container {
       min-height: 100vh;
       display: flex;
@@ -26,51 +31,70 @@
       max-width: 420px;
       width: 100%;
       box-shadow: 0 10px 40px rgba(10, 46, 92, 0.1);
+      position: relative !important;
     }
 
     .auth-logo {
       text-align: center;
       margin-bottom: 32px;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      object-fit: initial !important;
+      position: relative !important;
     }
 
     .auth-logo img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 16px;
+      width: 80px !important;
+      height: 80px !important;
+      margin: 0 auto 16px auto !important;
+      display: block !important;
+      object-fit: contain !important;
     }
 
     .auth-logo h1 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #0A2E5C;
-      margin-bottom: 4px;
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: #0A2E5C !important;
+      margin: 0 0 4px 0 !important;
+      padding: 0 !important;
+      position: relative !important;
+      display: block !important;
     }
 
     .auth-logo p {
-      font-size: 14px;
-      color: #666;
+      font-size: 14px !important;
+      color: #666 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: relative !important;
+      display: block !important;
     }
 
     .auth-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 32px;
-      background: #F4E5D8;
-      border-radius: 12px;
-      padding: 4px;
+      display: flex !important;
+      gap: 8px !important;
+      margin-bottom: 32px !important;
+      background: #F4E5D8 !important;
+      border-radius: 12px !important;
+      padding: 4px !important;
+      position: relative !important;
+      width: 100% !important;
     }
 
     .auth-tab {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #666;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 1 !important;
+      padding: 12px !important;
+      border: none !important;
+      background: transparent !important;
+      border-radius: 8px !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      color: #666 !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      position: relative !important;
+      display: block !important;
     }
 
     .auth-tab.active {
@@ -225,14 +249,15 @@
 </head>
 <body>
 
-  <div class="auth-container">
-    <div class="auth-card">
-      <!-- Logo Header -->
-      <div class="auth-logo">
-        <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" />
-        <h1>Asenso Bago</h1>
-        <p>City of Bago, Negros Occidental</p>
-      </div>
+  <div class="auth-page-wrapper">
+    <div class="auth-container">
+      <div class="auth-card">
+        <!-- Logo Header -->
+        <div class="auth-logo">
+          <img src="assets/images/bago-city-logo.png" alt="Bago City Seal" />
+          <h1>Asenso Bago</h1>
+          <p>City of Bago, Negros Occidental</p>
+        </div>
 
       <!-- Tabs -->
       <div class="auth-tabs">
@@ -342,6 +367,7 @@
         🔒 Your information is secure and encrypted
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Supabase SDK (ES Module) -->
