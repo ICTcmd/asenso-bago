@@ -2949,16 +2949,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
       
-      // Handle sign in links ONLY on splash screen
+      // Handle sign in links ONLY on splash screen - redirect to auth.html
       signInLinks.forEach(link => {
         if (link.textContent.includes('Sign in')) {
           link.addEventListener('click', () => {
-            document.getElementById('splash').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            document.getElementById('bottom-nav').style.display = 'flex';
-            if (window.authManager) {
-              window.authManager.showSignInModal();
-            }
+            // Redirect to dedicated auth page for cleaner experience
+            window.location.href = 'auth.html';
           });
         }
       });
@@ -2973,12 +2969,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
       
-      // Setup profile sign in button
+      // Setup profile sign in button - redirect to auth.html instead of modal
       const profileSignInBtn = document.querySelector('.signin-btn');
       if (profileSignInBtn) {
         profileSignInBtn.addEventListener('click', () => {
           if (window.authManager && !window.authManager.isAuthenticated()) {
-            window.authManager.showSignInModal();
+            // Redirect to dedicated auth page instead of showing modal
+            window.location.href = 'auth.html';
           }
         });
       }
