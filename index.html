@@ -2703,6 +2703,40 @@ document.addEventListener('DOMContentLoaded', function() {
        AUTHENTICATION MODAL
        Sign In / Sign Up forms with Supabase integration
    -->
+  <style>
+    /* Fix auth modal layout - prevent conflicts */
+    #auth-modal .auth-header {
+      text-align: center !important;
+      margin-bottom: 32px !important;
+      display: block !important;
+    }
+    
+    #auth-modal .auth-logo {
+      width: 80px !important;
+      height: 80px !important;
+      object-fit: contain !important;
+      margin: 0 auto 16px auto !important;
+      display: block !important;
+    }
+    
+    #auth-modal .auth-header h2 {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      margin: 0 0 8px 0 !important;
+      padding: 0 !important;
+      display: block !important;
+      position: relative !important;
+    }
+    
+    #auth-modal .auth-header p {
+      font-size: 14px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: block !important;
+      position: relative !important;
+    }
+  </style>
+  
   <div id="auth-modal" class="auth-modal" style="display: none;">
     <div class="auth-modal-overlay"></div>
     <div class="auth-modal-content">
