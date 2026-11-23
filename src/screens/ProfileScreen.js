@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View, Text, ScrollView, StyleSheet,
   TouchableOpacity, StatusBar, Image,
@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius } from '../theme';
+import AuthModal from './AuthModal';
 
 const MENU_ITEMS = [
   { icon: 'person-outline',        label: 'My Profile',          },
@@ -17,6 +18,8 @@ const MENU_ITEMS = [
 ];
 
 export default function ProfileScreen() {
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
@@ -39,7 +42,10 @@ export default function ProfileScreen() {
             <Text style={styles.profileName}>Guest User</Text>
             <Text style={styles.profileSub}>Sign in to access all features</Text>
           </View>
-          <TouchableOpacity style={styles.signInBtn}>
+          <TouchableOpacity 
+            style={styles.signInBtn}
+            onPress={() => setShowAuthModal(true)}
+          >
             <Text style={styles.signInBtnText}>Sign In</Text>
           </TouchableOpacity>
         </View>
@@ -76,6 +82,12 @@ export default function ProfileScreen() {
 
         <Text style={styles.version}>Asenso Bago v1.0.0{'\n'}© 2026 LGU Bago City</Text>
       </ScrollView>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        visible={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
     </SafeAreaView>
   );
 }
