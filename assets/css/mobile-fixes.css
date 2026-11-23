@@ -6,12 +6,14 @@
 /* FIX #1: Horizontal Scroll Protection */
 html, body {
   overflow-x: hidden !important;
+  overflow-y: auto !important; /* Allow vertical scrolling */
   max-width: 100vw;
   position: relative;
 }
 
 #app, .page {
   overflow-x: hidden !important;
+  overflow-y: auto !important; /* Allow vertical scrolling */
   max-width: 100%;
 }
 
