@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=3.4" />
-  <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=1.0" />
+  <link rel="stylesheet" href="assets/css/app.css?v=3.5" />
+  <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=1.1" />
   <link rel="manifest" href="manifest.json?v=2.2" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
   <link rel="apple-touch-icon" href="assets/images/app-icon.png" />
@@ -2703,12 +2703,21 @@ document.addEventListener('DOMContentLoaded', function() {
        AUTHENTICATION MODAL
        Sign In / Sign Up forms with Supabase integration
    -->
-  <style>
-    /* Fix auth modal layout - prevent conflicts */
+  <style id="auth-modal-fix-v2">
+    /* Fix auth modal layout - prevent conflicts (Updated) */
+    #auth-modal * {
+      position: static !important;
+    }
+    
+    #auth-modal .auth-modal-content {
+      position: relative !important;
+    }
+    
     #auth-modal .auth-header {
       text-align: center !important;
       margin-bottom: 32px !important;
       display: block !important;
+      position: relative !important;
     }
     
     #auth-modal .auth-logo {
@@ -2717,23 +2726,40 @@ document.addEventListener('DOMContentLoaded', function() {
       object-fit: contain !important;
       margin: 0 auto 16px auto !important;
       display: block !important;
+      position: relative !important;
     }
     
     #auth-modal .auth-header h2 {
       font-size: 24px !important;
       font-weight: 700 !important;
+      color: #1a1a1a !important;
       margin: 0 0 8px 0 !important;
       padding: 0 !important;
       display: block !important;
       position: relative !important;
+      text-align: center !important;
     }
     
     #auth-modal .auth-header p {
       font-size: 14px !important;
+      color: #666 !important;
       margin: 0 !important;
       padding: 0 !important;
       display: block !important;
       position: relative !important;
+      text-align: center !important;
+    }
+    
+    #auth-modal .auth-divider {
+      position: relative !important;
+      margin: 24px 0 !important;
+      text-align: center !important;
+      display: block !important;
+    }
+    
+    #auth-modal .auth-divider span {
+      position: relative !important;
+      display: inline-block !important;
     }
   </style>
   
