@@ -2075,28 +2075,75 @@
   function loadFbSdk() {
     if (fbSdkLoaded) return;
     fbSdkLoaded = true;
+    
     window.fbAsyncInit = function() {
-      FB.init({ xfbml: true, version: 'v19.0' });
-      FB.Event.subscribe('xfbml.render', function() {
-        const loading = document.getElementById('fb-loading');
-        const wrap = document.getElementById('fb-embed-wrap');
-        if (loading) loading.style.display = 'none';
-        if (wrap) wrap.style.display = 'block';
-      });
+      try {
+        FB.init({
+          appId: '1234567890', // Placeholder - replace with actual Facebook App ID if needed
+          xfbml: true,
+          version: 'v19.0',
+          status: false,
+          cookie: false
+        });
+        
+        // Parse the Facebook plugin
+        FB.XFBML.parse();
+        
+        FB.Event.subscribe('xfbml.render', function() {
+          console.log('Facebook feed rendered successfully');
+          const wrap = document.querySelector('.fb-embed-wrap');
+          if (wrap) wrap.style.opacity = '1';
+        });
+      } catch (error) {
+        console.error('Facebook SDK initialization error:', error);
+        showFacebookFallback();
+      }
     };
-    // Fallback: show embed after 8 seconds regardless
+    
+    // Fallback: show message if Facebook doesn't load after 10 seconds
     setTimeout(() => {
-      const loading = document.getElementById('fb-loading');
-      const wrap = document.getElementById('fb-embed-wrap');
-      if (loading) loading.style.display = 'none';
-      if (wrap) wrap.style.display = 'block';
-    }, 8000);
+      if (!window.FB || !document.querySelector('.fb-page iframe')) {
+        console.warn('Facebook feed failed to load - showing fallback');
+        showFacebookFallback();
+      }
+    }, 10000);
+    
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/sdk.js';
     script.async = true;
     script.defer = true;
     script.crossOrigin = 'anonymous';
+    script.onerror = function() {
+      console.error('Failed to load Facebook SDK');
+      showFacebookFallback();
+    };
     document.body.appendChild(script);
+  }
+  
+  function showFacebookFallback() {
+    const fbWrap = document.querySelector('.fb-embed-wrap');
+    if (fbWrap) {
+      fbWrap.innerHTML = `
+        <div style="padding: 40px 20px; text-align: center; background: #f8f9fa; border-radius: 12px; margin: 16px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#1877f2" viewBox="0 0 24 24" style="margin-bottom: 16px;">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+          <h3 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px;">
+            News Feed Unavailable
+          </h3>
+          <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
+            The live news feed couldn't be loaded. This may be due to ad blockers, privacy settings, or browser restrictions.
+          </p>
+          <a href="https://www.facebook.com/TheCityBridge" target="_blank" rel="noopener noreferrer" 
+             style="display: inline-flex; align-items: center; gap: 8px; background: #1877f2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+            </svg>
+            View on Facebook
+          </a>
+        </div>
+      `;
+    }
   }
 
   if ('serviceWorker' in navigator) {
