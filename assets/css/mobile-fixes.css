@@ -3,12 +3,6 @@
    Critical fixes for 320-360px screens
    ═══════════════════════════════════════════════════════════ */
 
-/* Main app container - for chatbot absolute positioning */
-#main-app {
-  position: relative; /* Enables absolute positioning for children */
-  flex: 1;
-}
-
 /* FIX #1: Horizontal Scroll Protection - Mobile Only */
 @media (max-width: 768px) {
   html, body {
