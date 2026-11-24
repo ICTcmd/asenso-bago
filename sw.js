@@ -1,5 +1,5 @@
-﻿// Asenso Bago Service Worker v20261124-ROOTFIX
-const CACHE = 'bago-pwa-v20261124-rootfix';
+﻿// Asenso Bago Service Worker v20261124-1800
+const CACHE = 'bago-pwa-v20261124-1800';
 
 const ASSETS = [
   '/',
