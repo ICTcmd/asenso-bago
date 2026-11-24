@@ -1,0 +1,63 @@
+{
+  "benchmark_date": "2026-11-20 11:49:05",
+  "models": [
+    {
+      "model_name": "intfloat/multilingual-e5-small",
+      "overall": {
+        "top1_accuracy": 1.0,
+        "top3_accuracy": 1.0,
+        "mean_mrr": 1.0,
+        "avg_query_time_ms": 27.216097887824564,
+        "avg_doc_embed_time_ms": 512.7079486846924
+      },
+      "by_language": {
+        "English": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0,
+          "mean_mrr": 1.0
+        },
+        "Filipino": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0,
+          "mean_mrr": 1.0
+        },
+        "Hiligaynon": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0,
+          "mean_mrr": 1.0
+        }
+      },
+      "by_category": {
+        "Health Programs": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        },
+        "Exact Search": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        },
+        "Business Permits": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        },
+        "Contact Information": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        },
+        "Barangay Services": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        },
+        "Civil Registry": {
+          "top1_accuracy": 1.0,
+          "top3_accuracy": 1.0
+        }
+      },
+      "detailed_results": [
+        {
+          "question_id": 1,
+          "question": "What are the requirements for a business permit in Bago City?",
+          "language": "English",
+          "category": "Business Permits",
+          "query_time_ms": 30.52043914794922,
+          "top1_correct": 

@@ -1,0 +1,72 @@
+═══════════════════════════════════════════════════════════════
+  QUICK FIX: Supabase Console Errors (Infinite Recursion)
+═══════════════════════════════════════════════════════════════
+
+PROBLEM: Browser console showing "Infinite recursion detected in 
+policy for relation 'profiles'" and 500 errors.
+
+QUICK FIX STEPS:
+
+1. Open Supabase Dashboard
+   → https://supabase.com/dashboard
+   → Select your Asenso Bago project
+   → Click "SQL Editor" in sidebar
+
+2. Copy & Run Fix Script
+   → Open file: fix-profiles-rls.sql
+   → Copy ALL the SQL code
+   → Paste into SQL Editor
+   → Click RUN
+
+3. Clear Browser Cache
+   → Press Ctrl+Shift+Delete (Windows)
+   → Press Cmd+Shift+Delete (Mac)
+   → Select "Cached images and files"
+   → Click Clear Data
+
+4. Hard Reload App
+   → Press Ctrl+Shift+R (Windows)
+   → Press Cmd+Shift+R (Mac)
+   → Or click reload button while holding Shift
+
+5. Test
+   → Check browser console (F12)
+   → Errors should be gone!
+   → Try signing in
+   → Profile should load without errors
+
+═══════════════════════════════════════════════════════════════
+
+WHAT WAS FIXED:
+
+✓ Removed all conflicting RLS policies on profiles table
+✓ Created 4 clean policies without circular references:
+  - profiles_select_own (users can read own profile)
+  - profiles_insert_own (users can create own profile)
+  - profiles_update_own (users can update own profile)
+  - profiles_delete_own (users can delete own profile)
+✓ Granted proper permissions to authenticated users
+✓ No more infinite recursion!
+
+═══════════════════════════════════════════════════════════════
+
+WHY THIS HAPPENED:
+
+The profiles table had multiple or conflicting RLS policies that
+were checking the profiles table itself, creating an infinite
+loop:
+
+Policy checks profiles → triggers same policy → checks profiles
+→ triggers policy again → INFINITE LOOP!
+
+The fix uses simple `auth.uid() = id` checks that don't need to
+query the profiles table, breaking the circular reference.
+
+═══════════════════════════════════════════════════════════════
+
+NEED HELP?
+
+Read: FIX-SUPABASE-ERRORS.md (detailed guide)
+Run: fix-profiles-rls.sql (SQL script)
+
+═══════════════════════════════════════════════════════════════

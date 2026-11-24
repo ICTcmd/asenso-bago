@@ -350,6 +350,32 @@ function buildChatbot() {
     #chatbot-btn:hover:not(.dragging) { transform: scale(1.08); }
     #chatbot-btn:active:not(.dragging) { transform: scale(0.95); }
     #chatbot-btn svg { width: 28px; height: 28px; color: white; pointer-events: none; }
+    
+    /* Adjust button position on small screens to avoid nav bar */
+    @media (max-width: 480px) {
+      #chatbot-btn {
+        bottom: 85px; /* Keep above bottom nav */
+        right: 12px;
+        width: 52px;
+        height: 52px;
+      }
+      #chatbot-btn svg {
+        width: 26px;
+        height: 26px;
+      }
+    }
+    
+    /* Extra adjustment for very small screens */
+    @media (max-height: 700px) {
+      #chatbot-btn {
+        width: 50px;
+        height: 50px;
+      }
+      #chatbot-btn svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
 
     /* Notification dot */
     #chatbot-btn .notif-dot {
@@ -386,8 +412,8 @@ function buildChatbot() {
       right: 0;
       max-width: 480px;
       margin: 0 auto;
-      height: 85vh;
-      max-height: 680px;
+      height: min(85vh, 680px);
+      height: min(85dvh, 680px); /* Use dynamic viewport for better mobile support */
       background: #fff;
       border-radius: 24px 24px 0 0;
       box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
@@ -400,11 +426,39 @@ function buildChatbot() {
     #chatbot-window.open {
       transform: translateY(0);
     }
+    
+    /* Mobile optimization for small screens */
+    @media (max-width: 480px) {
+      #chatbot-window {
+        max-width: 100%;
+        height: calc(100vh - 50px); /* Leave small gap at top */
+        height: calc(100dvh - 50px); /* Dynamic viewport */
+        border-radius: 20px 20px 0 0;
+      }
+    }
+    
+    /* Extra small screens (iPhone SE, small Android) */
+    @media (max-height: 700px) {
+      #chatbot-window {
+        height: calc(100vh - 30px);
+        height: calc(100dvh - 30px);
+      }
+      #chatbot-header {
+        padding: 12px 16px;
+      }
+      #chatbot-header .bot-name {
+        font-size: 15px;
+      }
+      #chatbot-header .bot-status {
+        font-size: 11px;
+      }
+    }
 
     /* Header */
     #chatbot-header {
       background: linear-gradient(135deg, #D97732, #F3A65A);
       padding: 16px 20px;
+      padding-top: max(16px, env(safe-area-inset-top, 0px)); /* Handle notch/Dynamic Island */
       border-radius: 24px 24px 0 0;
       display: flex;
       align-items: center;
@@ -471,7 +525,17 @@ function buildChatbot() {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      overscroll-behavior: contain; /* Prevent scroll chaining */
+      scroll-behavior: smooth;
+    }
+    
+    /* Mobile adjustments for messages */
+    @media (max-width: 480px) {
+      #chatbot-messages {
+        padding: 12px;
+        gap: 10px;
+      }
     }
 
     /* Message bubbles */
@@ -495,6 +559,7 @@ function buildChatbot() {
       line-height: 1.6;
       max-width: 100%;
       word-break: break-word;
+      overflow-wrap: break-word; /* Better word wrapping */
     }
     .chat-msg.bot .msg-bubble {
       background: #f3f4f6;
@@ -505,6 +570,14 @@ function buildChatbot() {
       background: linear-gradient(135deg, #D97732, #F3A65A);
       color: white;
       border-bottom-right-radius: 4px;
+    }
+    
+    /* Smaller text on very small screens */
+    @media (max-width: 360px) {
+      .msg-bubble {
+        font-size: 13px;
+        padding: 9px 12px;
+      }
     }
 
     /* Typing indicator */
@@ -537,6 +610,9 @@ function buildChatbot() {
       flex-wrap: wrap;
       gap: 8px;
       flex-shrink: 0;
+      max-height: 120px; /* Prevent suggestions from taking too much space */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .suggestion-chip {
       background: #fff4e8;
@@ -550,13 +626,27 @@ function buildChatbot() {
       white-space: nowrap;
       transition: all 0.15s;
       -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0; /* Prevent chips from shrinking */
     }
     .suggestion-chip:hover { background: #D97732; color: white; border-color: #D97732; }
+    .suggestion-chip:active { transform: scale(0.95); }
+    
+    /* Mobile adjustments for suggestions */
+    @media (max-width: 480px) {
+      #chatbot-suggestions {
+        padding: 0 12px 8px;
+        gap: 6px;
+      }
+      .suggestion-chip {
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+    }
 
     /* Input area */
     #chatbot-input-area {
       padding: 12px 16px;
-      padding-bottom: max(16px, env(safe-area-inset-bottom));
+      padding-bottom: max(12px, env(safe-area-inset-bottom, 0px)); /* Handle iPhone home indicator */
       border-top: 1px solid #f3f4f6;
       display: flex;
       gap: 8px;
@@ -569,7 +659,7 @@ function buildChatbot() {
       border: 2px solid #e5e7eb;
       border-radius: 20px;
       padding: 10px 16px;
-      font-size: 14px;
+      font-size: 16px; /* 16px prevents iOS zoom on focus */
       font-family: inherit;
       resize: none;
       outline: none;
@@ -577,8 +667,27 @@ function buildChatbot() {
       min-height: 42px;
       line-height: 1.4;
       transition: border-color 0.2s;
+      -webkit-appearance: none; /* Remove iOS default styling */
     }
     #chatbot-input:focus { border-color: #D97732; }
+    
+    /* Smaller screens adjustments */
+    @media (max-width: 480px) {
+      #chatbot-input-area {
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+      }
+      #chatbot-input {
+        padding: 9px 14px;
+        font-size: 16px; /* Keep 16px to prevent zoom */
+      }
+    }
+    
+    @media (max-height: 700px) {
+      #chatbot-input {
+        max-height: 80px; /* Smaller max height on short screens */
+      }
+    }
     #chatbot-send {
       width: 42px;
       height: 42px;
