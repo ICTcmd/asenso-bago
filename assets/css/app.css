@@ -110,6 +110,11 @@ body {
   overflow-x: hidden;
   overscroll-behavior-y: contain;
   line-height: 1.5;
+  /* GPU acceleration for smooth back/forward navigation */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* ── Reusable Component Classes ── */

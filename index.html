@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=4.1" />
+  <link rel="stylesheet" href="assets/css/app.css?v=4.2" />
   <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=1.2" />
   <link rel="manifest" href="manifest.json?v=4.0" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
@@ -2078,43 +2078,37 @@
     const link = e.target.closest('a.external-link');
     if (link && isIOS) {
       // On iOS, navigate in same window so back button works
-      // Don't prevent default - let it navigate naturally
-      // Store current scroll position and active page
-      sessionStorage.setItem('scrollPos', window.scrollY);
-      sessionStorage.setItem('lastPage', window.location.href);
-      sessionStorage.setItem('returnTime', Date.now());
+      // Store minimal state for instant restoration
+      try {
+        sessionStorage.setItem('appScrollY', window.scrollY.toString());
+        sessionStorage.setItem('appReturnFlag', '1');
+      } catch (err) {
+        // Ignore storage errors
+      }
     }
   });
   
-  // Smooth restoration when returning to app
-  window.addEventListener('pageshow', function(event) {
-    const scrollPos = sessionStorage.getItem('scrollPos');
-    const returnTime = sessionStorage.getItem('returnTime');
+  // Ultra-fast restoration when returning to app
+  // This runs BEFORE the page fully renders for instant feel
+  (function() {
+    const returnFlag = sessionStorage.getItem('appReturnFlag');
+    const scrollY = sessionStorage.getItem('appScrollY');
     
-    if (scrollPos && returnTime) {
-      // Add fade-in effect when returning
-      document.body.style.opacity = '0';
-      document.body.style.transition = 'opacity 0.3s ease';
+    if (returnFlag && scrollY) {
+      // Immediately restore scroll BEFORE page paints
+      window.scrollTo(0, parseInt(scrollY) || 0);
       
-      requestAnimationFrame(() => {
-        // Restore scroll position smoothly
-        window.scrollTo({
-          top: parseInt(scrollPos),
-          behavior: 'instant' // Instant to avoid jarring scroll animation
-        });
-        
-        // Fade in content
-        setTimeout(() => {
-          document.body.style.opacity = '1';
-        }, 10);
-        
-        // Clean up
-        setTimeout(() => {
-          document.body.style.transition = '';
-          sessionStorage.removeItem('scrollPos');
-          sessionStorage.removeItem('returnTime');
-        }, 350);
-      });
+      // Clear flags immediately
+      sessionStorage.removeItem('appReturnFlag');
+      sessionStorage.removeItem('appScrollY');
+    }
+  })();
+  
+  // Additional pageshow handler for bfcache (back-forward cache)
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      // Page was restored from bfcache - already fast!
+      // No action needed, browser handles it natively
     }
   });
 
