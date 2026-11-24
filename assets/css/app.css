@@ -377,7 +377,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--color-border-light);
-  display: none; /* Hidden by default */
+  display: flex; /* Always flex by default - JS will control visibility */
   z-index: 10000; /* Higher than chatbot to ensure always visible */
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow: var(--shadow-lg);
@@ -385,13 +385,6 @@ body {
   will-change: transform;
   transform: translateX(-50%) translateZ(0);
   -webkit-transform: translateX(-50%) translateZ(0);
-}
-
-/* Show bottom nav when main app is visible (not on splash) */
-#main-app:not([style*="display: none"]) ~ .bottom-nav,
-#main-app:not([style*="display:none"]) ~ .bottom-nav,
-#main-app[style*="display: flex"] ~ .bottom-nav {
-  display: flex !important;
 }
 
 /* Hide on desktop (900px+) */

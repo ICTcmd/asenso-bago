@@ -2344,7 +2344,7 @@
     const sidebar   = document.querySelector('.desktop-sidebar');
     splash.style.opacity = '0';
     splash.style.transition = 'opacity 0.4s ease';
-    // Remember that user already passed splash  survives back navigation
+    // Remember that user already passed splash — survives back navigation
     sessionStorage.setItem('splashDone', '1');
     setTimeout(() => {
       splash.style.display = 'none';
@@ -2352,8 +2352,9 @@
       mainApp.style.display = 'flex';
       if (isDesktop) {
         if (sidebar) sidebar.style.display = 'flex';
+        if (bottomNav) bottomNav.style.display = 'none'; // Hide on desktop
       } else {
-        bottomNav.style.display = 'flex';
+        if (bottomNav) bottomNav.style.display = 'flex'; // Show on mobile
       }
       updateGreeting();
       animateCounters();
@@ -2368,11 +2369,32 @@
     const sidebar   = document.querySelector('.desktop-sidebar');
     if (splash)    { splash.style.display = 'none'; }
     if (mainApp)   { mainApp.style.display = 'flex'; }
-    if (isDesktop) { if (sidebar) sidebar.style.display = 'flex'; }
-    else           { if (bottomNav) bottomNav.style.display = 'flex'; }
+    if (isDesktop) { 
+      if (sidebar) sidebar.style.display = 'flex'; 
+      if (bottomNav) bottomNav.style.display = 'none'; // Hide on desktop
+    } else {
+      if (bottomNav) bottomNav.style.display = 'flex'; // Show on mobile
+    }
     updateGreeting();
     animateCounters();
   }
+
+  // On page load, hide bottom nav on splash
+  window.addEventListener('DOMContentLoaded', () => {
+    const splash = document.getElementById('splash');
+    const mainApp = document.getElementById('main-app');
+    const bottomNav = document.getElementById('bottom-nav');
+    
+    // Hide bottom nav if splash is visible
+    if (splash && splash.style.display !== 'none' && bottomNav) {
+      bottomNav.style.display = 'none';
+    }
+    
+    // Show bottom nav if main app is visible (mobile only)
+    if (mainApp && mainApp.style.display === 'flex' && bottomNav && !isDesktop) {
+      bottomNav.style.display = 'flex';
+    }
+  });
 
   // Mobile button
   const mobileBtn = document.getElementById('get-started-btn');

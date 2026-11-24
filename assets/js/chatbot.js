@@ -321,11 +321,12 @@ function buildChatbot() {
   // Create styles
   const style = document.createElement('style');
   style.textContent = `
-    /* Floating button - appears to scroll with content */
+    /* Floating button - fixed in middle of screen, always visible */
     #chatbot-btn {
-      position: fixed; /* Fixed but we'll move it on scroll */
-      bottom: 150px;
+      position: fixed; /* Fixed to viewport - stays visible while scrolling */
+      bottom: 50%; /* Middle of screen vertically */
       right: 16px;
+      transform: translateY(50%) translateZ(0); /* Center vertically + GPU acceleration */
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -336,15 +337,14 @@ function buildChatbot() {
       display: none; /* Hidden by default, shown via JS */
       align-items: center;
       justify-content: center;
-      z-index: 10001;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, bottom 0.1s ease;
+      z-index: 9999; /* Below bottom nav (10000) but above content */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
-      touch-action: pan-y;
+      touch-action: none; /* Allow full dragging */
       user-select: none;
       /* Force hardware acceleration */
       will-change: transform;
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
+      -webkit-transform: translateY(50%) translateZ(0);
     }
     
     #chatbot-btn.dragging {
@@ -353,14 +353,13 @@ function buildChatbot() {
       box-shadow: 0 8px 24px rgba(217,119,50,0.6), 0 4px 12px rgba(0,0,0,0.25);
       z-index: 10002;
     }
-    #chatbot-btn:hover:not(.dragging) { transform: translateZ(0) scale(1.08); }
-    #chatbot-btn:active:not(.dragging) { transform: translateZ(0) scale(0.95); }
+    #chatbot-btn:hover:not(.dragging) { transform: translateY(50%) translateZ(0) scale(1.08); }
+    #chatbot-btn:active:not(.dragging) { transform: translateY(50%) translateZ(0) scale(0.95); }
     #chatbot-btn svg { width: 28px; height: 28px; color: white; pointer-events: none; }
     
     /* Adjust button position on small screens */
     @media (max-width: 480px) {
       #chatbot-btn {
-        bottom: 150px;
         right: 12px;
         width: 52px;
         height: 52px;
@@ -376,7 +375,6 @@ function buildChatbot() {
       #chatbot-btn {
         width: 50px;
         height: 50px;
-        bottom: 130px;
       }
       #chatbot-btn svg {
         width: 24px;
