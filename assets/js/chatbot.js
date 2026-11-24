@@ -321,10 +321,10 @@ function buildChatbot() {
   // Create styles
   const style = document.createElement('style');
   style.textContent = `
-    /* Floating button - appears to scroll with content */
+    /* Floating button - scrolls with content */
     #chatbot-btn {
-      position: fixed; /* Fixed but we'll move it on scroll */
-      bottom: 150px;
+      position: absolute; /* Scrolls with page content */
+      top: 300px; /* Position from top of page */
       right: 16px;
       width: 56px;
       height: 56px;
@@ -337,7 +337,7 @@ function buildChatbot() {
       align-items: center;
       justify-content: center;
       z-index: 10001;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, bottom 0.1s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       -webkit-tap-highlight-color: transparent;
       touch-action: pan-y;
       user-select: none;
@@ -360,7 +360,7 @@ function buildChatbot() {
     /* Adjust button position on small screens */
     @media (max-width: 480px) {
       #chatbot-btn {
-        bottom: 150px;
+        top: 250px; /* Visible in viewport */
         right: 12px;
         width: 52px;
         height: 52px;
@@ -376,7 +376,7 @@ function buildChatbot() {
       #chatbot-btn {
         width: 50px;
         height: 50px;
-        bottom: 130px;
+        top: 200px;
       }
       #chatbot-btn svg {
         width: 24px;
@@ -786,12 +786,21 @@ function buildChatbot() {
     </div>
   `;
 
+  // Append to body first, then move to main-app when it's available
   document.body.appendChild(btn);
   document.body.appendChild(backdrop);
   document.body.appendChild(chatWindow);
 
   // Hide chatbot initially (will show when main app loads)
   btn.style.display = 'none';
+  
+  // Move button to main-app so it scrolls with content
+  function moveButtonToMainApp() {
+    const mainApp = document.getElementById('main-app');
+    if (mainApp && btn.parentElement !== mainApp) {
+      mainApp.appendChild(btn);
+    }
+  }
   
   // Show/hide chatbot based on splash vs main app
   function updateChatbotVisibility() {
@@ -800,6 +809,7 @@ function buildChatbot() {
     
     // Show chatbot only when main app is visible (not on splash screen)
     if (mainApp && mainApp.style.display !== 'none' && splash && splash.style.display === 'none') {
+      moveButtonToMainApp(); // Move to main-app container
       btn.style.display = 'flex';
     } else {
       btn.style.display = 'none';
@@ -857,10 +867,12 @@ function loadButtonPosition() {
   try {
     const saved = localStorage.getItem('chatbot-button-position');
     if (saved) {
-      const { bottom, right } = JSON.parse(saved);
+      const { top, right } = JSON.parse(saved);
       const btn = document.getElementById('chatbot-btn');
-      btn.style.bottom = bottom;
-      btn.style.right = right;
+      if (btn) {
+        btn.style.top = top;
+        btn.style.right = right;
+      }
     }
   } catch (e) {
     console.error('Failed to load button position:', e);
@@ -871,7 +883,7 @@ function saveButtonPosition() {
   try {
     const btn = document.getElementById('chatbot-btn');
     const position = {
-      bottom: btn.style.bottom,
+      top: btn.style.top,
       right: btn.style.right
     };
     localStorage.setItem('chatbot-button-position', JSON.stringify(position));
@@ -924,18 +936,22 @@ function drag(e) {
     const newX = buttonStartX + deltaX;
     const newY = buttonStartY + deltaY;
     
-    // Keep button within viewport bounds
+    // Get the scrollable page container
+    const page = document.querySelector('.page.active');
+    const scrollTop = page ? page.scrollTop : 0;
+    
+    // Keep button within page bounds (considering scroll)
     const maxX = window.innerWidth - btn.offsetWidth;
-    const maxY = window.innerHeight - btn.offsetHeight;
+    const maxY = (page ? page.scrollHeight : window.innerHeight) - btn.offsetHeight;
     
     const clampedX = Math.max(0, Math.min(newX, maxX));
     const clampedY = Math.max(0, Math.min(newY, maxY));
     
-    // Convert to bottom/right positioning
-    const bottom = window.innerHeight - clampedY - btn.offsetHeight;
+    // Convert to top/right positioning (absolute positioning from page top)
+    const top = clampedY;
     const right = window.innerWidth - clampedX - btn.offsetWidth;
     
-    btn.style.bottom = `${bottom}px`;
+    btn.style.top = `${top}px`;
     btn.style.right = `${right}px`;
   }
 }
