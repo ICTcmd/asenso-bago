@@ -1,6 +1,6 @@
-﻿// Asenso Bago â€” Service Worker v20260526
+﻿// Asenso Bago Service Worker v20261124-ORANGE
 // Version timestamp ensures cache busts on every deploy
-const CACHE = 'bago-pwa-v__CACHE_VERSION__';
+const CACHE = 'bago-pwa-v20261124-orange';
 
 const ASSETS = [
   '/',
@@ -70,6 +70,12 @@ self.addEventListener('fetch', e => {
 
   if (url.origin !== self.location.origin) return;
 
+  // Never cache CSS files - always fetch fresh so theme updates work immediately
+  if (url.pathname.endsWith('.css')) {
+    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+    return;
+  }
+
   // Never cache JS files - always fetch fresh so updates work immediately
   if (url.pathname.endsWith('.js')) {
     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -82,7 +88,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Never cache map.html or index.html â€” always fetch fresh
+  // Never cache map.html or index.html - always fetch fresh
   if (url.pathname === '/map.html' || url.pathname === '/index.html' || url.pathname === '/') {
     e.respondWith(
       fetch(e.request).catch(() => caches.match(e.request))
@@ -109,6 +115,3 @@ self.addEventListener('fetch', e => {
 self.addEventListener('message', e => {
   if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
-
-
-
