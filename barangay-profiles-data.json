@@ -493,6 +493,56 @@
     "population2025": "4,316"
   },
   {
+    "name": "Don Jorge L. Araneta",
+    "type": "urban",
+    "landArea": "2,143.98 ha",
+    "distance": "16.9 km",
+    "puroks": 31,
+    "slug": "don-jorge-l-araneta",
+    "officials": {
+      "captain": {
+        "name": "Hon. Cleo L. Rema",
+        "title": "Punong Barangay"
+      },
+      "sk_chair": {
+        "name": "To be updated",
+        "title": "SK Chairperson"
+      },
+      "kagawad": [
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated"
+      ],
+      "sk_kagawad": [
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated",
+        "To be updated"
+      ],
+      "secretary": "To be updated",
+      "treasurer": "To be updated",
+      "sk_secretary": "To be updated",
+      "sk_treasurer": "To be updated"
+    },
+    "description": "Named after Don Jorge Araneta, founder of Ma-ao Sugar Milling Company who spearheaded the sugar industry boom. The name was later changed to Don Jorge Araneta in honor of one of the illustrious sons of Bago City. He was acknowledged as the founder of the Ma-ao Sugar Milling Company and spearheaded the economic boom of the sugar industry in this milling district through his professional management of the Ma-ao Sugar Central.",
+    "images": {
+      "captain": "11-Brgy-Captain-Cleo-L-Rema-Don-Jorge-L-Araneta-2023.jpg",
+      "sk_chair": null,
+      "logo": true,
+      "illustration": "005_about-brgy-don-jorge-araneta.jpg"
+    },
+    "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-don-jorge-araneta",
+    "households2025": "2,151",
+    "population2025": "9,457"
+  },
+  {
     "name": "Dulao",
     "type": "rural",
     "landArea": "2,439.91 ha",
