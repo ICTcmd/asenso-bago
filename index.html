@@ -2100,13 +2100,28 @@
       }
     };
     
-    // Fallback: show message if Facebook doesn't load after 10 seconds
+    // Fallback: show message if Facebook doesn't load after 8 seconds
     setTimeout(() => {
-      if (!window.FB || !document.querySelector('.fb-page iframe')) {
+      const fbWrap = document.querySelector('.fb-embed-wrap');
+      const fbIframe = document.querySelector('.fb-page iframe');
+      
+      // Check if iframe loaded successfully by checking if it has content
+      let iframeLoaded = false;
+      if (fbIframe) {
+        try {
+          // If iframe is blocked, it will have minimal height
+          const rect = fbIframe.getBoundingClientRect();
+          iframeLoaded = rect.height > 100; // Successfully loaded iframes are taller
+        } catch (e) {
+          iframeLoaded = false;
+        }
+      }
+      
+      if (!window.FB || !fbIframe || !iframeLoaded) {
         console.warn('Facebook feed failed to load - showing fallback');
         showFacebookFallback();
       }
-    }, 10000);
+    }, 8000);
     
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/sdk.js';
