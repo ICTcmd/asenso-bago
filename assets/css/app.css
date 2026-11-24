@@ -377,7 +377,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--color-border-light);
-  display: flex; /* Always flex by default - JS will control visibility */
+  display: flex;
   z-index: 10000; /* Higher than chatbot to ensure always visible */
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow: var(--shadow-lg);
@@ -385,6 +385,7 @@ body {
   will-change: transform;
   transform: translateX(-50%) translateZ(0);
   -webkit-transform: translateX(-50%) translateZ(0);
+  /* Note: Hidden by default with inline style, shown via JS when main app loads */
 }
 
 /* Hide on desktop (900px+) */
