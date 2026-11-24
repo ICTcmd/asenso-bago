@@ -2204,52 +2204,108 @@
     }
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // SERVICE WORKER - AUTO-UPDATE SYSTEM
+  // Detects new versions and prompts user to update
+  // ═══════════════════════════════════════════════════════════
   if ('serviceWorker' in navigator) {
-    // Unregister all service workers permanently
-    // Prevents stale cache issues with CSP headers and JS updates
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      registrations.forEach(reg => reg.unregister());
+    // Register service worker
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('[SW] Registered successfully');
+        
+        // Check for updates every 60 seconds
+        setInterval(() => {
+          registration.update();
+        }, 60000);
+        
+        // Detect when new service worker is waiting
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available!
+              showUpdateBanner(newWorker);
+            }
+          });
+        });
+      })
+      .catch(err => console.error('[SW] Registration failed:', err));
+    
+    // Listen for controller changes (new SW activated)
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
     });
   }
 
   function showUpdateBanner(worker) {
+    // Remove any existing update banner
+    const existing = document.getElementById('update-bar');
+    if (existing) existing.remove();
+    
     // Create update notification bar
     const bar = document.createElement('div');
     bar.id = 'update-bar';
     bar.style.cssText = `
       position:fixed; top:0; left:50%; transform:translateX(-50%);
-      width:100%; max-width:430px; z-index:9999;
-      background:#7a2800; color:#fff;
+      width:100%; max-width:430px; z-index:99999;
+      background:linear-gradient(135deg, #D97732, #F3A65A); color:#fff;
       display:flex; align-items:center; gap:12px;
-      padding:12px 16px; font-family:inherit;
-      box-shadow:0 4px 16px rgba(0,0,0,0.2);
+      padding:14px 16px; font-family:inherit;
+      box-shadow:0 4px 16px rgba(217,119,50,0.4);
+      animation: slideDown 0.3s ease;
     `;
     bar.innerHTML = `
-      <span style="flex:1;font-size:13px;font-weight:600;">
-        ?? A new version of Asenso Bago is available.
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:24px;height:24px;flex-shrink:0;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+      </svg>
+      <span style="flex:1;font-size:14px;font-weight:600;">
+        New version available!
       </span>
       <button onclick="applyUpdate()" style="
-        background:#D97732;color:#fff;border:none;border-radius:8px;
-        padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;
-        font-family:inherit;white-space:nowrap;
-      ">Update Now</button>
-      <button onclick="this.parentElement.remove()" style="
-        background:none;border:none;color:rgba(255,255,255,0.6);
-        font-size:18px;cursor:pointer;padding:0 4px;line-height:1;
-      ">ï¿½</button>
+        background:#fff;color:#D97732;border:none;border-radius:8px;
+        padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;
+        font-family:inherit;white-space:nowrap;box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      ">Update</button>
     `;
+    
+    // Add slide animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideDown {
+        from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+    
     document.body.prepend(bar);
+    
     // Store reference to new worker for activation
     window._pendingWorker = worker;
+    
+    // Auto-update after 10 seconds if user doesn't click
+    setTimeout(() => {
+      if (document.getElementById('update-bar')) {
+        applyUpdate();
+      }
+    }, 10000);
   }
 
   function applyUpdate() {
+    const bar = document.getElementById('update-bar');
+    if (bar) {
+      bar.innerHTML = '<span style="flex:1;text-align:center;font-size:14px;font-weight:600;">Updating app...</span>';
+    }
+    
     if (window._pendingWorker) {
       window._pendingWorker.postMessage('SKIP_WAITING');
     }
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      window.location.reload();
-    });
   }
 
   // ---  DAILY BIBLE VERSE ------------------------------------------------------
