@@ -321,12 +321,12 @@ function buildChatbot() {
   // Create styles
   const style = document.createElement('style');
   style.textContent = `
-    /* Floating button - fixed in middle of screen, always visible */
+    /* Floating button - fixed in middle-right of screen */
     #chatbot-btn {
-      position: fixed; /* Fixed to viewport - stays visible while scrolling */
-      bottom: 50%; /* Middle of screen vertically */
+      position: fixed; /* Fixed to viewport - always visible while scrolling */
+      top: 50%; /* Start at middle of screen */
       right: 16px;
-      transform: translateY(50%) translateZ(0); /* Center vertically + GPU acceleration */
+      transform: translateY(-50%) translateZ(0); /* Center vertically (move UP by half its height) */
       width: 56px;
       height: 56px;
       border-radius: 50%;
@@ -344,7 +344,7 @@ function buildChatbot() {
       user-select: none;
       /* Force hardware acceleration */
       will-change: transform;
-      -webkit-transform: translateY(50%) translateZ(0);
+      -webkit-transform: translateY(-50%) translateZ(0);
     }
     
     #chatbot-btn.dragging {
@@ -353,8 +353,8 @@ function buildChatbot() {
       box-shadow: 0 8px 24px rgba(217,119,50,0.6), 0 4px 12px rgba(0,0,0,0.25);
       z-index: 10002;
     }
-    #chatbot-btn:hover:not(.dragging) { transform: translateY(50%) translateZ(0) scale(1.08); }
-    #chatbot-btn:active:not(.dragging) { transform: translateY(50%) translateZ(0) scale(0.95); }
+    #chatbot-btn:hover:not(.dragging) { transform: translateY(-50%) translateZ(0) scale(1.08); }
+    #chatbot-btn:active:not(.dragging) { transform: translateY(-50%) translateZ(0) scale(0.95); }
     #chatbot-btn svg { width: 28px; height: 28px; color: white; pointer-events: none; }
     
     /* Adjust button position on small screens */

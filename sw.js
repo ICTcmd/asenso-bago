@@ -1,6 +1,6 @@
-﻿// Asenso Bago Service Worker v20261124-ORANGE
+﻿// Asenso Bago Service Worker v20261124-NAVBAR-FIX
 // Version timestamp ensures cache busts on every deploy
-const CACHE = 'bago-pwa-v20261124-orange';
+const CACHE = 'bago-pwa-v20261124-navbar-fix';
 
 const ASSETS = [
   '/',
