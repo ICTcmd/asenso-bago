@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=3.5" />
+  <link rel="stylesheet" href="assets/css/app.css?v=3.6" />
   <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=1.1" />
   <link rel="manifest" href="manifest.json?v=2.2" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
@@ -2079,18 +2079,42 @@
     if (link && isIOS) {
       // On iOS, navigate in same window so back button works
       // Don't prevent default - let it navigate naturally
-      // Store current scroll position
+      // Store current scroll position and active page
       sessionStorage.setItem('scrollPos', window.scrollY);
       sessionStorage.setItem('lastPage', window.location.href);
+      sessionStorage.setItem('returnTime', Date.now());
     }
   });
   
-  // Restore scroll position when returning
-  window.addEventListener('pageshow', function() {
+  // Smooth restoration when returning to app
+  window.addEventListener('pageshow', function(event) {
     const scrollPos = sessionStorage.getItem('scrollPos');
-    if (scrollPos) {
-      window.scrollTo(0, parseInt(scrollPos));
-      sessionStorage.removeItem('scrollPos');
+    const returnTime = sessionStorage.getItem('returnTime');
+    
+    if (scrollPos && returnTime) {
+      // Add fade-in effect when returning
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease';
+      
+      requestAnimationFrame(() => {
+        // Restore scroll position smoothly
+        window.scrollTo({
+          top: parseInt(scrollPos),
+          behavior: 'instant' // Instant to avoid jarring scroll animation
+        });
+        
+        // Fade in content
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 10);
+        
+        // Clean up
+        setTimeout(() => {
+          document.body.style.transition = '';
+          sessionStorage.removeItem('scrollPos');
+          sessionStorage.removeItem('returnTime');
+        }, 350);
+      });
     }
   });
 

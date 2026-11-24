@@ -1924,7 +1924,17 @@ body {
 /* ── Animations ── */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.page.active { animation: fadeIn 0.22s ease; }
+.page.active { animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Smooth page transitions */
+.page {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Body transition for back navigation */
+body {
+  transition: opacity 0.3s ease;
+}
 
 /* ── Install Banner ── */
 #install-banner {
