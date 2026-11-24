@@ -855,10 +855,13 @@ function loadButtonPosition() {
   try {
     const saved = localStorage.getItem('chatbot-button-position');
     if (saved) {
-      const { bottom, right } = JSON.parse(saved);
+      const { top, right } = JSON.parse(saved);
       const btn = document.getElementById('chatbot-btn');
-      btn.style.bottom = bottom;
-      btn.style.right = right;
+      if (btn) {
+        btn.style.top = top;
+        btn.style.right = right;
+        btn.style.transform = 'translateZ(0)'; // Remove center transform when using saved position
+      }
     }
   } catch (e) {
     console.error('Failed to load button position:', e);
@@ -869,7 +872,7 @@ function saveButtonPosition() {
   try {
     const btn = document.getElementById('chatbot-btn');
     const position = {
-      bottom: btn.style.bottom,
+      top: btn.style.top,
       right: btn.style.right
     };
     localStorage.setItem('chatbot-button-position', JSON.stringify(position));
@@ -929,12 +932,13 @@ function drag(e) {
     const clampedX = Math.max(0, Math.min(newX, maxX));
     const clampedY = Math.max(0, Math.min(newY, maxY));
     
-    // Convert to bottom/right positioning
-    const bottom = window.innerHeight - clampedY - btn.offsetHeight;
+    // Use top/right positioning (matching the CSS)
+    const top = clampedY;
     const right = window.innerWidth - clampedX - btn.offsetWidth;
     
-    btn.style.bottom = `${bottom}px`;
+    btn.style.top = `${top}px`;
     btn.style.right = `${right}px`;
+    btn.style.transform = 'translateZ(0)'; // Remove translateY when dragging
   }
 }
 
