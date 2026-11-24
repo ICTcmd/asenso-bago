@@ -409,62 +409,57 @@ function buildChatbot() {
       opacity: 1;
     }
 
-    /* Chat window — bottom sheet on mobile */
+    /* Chat window — centered popup (not bottom sheet) */
     #chatbot-window {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-width: 480px;
-      margin: 0 auto;
-      height: min(85vh, 680px);
-      height: min(85dvh, 680px); /* Use dynamic viewport for better mobile support */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: calc(100% - 32px);
+      max-width: 420px;
+      height: min(80vh, 650px);
+      height: min(80dvh, 650px);
       background: #fff;
-      border-radius: 24px 24px 0 0;
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 8px 24px rgba(0,0,0,0.15);
       z-index: 9002;
       display: flex;
       flex-direction: column;
-      transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.25s ease;
     }
     #chatbot-window.open {
-      transform: translateY(0);
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: all;
     }
-    
-    /* Mobile optimization for small screens */
+
+    /* Small screens — a bit more height */
     @media (max-width: 480px) {
       #chatbot-window {
-        max-width: 100%;
-        height: calc(100vh - 50px); /* Leave small gap at top */
-        height: calc(100dvh - 50px); /* Dynamic viewport */
-        border-radius: 20px 20px 0 0;
+        width: calc(100% - 24px);
+        height: min(82vh, 640px);
+        height: min(82dvh, 640px);
       }
     }
-    
-    /* Extra small screens (iPhone SE, small Android) */
+
     @media (max-height: 700px) {
       #chatbot-window {
-        height: calc(100vh - 30px);
-        height: calc(100dvh - 30px);
+        height: calc(100dvh - 80px);
       }
       #chatbot-header {
         padding: 12px 16px;
       }
-      #chatbot-header .bot-name {
-        font-size: 15px;
-      }
-      #chatbot-header .bot-status {
-        font-size: 11px;
-      }
+      #chatbot-header .bot-name { font-size: 15px; }
+      #chatbot-header .bot-status { font-size: 11px; }
     }
 
     /* Header */
     #chatbot-header {
       background: linear-gradient(135deg, #D97732, #F3A65A);
       padding: 16px 20px;
-      padding-top: max(16px, env(safe-area-inset-top, 0px)); /* Handle notch/Dynamic Island */
-      border-radius: 24px 24px 0 0;
+      border-radius: 20px 20px 0 0;
       display: flex;
       align-items: center;
       gap: 12px;
