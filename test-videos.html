@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Test - Asenso Bago</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 { color: #D97732; }
+    .video-test {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    video {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 8px;
+      background: #000;
+    }
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .info { background: #d1ecf1; color: #0c5460; }
+  </style>
+</head>
+<body>
+  <h1>🎥 Tourism Videos Test Page</h1>
+  <p>This page tests if the tourism videos are accessible and playable.</p>
+
+  <!-- Video 1: Bago Tourism -->
+  <div class="video-test">
+    <h2>1. Bago Tourism Video (36.8 MB)</h2>
+    <video id="video1" controls preload="metadata">
+      <source src="assets/videos/bago-tourism-2026.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="status1" class="status info">Loading...</div>
+  </div>
+
+  <!-- Video 2: Al Cinco -->
+  <div class="video-test">
+    <h2>2. Al Cinco Festival Video (30.2 MB)</h2>
+    <video id="video2" controls preload="metadata">
+      <source src="assets/videos/al-cinco-2026.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="status2" class="status info">Loading...</div>
+  </div>
+
+  <!-- Video 3: Bugana -->
+  <div class="video-test">
+    <h2>3. Bugana Festival Video (9.5 MB)</h2>
+    <video id="video3" controls preload="metadata">
+      <source src="assets/videos/bugana-2026-dionela.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div id="status3" class="status info">Loading...</div>
+  </div>
+
+  <div class="video-test">
+    <h3>Direct Links Test:</h3>
+    <ul>
+      <li><a href="assets/videos/bago-tourism-2026.mp4" target="_blank">bago-tourism-2026.mp4</a></li>
+      <li><a href="assets/videos/al-cinco-2026.mp4" target="_blank">al-cinco-2026.mp4</a></li>
+      <li><a href="assets/videos/bugana-2026-dionela.mp4" target="_blank">bugana-2026-dionela.mp4</a></li>
+    </ul>
+    <p><small>Click links above to test direct access. If they download or play, videos are deployed correctly.</small></p>
+  </div>
+
+  <script>
+    // Test each video
+    function testVideo(videoId, statusId) {
+      const video = document.getElementById(videoId);
+      const status = document.getElementById(statusId);
+      
+      video.addEventListener('loadedmetadata', () => {
+        status.textContent = `✅ Video loaded! Duration: ${Math.round(video.duration)}s`;
+        status.className = 'status success';
+      });
+      
+      video.addEventListener('error', (e) => {
+        const error = video.error;
+        let errorMsg = 'Unknown error';
+        if (error) {
+          switch(error.code) {
+            case 1: errorMsg = 'MEDIA_ERR_ABORTED - Loading aborted'; break;
+            case 2: errorMsg = 'MEDIA_ERR_NETWORK - Network error'; break;
+            case 3: errorMsg = 'MEDIA_ERR_DECODE - Decode error'; break;
+            case 4: errorMsg = 'MEDIA_ERR_SRC_NOT_SUPPORTED - File not found or format not supported'; break;
+          }
+        }
+        status.textContent = `❌ Error: ${errorMsg}`;
+        status.className = 'status error';
+      });
+
+      video.addEventListener('canplay', () => {
+        if (status.className === 'status info') {
+          status.textContent = `✅ Video ready to play`;
+          status.className = 'status success';
+        }
+      });
+    }
+
+    testVideo('video1', 'status1');
+    testVideo('video2', 'status2');
+    testVideo('video3', 'status3');
+  </script>
+</body>
+</html>
