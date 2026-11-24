@@ -321,10 +321,10 @@ function buildChatbot() {
   // Create styles
   const style = document.createElement('style');
   style.textContent = `
-    /* Floating button */
+    /* Floating button - appears to scroll with content */
     #chatbot-btn {
-      position: fixed;
-      bottom: 90px;
+      position: fixed; /* Fixed but we'll move it on scroll */
+      bottom: 150px;
       right: 16px;
       width: 56px;
       height: 56px;
@@ -333,33 +333,34 @@ function buildChatbot() {
       border: none;
       cursor: pointer;
       box-shadow: 0 4px 16px rgba(217,119,50,0.4), 0 2px 8px rgba(0,0,0,0.15);
-      display: flex;
+      display: none; /* Hidden by default, shown via JS */
       align-items: center;
       justify-content: center;
-      z-index: 10001; /* Above bottom nav (10000) but below modals */
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 10001;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, bottom 0.1s ease;
       -webkit-tap-highlight-color: transparent;
-      touch-action: pan-y; /* Allow vertical scrolling but enable dragging */
+      touch-action: pan-y;
       user-select: none;
       /* Force hardware acceleration */
       will-change: transform;
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
+    
     #chatbot-btn.dragging {
       cursor: grabbing;
       transition: none;
       box-shadow: 0 8px 24px rgba(217,119,50,0.6), 0 4px 12px rgba(0,0,0,0.25);
-      z-index: 10002; /* Even higher when dragging */
+      z-index: 10002;
     }
     #chatbot-btn:hover:not(.dragging) { transform: translateZ(0) scale(1.08); }
     #chatbot-btn:active:not(.dragging) { transform: translateZ(0) scale(0.95); }
     #chatbot-btn svg { width: 28px; height: 28px; color: white; pointer-events: none; }
     
-    /* Adjust button position on small screens to avoid nav bar */
+    /* Adjust button position on small screens */
     @media (max-width: 480px) {
       #chatbot-btn {
-        bottom: 80px; /* Keep above bottom nav (adjust if needed) */
+        bottom: 150px;
         right: 12px;
         width: 52px;
         height: 52px;
@@ -375,7 +376,7 @@ function buildChatbot() {
       #chatbot-btn {
         width: 50px;
         height: 50px;
-        bottom: 75px; /* Closer to nav on small screens */
+        bottom: 130px;
       }
       #chatbot-btn svg {
         width: 24px;
@@ -788,6 +789,37 @@ function buildChatbot() {
   document.body.appendChild(btn);
   document.body.appendChild(backdrop);
   document.body.appendChild(chatWindow);
+
+  // Hide chatbot initially (will show when main app loads)
+  btn.style.display = 'none';
+  
+  // Show/hide chatbot based on splash vs main app
+  function updateChatbotVisibility() {
+    const splash = document.getElementById('splash');
+    const mainApp = document.getElementById('main-app');
+    
+    // Show chatbot only when main app is visible (not on splash screen)
+    if (mainApp && mainApp.style.display !== 'none' && splash && splash.style.display === 'none') {
+      btn.style.display = 'flex';
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+  
+  // Check visibility every time display changes
+  const observer = new MutationObserver(updateChatbotVisibility);
+  const splash = document.getElementById('splash');
+  const mainApp = document.getElementById('main-app');
+  
+  if (splash) {
+    observer.observe(splash, { attributes: true, attributeFilter: ['style'] });
+  }
+  if (mainApp) {
+    observer.observe(mainApp, { attributes: true, attributeFilter: ['style'] });
+  }
+  
+  // Initial check
+  updateChatbotVisibility();
 
   // Show suggestions
   buildSuggestions();
