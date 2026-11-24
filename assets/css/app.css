@@ -106,15 +106,10 @@ body {
   font-family: var(--font-body);
   background: var(--color-bg-page);
   color: var(--color-text-primary);
-  min-height: 100vh;
+  min-height: 100%;
   overflow-x: hidden;
-  overscroll-behavior-y: contain;
+  overscroll-behavior-y: none;
   line-height: 1.5;
-  /* GPU acceleration for smooth back/forward navigation */
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 /* ── Reusable Component Classes ── */
@@ -321,14 +316,14 @@ body {
 #app {
   max-width: 100%;
   margin: 0 auto;
-  min-height: 100vh;
+  height: 100%;
   background: var(--color-bg-page);
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-/* Responsive app width */
 @media (min-width: 768px) and (max-width: 899px) {
   #app { max-width: 480px; }
 }
@@ -339,30 +334,18 @@ body {
   flex: 1;
   flex-direction: column;
   overflow-y: auto;
-  padding-bottom: 72px;
+  overflow-x: hidden;
+  padding-bottom: 80px; /* Space for bottom nav */
   -webkit-overflow-scrolling: touch;
-  /* Performance optimizations for smooth page transitions */
-  will-change: opacity, transform;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
-.page.active { 
+.page.active {
   display: flex;
-  /* Smooth fade-in on page change */
   animation: pageFadeIn 0.2s ease-out;
 }
 
 @keyframes pageFadeIn {
-  from {
-    opacity: 0;
-    transform: translateZ(0) translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateZ(0) translateY(0);
-  }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Bottom Nav ── */

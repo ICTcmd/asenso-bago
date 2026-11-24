@@ -1,6 +1,5 @@
-﻿// Asenso Bago Service Worker v20261124-AUTO-UPDATE
-// Version timestamp ensures cache busts on every deploy
-const CACHE = 'bago-pwa-v20261124-auto-update';
+﻿// Asenso Bago Service Worker v20261124-ROOTFIX
+const CACHE = 'bago-pwa-v20261124-rootfix';
 
 const ASSETS = [
   '/',
