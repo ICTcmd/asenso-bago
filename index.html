@@ -24,7 +24,7 @@
     document.documentElement.className = window.innerWidth >= 900 ? 'is-desktop' : 'is-mobile';
 
     // FORCE RELOAD if user has old cached version
-    const APP_VERSION = '20261124-1800';
+    const APP_VERSION = '20261124-2000';
     const storedVersion = localStorage.getItem('app_version');
     if (storedVersion && storedVersion !== APP_VERSION) {
       localStorage.setItem('app_version', APP_VERSION);
@@ -2390,6 +2390,18 @@
 
     // Load Facebook SDK when News page is opened
     if (pageId === 'page-news') loadFbSdk();
+
+    // Trigger tourism card animations when visiting tourism page
+    if (pageId === 'page-tourism') {
+      setTimeout(() => {
+        const page = document.getElementById('page-tourism');
+        if (page) {
+          page.querySelectorAll('.tourism-card').forEach((card, i) => {
+            setTimeout(() => card.classList.add('animate-in'), i * 60);
+          });
+        }
+      }, 100);
+    }
   }
 
   // Bottom nav clicks
@@ -3335,24 +3347,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (tourismCards.length > 0 && 'IntersectionObserver' in window) {
           const observerOptions = {
-            root: null,
+            root: tourismPage, // Use the page container as root, not viewport
             rootMargin: '0px',
-            threshold: 0.2 // Trigger when 20% visible
+            threshold: 0.1
           };
           
           const cardObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
-                // Optionally unobserve after animation to improve performance
-                // cardObserver.unobserve(entry.target);
+                cardObserver.unobserve(entry.target); // Stop observing after animation
               }
             });
           }, observerOptions);
           
-          // Observe all tourism cards
           tourismCards.forEach(card => {
             cardObserver.observe(card);
+          });
+        } else {
+          // Fallback: just show all cards if IntersectionObserver not supported
+          tourismPage.querySelectorAll('.tourism-card').forEach(card => {
+            card.classList.add('animate-in');
           });
         }
       }

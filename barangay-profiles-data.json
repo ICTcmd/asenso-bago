@@ -505,7 +505,7 @@
         "title": "Punong Barangay"
       },
       "sk_chair": {
-        "name": "To be updated",
+        "name": "Gildo Carlo T. Famoso",
         "title": "SK Chairperson"
       },
       "kagawad": [
@@ -533,10 +533,10 @@
     },
     "description": "Named after Don Jorge Araneta, founder of Ma-ao Sugar Milling Company who spearheaded the sugar industry boom. The name was later changed to Don Jorge Araneta in honor of one of the illustrious sons of Bago City. He was acknowledged as the founder of the Ma-ao Sugar Milling Company and spearheaded the economic boom of the sugar industry in this milling district through his professional management of the Ma-ao Sugar Central.",
     "images": {
-      "captain": "11-Brgy-Captain-Cleo-L-Rema-Don-Jorge-L-Araneta-2023.jpg",
-      "sk_chair": null,
+      "captain": true,
+      "sk_chair": true,
       "logo": true,
-      "illustration": "005_about-brgy-don-jorge-araneta.jpg"
+      "illustration": true
     },
     "archive_folder": "c:\\Users\\OJTBEEG\\Desktop\\LGU-Bago-App\\BAGO_BARANGAY_ARCHIVE\\pages\\barangay-don-jorge-araneta",
     "households2025": "2,151",

@@ -74,18 +74,14 @@ let filteredDocuments = [];
 let activeYear = 'all';
 let activeType = 'all';
 let searchQuery = '';
+let currentPage = 0;
+const PAGE_SIZE = 20;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  // Parse data
   allDocuments = parseCSVData(legislativeData);
-  console.log(`Loaded ${allDocuments.length} documents`);
-
-  // Setup event listeners
   setupFilters();
   setupSearch();
-
-  // Initial render
   filterAndRender();
 });
 

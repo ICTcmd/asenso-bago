@@ -852,10 +852,17 @@ function loadButtonPosition() {
     if (saved) {
       const { top, right } = JSON.parse(saved);
       const btn = document.getElementById('chatbot-btn');
-      if (btn) {
-        btn.style.top = top;
-        btn.style.right = right;
-        btn.style.transform = 'translateZ(0)'; // Remove center transform when using saved position
+      if (btn && top && right) {
+        // Validate position is on right side (right must be small = close to right edge)
+        const rightVal = parseInt(right);
+        if (rightVal >= 0 && rightVal <= 100) {
+          btn.style.top = top;
+          btn.style.right = right;
+          btn.style.transform = 'translateZ(0)';
+        } else {
+          // Position was on left side - reset to right side center
+          localStorage.removeItem('chatbot-button-position');
+        }
       }
     }
   } catch (e) {
@@ -951,8 +958,8 @@ function endDrag(e) {
   if (isDragging) {
     saveButtonPosition();
   } else {
-    // If it wasn't a drag (just a click), open the chat
-    openChat();
+    // If it wasn't a drag (just a click), toggle the chat
+    toggleChat();
   }
   
   // Reset dragging state
@@ -1000,6 +1007,14 @@ function closeChat() {
   isChatOpen = false;
   document.getElementById('chatbot-backdrop').classList.remove('open');
   document.getElementById('chatbot-window').classList.remove('open');
+}
+
+function toggleChat() {
+  if (isChatOpen) {
+    closeChat();
+  } else {
+    openChat();
+  }
 }
 
 // ── Add message bubble ─────────────────────────────────────
