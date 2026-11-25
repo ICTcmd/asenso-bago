@@ -3381,6 +3381,9 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  background: var(--color-bg-page); /* Solid background prevents overlap */
+  position: relative;
+  z-index: 1;
 }
 
 .brgy-filters-container::-webkit-scrollbar {
@@ -4705,10 +4708,10 @@ input:checked + .toggle-slider:before {
 
 .tourism-featured-video {
   background: linear-gradient(180deg, #0A2342 0%, #1a3a5c 100%);
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-8) var(--space-4) var(--space-6);
   margin: 0 0 var(--space-4) 0;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Don't clip the video */
 }
 
 .tourism-featured-video::before {
@@ -4780,6 +4783,7 @@ input:checked + .toggle-slider:before {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3);
   background: #000;
   aspect-ratio: 16 / 9;
+  min-height: 200px; /* Fallback if aspect-ratio fails */
   z-index: 1;
 }
 
