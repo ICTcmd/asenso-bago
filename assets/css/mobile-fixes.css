@@ -1,58 +1,40 @@
 /* ═══════════════════════════════════════════════════════════
-   MOBILE OPTIMIZATION FIXES
-   Critical fixes for 320-360px screens
+   MOBILE SCROLL FIX
+   Uses dvh (dynamic viewport height) which accounts for
+   Safari's URL bar / toolbar correctly
    ═══════════════════════════════════════════════════════════ */
 
-/* FIX #1: Scrolling - BODY must NOT scroll on mobile, only inner pages scroll.
-   This is critical for position:fixed elements (bottom nav, chatbot) to work on iOS Safari. */
-html {
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
-#app {
-  height: 100%;
-  overflow: hidden;
-}
-
-/* main-app fills space between top and bottom nav */
-#main-app {
-  height: calc(100% - 65px); /* 65px = bottom nav height */
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Pages scroll internally - this is where the scrolling happens */
-.page {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  flex: 1;
-  height: 100%;
-}
-
-@media (min-width: 769px) {
+/* Only apply fixed-height scroll model on mobile */
+@media (max-width: 768px) {
   html, body {
-    overflow: auto;
-    height: auto;
+    height: 100%;
+    /* Do NOT use overflow:hidden on body - breaks iOS fixed positioning */
+    overflow-x: hidden;
   }
+
   #app {
-    height: auto;
-    overflow: visible;
+    /* Use dvh so Safari toolbar is accounted for */
+    min-height: 100dvh;
+    min-height: 100vh; /* fallback */
+    overflow-x: hidden;
   }
+
   #main-app {
-    height: auto;
-    overflow: visible;
+    /* Take full viewport minus bottom nav (65px) */
+    min-height: calc(100dvh - 65px);
+    min-height: calc(100vh - 65px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
+
+  /* THE KEY FIX: pages scroll inside main-app */
   .page {
+    flex: 1 1 0%;
+    min-height: 0; /* Required for flex overflow to work */
     overflow-y: auto !important;
-    height: auto;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

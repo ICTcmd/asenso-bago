@@ -316,12 +316,11 @@ body {
 #app {
   max-width: 100%;
   margin: 0 auto;
-  height: 100%;
+  min-height: 100vh;
   background: var(--color-bg-page);
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 @media (min-width: 768px) and (max-width: 899px) {
@@ -331,7 +330,8 @@ body {
 /* ── Pages ── */
 .page {
   display: none;
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0; /* CRITICAL: allows flex child to scroll */
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
