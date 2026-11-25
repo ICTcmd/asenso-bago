@@ -7,12 +7,12 @@
    This is critical for position:fixed elements (bottom nav, chatbot) to work on iOS Safari. */
 html {
   height: 100%;
-  overflow: hidden; /* html never scrolls */
+  overflow: hidden;
 }
 
 body {
   height: 100%;
-  overflow: hidden; /* body never scrolls - pages scroll internally */
+  overflow: hidden;
 }
 
 #app {
@@ -20,25 +20,38 @@ body {
   overflow: hidden;
 }
 
-/* Pages scroll internally, not the body */
-.page {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  height: 100%;
-}
-
-/* main-app fills remaining space between top and nav */
+/* main-app fills space between top and bottom nav */
 #main-app {
-  height: 100%;
+  height: calc(100% - 65px); /* 65px = bottom nav height */
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
+/* Pages scroll internally - this is where the scrolling happens */
+.page {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  height: 100%;
+}
+
 @media (min-width: 769px) {
   html, body {
     overflow: auto;
+    height: auto;
+  }
+  #app {
+    height: auto;
+    overflow: visible;
+  }
+  #main-app {
+    height: auto;
+    overflow: visible;
+  }
+  .page {
+    overflow-y: auto !important;
     height: auto;
   }
 }

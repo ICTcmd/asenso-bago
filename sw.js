@@ -1,5 +1,5 @@
-﻿// Asenso Bago Service Worker v20261124-2000
-const CACHE = 'bago-pwa-v20261124-2000';
+﻿// Asenso Bago Service Worker v20261124-2200
+const CACHE = 'bago-pwa-v20261124-2200';
 
 const ASSETS = [
   '/',
