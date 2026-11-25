@@ -148,6 +148,12 @@ function filterAndRender() {
 function renderDocuments() {
   const container = document.getElementById('documentsContainer');
 
+// Render documents with pagination
+function renderDocuments() {
+  const container = document.getElementById('documentsContainer');
+  currentPage = 0;
+  container.innerHTML = '';
+
   if (filteredDocuments.length === 0) {
     container.innerHTML = `
       <div class="no-results">
@@ -161,33 +167,66 @@ function renderDocuments() {
     return;
   }
 
-  // Group by year
+  renderNextPage();
+}
+
+// Render one page of results (20 at a time)
+function renderNextPage() {
+  const container = document.getElementById('documentsContainer');
+  const start = currentPage * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, filteredDocuments.length);
+  const pageItems = filteredDocuments.slice(start, end);
+
+  // Group this page's items by year
   const groupedByYear = {};
-  filteredDocuments.forEach(doc => {
-    if (!groupedByYear[doc.year]) {
-      groupedByYear[doc.year] = [];
-    }
+  pageItems.forEach(doc => {
+    if (!groupedByYear[doc.year]) groupedByYear[doc.year] = [];
     groupedByYear[doc.year].push(doc);
   });
 
-  // Sort years in descending order
   const sortedYears = Object.keys(groupedByYear).sort((a, b) => b - a);
 
-  // Build HTML
-  let html = '';
+  // Remove old "load more" button if exists
+  const oldBtn = document.getElementById('load-more-btn');
+  if (oldBtn) oldBtn.remove();
+
   sortedYears.forEach(year => {
-    const docs = groupedByYear[year];
-    html += `
-      <div class="year-group">
-        <div class="year-header">${year} (${docs.length} document${docs.length !== 1 ? 's' : ''})</div>
-        ${docs.map(doc => createDocumentCard(doc)).join('')}
-      </div>
-    `;
+    // Find or create year group
+    let yearGroup = container.querySelector(`[data-year="${year}"]`);
+    if (!yearGroup) {
+      yearGroup = document.createElement('div');
+      yearGroup.className = 'year-group';
+      yearGroup.setAttribute('data-year', year);
+      yearGroup.innerHTML = `<div class="year-header">${year}</div>`;
+      container.appendChild(yearGroup);
+    }
+    groupedByYear[year].forEach(doc => {
+      yearGroup.insertAdjacentHTML('beforeend', createDocumentCard(doc));
+    });
   });
 
-  html += `<div class="document-count">Showing ${filteredDocuments.length} of ${allDocuments.length} documents</div>`;
+  currentPage++;
 
-  container.innerHTML = html;
+  // Show "Load More" button if there are more items
+  if (end < filteredDocuments.length) {
+    const remaining = filteredDocuments.length - end;
+    const btn = document.createElement('button');
+    btn.id = 'load-more-btn';
+    btn.textContent = `Load More (${remaining} remaining)`;
+    btn.style.cssText = `
+      display:block; width:calc(100% - 2rem); margin:1rem;
+      padding:12px; border-radius:12px; border:2px solid #0A2E5C;
+      background:#fff; color:#0A2E5C; font-size:14px; font-weight:700;
+      cursor:pointer; font-family:inherit;
+    `;
+    btn.onclick = renderNextPage;
+    container.appendChild(btn);
+  } else {
+    const count = document.createElement('div');
+    count.className = 'document-count';
+    count.textContent = `Showing all ${filteredDocuments.length} documents`;
+    container.appendChild(count);
+  }
 }
 
 // Create document card HTML
