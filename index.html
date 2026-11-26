@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=5.0" />
+  <link rel="stylesheet" href="assets/css/app.css?v=5.1" />
   <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3.1" />
   <link rel="manifest" href="manifest.json?v=4.0" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
@@ -451,7 +451,7 @@
       </div>
       <div class="programs-list">
 
-        <button class="program-chip" onclick="window.location.href='health-request.html'">
+        <button class="program-chip" onclick="openHealthProgram('heart_warriors')">
           <img src="assets/images/hw-logo.png" alt="Heart Warriors" loading="lazy" decoding="async" />
           <span class="program-chip-name">Heart Warriors</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -459,7 +459,7 @@
           </svg>
         </button>
 
-        <button class="program-chip" onclick="window.location.href='health-request.html'">
+        <button class="program-chip" onclick="openHealthProgram('wheels_of_love')">
           <img src="assets/images/wol-logo.png" alt="Wheels of Love" loading="lazy" decoding="async" />
           <span class="program-chip-name">Wheels of Love</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -467,7 +467,7 @@
           </svg>
         </button>
 
-        <button class="program-chip" onclick="window.location.href='health-request.html'">
+        <button class="program-chip" onclick="openHealthProgram('smile_bright')">
           <img src="assets/images/sbb-logo.png" alt="Smile Bright Bago" loading="lazy" decoding="async" />
           <span class="program-chip-name">Smile Bright Bago</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -529,17 +529,32 @@
 
     </div><!-- /page-home -->
 
-    <!-- --- PAGE: PROGRAMS --- -->
+    <!-- --- PAGE: PROGRAMS (HEALTH SERVICES SHOWCASE + FORM) --- -->
     <div class="page" id="page-programs">
 
       <div class="screen-header safe-top">
-        <h1>Health <span>Programs</span></h1>
-        <p>Request health services for all Bagonhons</p>
+        <h1>Health <span>Services</span></h1>
+        <p>Explore free health programs offered by Bago City and submit a request below</p>
       </div>
 
-      <!-- Unified Programs Overview -->
-      <div class="program-card">
-        <!-- Heart Warriors Section -->
+      <!-- Track Existing Request Banner -->
+      <a class="health-track-banner" href="health-track.html">
+        <div class="health-track-banner-left">
+          <div class="health-track-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="health-track-title">Already submitted a request?</p>
+            <p class="health-track-sub">Check status using your reference number</p>
+          </div>
+        </div>
+        <span class="health-track-cta">Track →</span>
+      </a>
+
+      <!-- 1. Heart Warriors -->
+      <div class="health-service-card" data-program="heart_warriors">
         <div class="program-cover">
           <img src="assets/images/hw-cover.png" alt="Heart Warriors Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(192,57,43,0.85) 100%);"></div>
@@ -549,6 +564,12 @@
           <span class="program-badge" style="background:rgba(192,57,43,0.12);color:#c0392b;">Cardiovascular Health</span>
           <h2 class="program-title">Heart Warriors</h2>
           <p class="program-desc">Free cardiac screenings, consultations, and medicines to Bagonhons across all 24 Barangays.</p>
+          <ul class="program-features">
+            <li>Blood pressure monitoring &amp; ECG/EKG heart screening</li>
+            <li>Physician cardiac consultation &amp; follow-up care</li>
+            <li>Free maintenance medicines (subject to availability)</li>
+          </ul>
+          <div class="program-req-note"><strong>Requirements:</strong> Bago City resident, valid ID, emergency contact details. Barangay health referral optional.</div>
           <div class="program-stats">
             <div class="program-stat"><span class="stat-n">5,000+</span><span class="stat-l">Beneficiaries</span></div>
             <div class="program-stat-div"></div>
@@ -556,10 +577,15 @@
             <div class="program-stat-div"></div>
             <div class="program-stat"><span class="stat-n">Free</span><span class="stat-l">Services</span></div>
           </div>
+          <button type="button" class="program-btn" style="background:#c0392b; margin-top:14px;" onclick="selectHealthProgram('heart_warriors')">
+            Request Heart Warriors →
+          </button>
         </div>
+      </div>
 
-        <!-- Wheels of Love Section -->
-        <div class="program-cover" style="margin-top:24px;">
+      <!-- 2. Wheels of Love -->
+      <div class="health-service-card" data-program="wheels_of_love">
+        <div class="program-cover">
           <img src="assets/images/wol-cover.png" alt="Wheels of Love Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(224,92,0,0.85) 100%);"></div>
           <img class="program-logo" src="assets/images/wol-logo.png" alt="Wheels of Love Logo" loading="lazy" decoding="async" />
@@ -568,6 +594,12 @@
           <span class="program-badge" style="background:rgba(224,92,0,0.12);color:#e05c00;">PWD Mobility Program</span>
           <h2 class="program-title">Wheels of Love</h2>
           <p class="program-desc">Free wheelchairs and mobility aids to qualified Bagonhon beneficiaries citywide.</p>
+          <ul class="program-features">
+            <li>Manual &amp; specialized wheelchairs for qualified PWDs/seniors</li>
+            <li>Walkers, crutches, and canes based on clinical assessment</li>
+            <li>Barangay validation &amp; home-delivery coordination</li>
+          </ul>
+          <div class="program-req-note"><strong>Requirements:</strong> PWD ID photo upload, Bago City residency, and optional medical certificate.</div>
           <div class="program-stats">
             <div class="program-stat"><span class="stat-n">1,200+</span><span class="stat-l">Beneficiaries</span></div>
             <div class="program-stat-div"></div>
@@ -575,10 +607,15 @@
             <div class="program-stat-div"></div>
             <div class="program-stat"><span class="stat-n">Free</span><span class="stat-l">Wheelchairs</span></div>
           </div>
+          <button type="button" class="program-btn" style="background:#e05c00; margin-top:14px;" onclick="selectHealthProgram('wheels_of_love')">
+            Request Wheels of Love →
+          </button>
         </div>
+      </div>
 
-        <!-- Smile Bright Bago Section -->
-        <div class="program-cover" style="margin-top:24px;">
+      <!-- 3. Smile Bright Bago -->
+      <div class="health-service-card" data-program="smile_bright">
+        <div class="program-cover">
           <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(0,119,182,0.85) 100%);"></div>
           <img class="program-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago Logo" loading="lazy" decoding="async" />
@@ -586,7 +623,13 @@
         <div class="program-body">
           <span class="program-badge" style="background:rgba(0,119,182,0.12);color:#0077b6;">Dental Health Program</span>
           <h2 class="program-title">Smile Bright Bago</h2>
-          <p class="program-desc">Free dental care services  cleanings, extractions, and oral health education.</p>
+          <p class="program-desc">Free dental care services — cleanings, extractions, restorations, and oral health education.</p>
+          <ul class="program-features">
+            <li>Dental check-up, oral prophylaxis (cleaning), and fluoride care</li>
+            <li>Tooth extraction &amp; tooth restoration services</li>
+            <li>Morning &amp; afternoon appointment scheduling</li>
+          </ul>
+          <div class="program-req-note"><strong>Requirements:</strong> Bago City resident, valid ID, and dental concern details.</div>
           <div class="program-stats">
             <div class="program-stat"><span class="stat-n">5,000+</span><span class="stat-l">Beneficiaries</span></div>
             <div class="program-stat-div"></div>
@@ -594,17 +637,309 @@
             <div class="program-stat-div"></div>
             <div class="program-stat"><span class="stat-n">Free</span><span class="stat-l">Dental Care</span></div>
           </div>
-        </div>
-
-        <!-- Single Request Button for All Programs -->
-        <div class="program-body" style="padding-top:0;">
-          <button class="program-btn" style="background:#0A2E5C;" onclick="window.location.href='health-request.html'">
-            Request Health Service
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" width="16" height="16">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
+          <button type="button" class="program-btn" style="background:#0077b6; margin-top:14px;" onclick="selectHealthProgram('smile_bright')">
+            Request Smile Bright Bago →
           </button>
         </div>
+      </div>
+
+      <!-- 4. City Health Office & Walk-In Services -->
+      <div class="health-cho-card">
+        <h3>Bago City Health Office &amp; Barangay Centers</h3>
+        <p>In addition to the online-request programs above, residents can walk in at the City Health Office, Bago City Hospital, or nearest Barangay Health Center for:</p>
+        <div class="health-cho-list">
+          <div class="health-cho-pill">🩺 General Medical Check-up</div>
+          <div class="health-cho-pill">🤰 Prenatal &amp; Maternal Care</div>
+          <div class="health-cho-pill">💉 Child &amp; Adult Immunization</div>
+          <div class="health-cho-pill">🧪 LaBago / Lab for All</div>
+          <div class="health-cho-pill">💊 Botica Bago Free Medicines</div>
+          <div class="health-cho-pill">🏥 Dialysis &amp; OPD Services</div>
+        </div>
+        <div class="health-cho-meta">
+          <span>📍 General Luna St., Bago City</span>
+          <span>🕒 Mon–Fri, 8:00 AM – 5:00 PM</span>
+          <span>📞 (034) 446-1319</span>
+        </div>
+      </div>
+
+      <!-- 5. Embedded Health Service Request Form -->
+      <div id="health-request-section" class="health-form-container">
+        <div class="health-form-header">
+          <h2>Request a Health Service</h2>
+          <p>Select a program and fill out your details to receive a tracking reference number.</p>
+        </div>
+
+        <form id="health-request-form" novalidate>
+          <!-- Program Selection -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span class="form-section-icon">🏥</span>
+              Which service do you need?
+            </h3>
+            <div class="program-selector">
+              <div class="program-option" data-program="heart_warriors">
+                <input type="radio" name="program" value="heart_warriors" id="program-hw" required>
+                <label for="program-hw" class="program-info">
+                  <div class="program-name">Heart Warriors</div>
+                  <div class="program-desc">Cardiovascular screening and consultation</div>
+                </label>
+              </div>
+              <div class="program-option" data-program="wheels_of_love">
+                <input type="radio" name="program" value="wheels_of_love" id="program-wol" required>
+                <label for="program-wol" class="program-info">
+                  <div class="program-name">Wheels of Love</div>
+                  <div class="program-desc">Wheelchair and mobility aid assistance</div>
+                </label>
+              </div>
+              <div class="program-option" data-program="smile_bright">
+                <input type="radio" name="program" value="smile_bright" id="program-sbb" required>
+                <label for="program-sbb" class="program-info">
+                  <div class="program-name">Smile Bright Bago</div>
+                  <div class="program-desc">Dental services and oral health care</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Personal Information -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span class="form-section-icon">👤</span>
+              Personal Information
+            </h3>
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="required">*</span></label>
+              <input type="text" class="form-input" name="full_name" placeholder="Juan Dela Cruz" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Age <span class="required">*</span></label>
+                <input type="number" class="form-input" name="age" placeholder="25" min="1" max="120" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender <span class="required">*</span></label>
+                <select class="form-select" name="gender" required>
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <span class="form-section-icon">📞</span>
+              Contact Information
+            </h3>
+            <div class="form-group">
+              <label class="form-label">Mobile Number <span class="required">*</span></label>
+              <input type="tel" class="form-input" name="contact_number" placeholder="09171234567" pattern="09[0-9]{9}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Barangay <span class="required">*</span></label>
+              <select class="form-select" name="barangay" required>
+                <option value="">Select your barangay</option>
+                <option value="Abuanan">Abuanan</option>
+                <option value="Alianza">Alianza</option>
+                <option value="Atipuluan">Atipuluan</option>
+                <option value="Bacong">Bacong</option>
+                <option value="Bagroy">Bagroy</option>
+                <option value="Balingasag">Balingasag</option>
+                <option value="Binubuhan">Binubuhan</option>
+                <option value="Busay">Busay</option>
+                <option value="Calumangan">Calumangan</option>
+                <option value="Caridad">Caridad</option>
+                <option value="Don Jorge L. Araneta">Don Jorge L. Araneta</option>
+                <option value="Dulao">Dulao</option>
+                <option value="Ilijan">Ilijan</option>
+                <option value="Lag-asan">Lag-asan</option>
+                <option value="Ma-ao">Ma-ao</option>
+                <option value="Mailum">Mailum</option>
+                <option value="Malingin">Malingin</option>
+                <option value="Napoles">Napoles</option>
+                <option value="Pacol">Pacol</option>
+                <option value="Poblacion">Poblacion</option>
+                <option value="Sagasa">Sagasa</option>
+                <option value="Sampinit">Sampinit</option>
+                <option value="Tabunan">Tabunan</option>
+                <option value="Taloc">Taloc</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Heart Warriors Specific Fields -->
+          <div id="heart-warriors-fields" class="program-specific-section">
+            <div class="form-section">
+              <h3 class="form-section-title">
+                <span class="form-section-icon">❤️</span>
+                Medical Information
+              </h3>
+              <div class="form-group">
+                <label class="form-label">Do you have an existing heart condition?</label>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" name="existing_condition" value="yes" id="condition-yes">
+                    <label for="condition-yes">Yes</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" name="existing_condition" value="no" id="condition-no">
+                    <label for="condition-no">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Current Medications (optional)</label>
+                <input type="text" class="form-input" name="current_medications" placeholder="List your current medications">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Screening Date</label>
+                <input type="date" class="form-input" name="preferred_date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emergency Contact Name <span class="required">*</span></label>
+                <input type="text" class="form-input" name="emergency_contact_name" placeholder="Maria Dela Cruz">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emergency Contact Number <span class="required">*</span></label>
+                <input type="tel" class="form-input" name="emergency_contact_number" placeholder="09181234567" pattern="09[0-9]{9}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Wheels of Love Specific Fields -->
+          <div id="wheels-of-love-fields" class="program-specific-section">
+            <div class="form-section">
+              <h3 class="form-section-title">
+                <span class="form-section-icon">♿</span>
+                Disability Information
+              </h3>
+              <div class="form-group">
+                <label class="form-label">PWD ID Number <span class="required">*</span></label>
+                <input type="text" class="form-input" name="pwd_id_number" placeholder="PWD-2026-1234">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Type of Disability <span class="required">*</span></label>
+                <select class="form-select" name="disability_type">
+                  <option value="">Select disability type</option>
+                  <option value="Physical">Physical</option>
+                  <option value="Visual">Visual</option>
+                  <option value="Hearing">Hearing</option>
+                  <option value="Mental">Mental</option>
+                  <option value="Multiple">Multiple Disabilities</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">What mobility aid do you need? <span class="required">*</span></label>
+                <select class="form-select" name="mobility_aid_needed">
+                  <option value="">Select mobility aid</option>
+                  <option value="Manual Wheelchair">Manual Wheelchair</option>
+                  <option value="Electric Wheelchair">Electric Wheelchair</option>
+                  <option value="Walker">Walker</option>
+                  <option value="Crutches">Crutches</option>
+                  <option value="Cane">Cane</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Describe your current situation <span class="required">*</span></label>
+                <textarea class="form-textarea" name="situation_description" placeholder="Please describe your mobility needs and current situation"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Upload PWD ID Photo <span class="required">*</span></label>
+                <input type="file" id="pwd-id-upload" accept="image/*" style="display:none">
+                <button type="button" class="file-upload-btn" onclick="document.getElementById('pwd-id-upload').click()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  Choose Photo or Take Photo
+                </button>
+                <div id="pwd-id-preview" class="file-preview"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Upload Medical Certificate (optional)</label>
+                <input type="file" id="medical-cert-upload" accept="image/*,application/pdf" style="display:none">
+                <button type="button" class="file-upload-btn" onclick="document.getElementById('medical-cert-upload').click()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                  Choose File
+                </button>
+                <div id="medical-cert-preview" class="file-preview"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Smile Bright Bago Specific Fields -->
+          <div id="smile-bright-fields" class="program-specific-section">
+            <div class="form-section">
+              <h3 class="form-section-title">
+                <span class="form-section-icon">🦷</span>
+                Dental Information
+              </h3>
+              <div class="form-group">
+                <label class="form-label">What services do you need? <span class="required">*</span></label>
+                <div class="checkbox-group">
+                  <div class="checkbox-option">
+                    <input type="checkbox" name="services_needed" value="Cleaning" id="service-cleaning">
+                    <label for="service-cleaning">Cleaning</label>
+                  </div>
+                  <div class="checkbox-option">
+                    <input type="checkbox" name="services_needed" value="Extraction" id="service-extraction">
+                    <label for="service-extraction">Tooth Extraction</label>
+                  </div>
+                  <div class="checkbox-option">
+                    <input type="checkbox" name="services_needed" value="Check-up" id="service-checkup">
+                    <label for="service-checkup">Check-up</label>
+                  </div>
+                  <div class="checkbox-option">
+                    <input type="checkbox" name="services_needed" value="Restoration" id="service-restoration">
+                    <label for="service-restoration">Tooth Restoration</label>
+                  </div>
+                  <div class="checkbox-option">
+                    <input type="checkbox" name="services_needed" value="Other" id="service-other">
+                    <label for="service-other">Other</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Describe your dental concern <span class="required">*</span></label>
+                <textarea class="form-textarea" name="dental_concern" placeholder="Please describe your dental problem or concern"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Appointment Date</label>
+                <input type="date" class="form-input" name="dental_preferred_date">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Time</label>
+                <select class="form-select" name="preferred_time">
+                  <option value="">Select time</option>
+                  <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+                  <option value="Afternoon (1PM - 5PM)">Afternoon (1PM - 5PM)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Allergies (optional)</label>
+                <input type="text" class="form-input" name="allergies" placeholder="List any allergies">
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-section">
+            <button type="submit" class="submit-btn" id="submit-btn">
+              <span id="submit-text">Submit Request</span>
+              <svg id="submit-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <div id="error-message" class="error-message"></div>
+          </div>
+        </form>
       </div>
 
     </div><!-- /page-programs -->
@@ -678,15 +1013,15 @@
         </a>
 
         <!-- Health Services -->
-        <a class="service-card" href="health-request.html" style="text-decoration: none;">
+        <div class="service-card" onclick="navigateTo('page-programs')" style="cursor: pointer;">
           <div class="service-card-icon" style="background:#10b981;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
             </svg>
           </div>
           <h3>Health Services</h3>
-          <p>Request Heart Warriors, Wheels of Love &amp; Smile Bright Bago services.</p>
-        </a>
+          <p>Explore Heart Warriors, Wheels of Love &amp; Smile Bright Bago and submit a request.</p>
+        </div>
 
         <!-- Asenso Caravan -->
         <a class="service-card" href="https://asenso-caravan.vercel.app" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
@@ -3032,10 +3367,23 @@ document.addEventListener('DOMContentLoaded', function() {
   <!-- Profile Manager -->
   <script src="assets/js/profile-manager.js?v=2.1" defer></script>
 
+  <!-- Health Services Form -->
+  <script src="assets/js/health-request.js?v=2.0" defer></script>
+
   <!-- AI Chatbot -->
   <script src="assets/js/chatbot.js?v=2.6" defer></script>
 
   <script>
+    function openHealthProgram(program) {
+      if (typeof navigateTo === 'function') {
+        navigateTo('page-programs');
+      }
+      if (typeof window.selectHealthProgram === 'function') {
+        window.selectHealthProgram(program, true);
+      } else {
+        window.location.href = `health-request.html?program=${encodeURIComponent(program)}`;
+      }
+    }
     // 
     // AUTHENTICATION HANDLERS
     // 
