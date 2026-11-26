@@ -5523,3 +5523,86 @@ input:checked + .toggle-slider:before {
     margin: 0;
   }
 }
+
+
+/* City News Feed Cards */
+.city-news-section {
+  margin-bottom: 12px;
+}
+
+.city-news-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.city-news-loading {
+  padding: 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+  background: #ffffff;
+  border-radius: 14px;
+}
+
+.city-news-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.city-news-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.city-news-cat {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.city-news-date {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.city-news-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0A2E5C;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+
+.city-news-summary {
+  font-size: 13px;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.city-news-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0A2E5C;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .city-news-feed {
+    padding: 0 28px;
+  }
+}

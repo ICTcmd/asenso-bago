@@ -970,9 +970,19 @@
 
       <!-- Clean header -->
       <div class="news-hero safe-top">
-        <div class="news-hero-badge" aria-hidden="true">?? Live Updates</div>
+        <div class="news-hero-badge" aria-hidden="true">🔴 Live Updates</div>
         <h1>City News</h1>
         <p>Official updates from the City of Bago</p>
+      </div>
+
+      <!-- Official City Announcements (Supabase city_news) -->
+      <div class="city-news-section">
+        <div class="section-header" style="padding: 4px 16px 8px;">
+          <span class="section-title">Official Announcements</span>
+        </div>
+        <div id="city-news-feed" class="city-news-feed">
+          <div class="city-news-loading">Loading official announcements...</div>
+        </div>
       </div>
 
       <!-- Source bar -->
@@ -2489,7 +2499,7 @@
       }
     };
     
-    // Fallback: show message if Facebook doesn't load after 8 seconds
+    // Fallback: show message if Facebook doesn't load after 3.5 seconds
     setTimeout(() => {
       const fbWrap = document.querySelector('.fb-embed-wrap');
       const fbIframe = document.querySelector('.fb-page iframe');
@@ -2510,7 +2520,7 @@
         console.warn('Facebook feed failed to load - showing fallback');
         showFacebookFallback();
       }
-    }, 8000);
+    }, 3500);
     
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/sdk.js';
@@ -2720,8 +2730,11 @@
     const targetSidebar = document.querySelector(`.sidebar-link[data-page="${pageId}"]`);
     if (targetSidebar) targetSidebar.classList.add('active');
 
-    // Load Facebook SDK when News page is opened
-    if (pageId === 'page-news') loadFbSdk();
+    // Load City News & Facebook SDK when News page is opened
+    if (pageId === 'page-news') {
+      loadCityNews();
+      loadFbSdk();
+    }
 
     // Trigger tourism card animations when visiting tourism page
     if (pageId === 'page-tourism') {
@@ -3417,6 +3430,85 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       `);
+    }
+
+    // Official City News Feed (Supabase city_news with starter fallback)
+    let cityNewsLoaded = false;
+    async function loadCityNews() {
+      if (cityNewsLoaded) return;
+      const container = document.getElementById('city-news-feed');
+      if (!container) return;
+
+      const starterNews = [
+        {
+          title: 'Follow The Citybridge for Daily Bago City Updates',
+          summary: 'Stay updated with official advisories, barangay events, and announcements from Mayor Mayette Javellana-Yao and the City Government of Bago.',
+          category: 'Official Page',
+          source_url: 'https://www.facebook.com/TheCityBridge',
+          published_at: new Date().toISOString()
+        },
+        {
+          title: 'Online Health Service Requests Now Open',
+          summary: 'Request Heart Warriors, Wheels of Love, and Smile Bright Bago services directly inside the Asenso Bago app.',
+          category: 'Health',
+          source_url: 'health-request.html',
+          published_at: new Date().toISOString()
+        },
+        {
+          title: 'Asenso Caravan Barangay Schedule',
+          summary: 'Mobile government services including PhilHealth, SSS, PAG-IBIG, and PhilSys registration continue across Bago City barangays.',
+          category: 'Caravan',
+          source_url: 'https://caravan-blond.vercel.app',
+          published_at: new Date().toISOString()
+        }
+      ];
+
+      let items = null;
+      try {
+        const cached = sessionStorage.getItem('city_news_cache');
+        if (cached) items = JSON.parse(cached);
+      } catch (_) {}
+
+      if (!items) {
+        const client = window.authManager?.supabase || window.supabaseClient;
+        if (client) {
+          try {
+            const { data, error } = await client
+              .from('city_news')
+              .select('title, summary, category, source_url, published_at')
+              .eq('is_published', true)
+              .order('published_at', { ascending: false })
+              .limit(10);
+            if (!error && Array.isArray(data) && data.length > 0) {
+              items = data;
+              try { sessionStorage.setItem('city_news_cache', JSON.stringify(items)); } catch (_) {}
+            }
+          } catch (_) {}
+        }
+      }
+
+      const list = Array.isArray(items) && items.length > 0 ? items : starterNews;
+      const esc = (v) => (window.utils ? window.utils.escapeHTML(String(v ?? '')) : String(v ?? ''));
+
+      container.innerHTML = list.map(post => {
+        const dateStr = post.published_at ? new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+        const rawUrl = String(post.source_url || '');
+        const isSafeUrl = /^(https?:\/\/|health-)/i.test(rawUrl);
+        const isExt = /^https?:\/\//i.test(rawUrl);
+        return `
+          <div class="city-news-card">
+            <div class="city-news-meta">
+              <span class="city-news-cat">${esc(post.category || 'Announcement')}</span>
+              ${dateStr ? `<span class="city-news-date">${esc(dateStr)}</span>` : ''}
+            </div>
+            <h3 class="city-news-title">${esc(post.title)}</h3>
+            <p class="city-news-summary">${esc(post.summary)}</p>
+            ${isSafeUrl ? `<a class="city-news-link" href="${esc(rawUrl)}" ${isExt ? 'target="_blank" rel="noopener noreferrer"' : ''}>Read More →</a>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      cityNewsLoaded = true;
     }
 
     // Offline / Online Banner
