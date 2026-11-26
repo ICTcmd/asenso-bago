@@ -21,11 +21,12 @@ class AuthManager {
         return;
       }
 
-      // Create Supabase client
-      this.supabase = window.supabase.createClient(
+      // Create single shared Supabase client
+      this.supabase = window.supabaseClient || window.supabase.createClient(
         window.SUPABASE_CONFIG.url,
         window.SUPABASE_CONFIG.anonKey
       );
+      window.supabaseClient = this.supabase;
 
       // Check for existing session
       const { data: { session } } = await this.supabase.auth.getSession();
@@ -191,9 +192,17 @@ class AuthManager {
     }
   }
 
+  // Escape HTML to prevent XSS in profile UI
+  escapeText(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
   // Update UI for authenticated user
   async updateUIForAuthenticatedUser() {
     const profile = await this.loadUserProfile();
+    const displayName = profile?.full_name || this.currentUser.email.split('@')[0];
     
     // Update profile card
     const profileCard = document.querySelector('.profile-card');
@@ -203,16 +212,16 @@ class AuthManager {
       const signInBtn = profileCard.querySelector('.signin-btn');
 
       // Update avatar with initial
-      if (avatar && profile?.full_name) {
-        const initial = profile.full_name.charAt(0).toUpperCase();
+      if (avatar && displayName) {
+        const initial = this.escapeText(displayName.charAt(0).toUpperCase());
         avatar.innerHTML = `<div style="font-size: 32px; font-weight: 700; color: #D97732;">${initial}</div>`;
       }
 
       // Update name and email
       if (profileInfo) {
         profileInfo.innerHTML = `
-          <h3>${profile?.full_name || 'User'}</h3>
-          <p>${this.currentUser.email}</p>
+          <h3>${this.escapeText(displayName)}</h3>
+          <p>${this.escapeText(this.currentUser.email)}</p>
         `;
       }
 
@@ -222,6 +231,16 @@ class AuthManager {
         signInBtn.onclick = () => this.signOut();
       }
     }
+
+    // Update splash sign-in links
+    document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link').forEach(link => {
+      link.innerHTML = `Signed in as <span>${this.escapeText(displayName)}</span>`;
+      link.onclick = (e) => {
+        e.preventDefault();
+        if (typeof dismissSplash === 'function') dismissSplash();
+        if (typeof navigateTo === 'function') navigateTo('page-profile');
+      };
+    });
   }
 
   // Update UI for guest user
@@ -249,12 +268,20 @@ class AuthManager {
         `;
       }
 
-      // Reset button
+      // Reset button - redirect to auth.html
       if (signInBtn) {
         signInBtn.textContent = 'Sign In';
-        signInBtn.onclick = () => this.showSignInModal();
+        signInBtn.onclick = () => { window.location.href = 'auth.html'; };
       }
     }
+
+    document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link').forEach(link => {
+      link.innerHTML = 'Already have an Account? <span>Sign in</span>';
+      link.onclick = (e) => {
+        e.preventDefault();
+        window.location.href = 'auth.html';
+      };
+    });
   }
 
   // Show sign in modal

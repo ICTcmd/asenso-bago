@@ -144,10 +144,6 @@ function filterAndRender() {
   renderDocuments();
 }
 
-// Render documents
-function renderDocuments() {
-  const container = document.getElementById('documentsContainer');
-
 // Render documents with pagination
 function renderDocuments() {
   const container = document.getElementById('documentsContainer');
@@ -238,8 +234,12 @@ function createDocumentCard(doc) {
   const fileId = doc.url.match(/\/d\/([^/]+)/)?.[1];
   const directLink = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : doc.url;
 
+  const safeUrl = String(doc.url || '').replace(/'/g, '%27').replace(/"/g, '&quot;');
+  const safeTitle = String(doc.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const safeYear = String(doc.year || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
   return `
-    <div class="document-card" onclick="window.open('${doc.url}', '_blank')">
+    <div class="document-card" onclick="window.open('${safeUrl}', '_blank', 'noopener,noreferrer')">
       <div class="document-header">
         <div class="document-icon">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -247,10 +247,10 @@ function createDocumentCard(doc) {
           </svg>
         </div>
         <div class="document-content">
-          <div class="document-title">${doc.title}</div>
+          <div class="document-title">${safeTitle}</div>
           <div class="document-meta">
             <span class="document-badge ${badgeClass}">${badgeText}</span>
-            <span class="document-year">${doc.year}</span>
+            <span class="document-year">${safeYear}</span>
           </div>
         </div>
       </div>

@@ -166,37 +166,47 @@ async function loadRequestDetails() {
 // ============================================================================
 // POPULATE PROGRAM-SPECIFIC DETAILS
 // ============================================================================
+function escapeHTML(val) {
+  return String(val ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function populateProgramDetails(program, details) {
   const container = document.getElementById('program-details-container');
+  const d = details || {};
   
   if (program === 'heart_warriors') {
     container.innerHTML = `
       <div class="detail-grid">
         <div class="detail-item">
           <span class="detail-label">Existing Heart Condition</span>
-          <span class="detail-value">${details.existing_condition ? 'Yes' : 'No'}</span>
+          <span class="detail-value">${d.existing_condition ? 'Yes' : 'No'}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Current Medications</span>
-          <span class="detail-value">${details.current_medications || 'None'}</span>
+          <span class="detail-value">${escapeHTML(d.current_medications || 'None')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Preferred Screening Date</span>
-          <span class="detail-value">${details.preferred_date || 'Not specified'}</span>
+          <span class="detail-value">${escapeHTML(d.preferred_date || 'Not specified')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Emergency Contact Name</span>
-          <span class="detail-value">${details.emergency_contact_name || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.emergency_contact_name || '-')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Emergency Contact Number</span>
-          <span class="detail-value">${details.emergency_contact_number || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.emergency_contact_number || '-')}</span>
         </div>
       </div>
-      ${details.medical_history ? `
+      ${d.medical_history ? `
         <div style="margin-top: 20px;">
           <span class="detail-label">Medical History</span>
-          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${details.medical_history}</p>
+          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${escapeHTML(d.medical_history)}</p>
         </div>
       ` : ''}
     `;
@@ -205,25 +215,25 @@ function populateProgramDetails(program, details) {
       <div class="detail-grid">
         <div class="detail-item">
           <span class="detail-label">PWD ID Number</span>
-          <span class="detail-value">${details.pwd_id_number || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.pwd_id_number || '-')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Disability Type</span>
-          <span class="detail-value">${details.disability_type || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.disability_type || '-')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Mobility Aid Needed</span>
-          <span class="detail-value">${details.mobility_aid_needed || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.mobility_aid_needed || '-')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Living Situation</span>
-          <span class="detail-value">${details.living_situation || '-'}</span>
+          <span class="detail-value">${escapeHTML(d.living_situation || '-')}</span>
         </div>
       </div>
-      ${details.situation_description ? `
+      ${d.situation_description ? `
         <div style="margin-top: 20px;">
           <span class="detail-label">Situation Description</span>
-          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${details.situation_description}</p>
+          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${escapeHTML(d.situation_description)}</p>
         </div>
       ` : ''}
     `;
@@ -232,33 +242,33 @@ function populateProgramDetails(program, details) {
       <div class="detail-grid">
         <div class="detail-item">
           <span class="detail-label">Services Needed</span>
-          <span class="detail-value">${Array.isArray(details.services_needed) ? details.services_needed.join(', ') : 'Not specified'}</span>
+          <span class="detail-value">${Array.isArray(d.services_needed) ? escapeHTML(d.services_needed.join(', ')) : 'Not specified'}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Preferred Date</span>
-          <span class="detail-value">${details.preferred_date || 'Not specified'}</span>
+          <span class="detail-value">${escapeHTML(d.preferred_date || 'Not specified')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Preferred Time</span>
-          <span class="detail-value">${details.preferred_time || 'Not specified'}</span>
+          <span class="detail-value">${escapeHTML(d.preferred_time || 'Not specified')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Last Dental Visit</span>
-          <span class="detail-value">${details.last_dental_visit || 'Never'}</span>
+          <span class="detail-value">${escapeHTML(d.last_dental_visit || 'Never')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Allergies</span>
-          <span class="detail-value">${details.allergies || 'None'}</span>
+          <span class="detail-value">${escapeHTML(d.allergies || 'None')}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Current Medications</span>
-          <span class="detail-value">${details.current_medications || 'None'}</span>
+          <span class="detail-value">${escapeHTML(d.current_medications || 'None')}</span>
         </div>
       </div>
-      ${details.dental_concern ? `
+      ${d.dental_concern ? `
         <div style="margin-top: 20px;">
           <span class="detail-label">Dental Concern</span>
-          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${details.dental_concern}</p>
+          <p style="margin-top: 8px; line-height: 1.6; color: var(--color-text-primary);">${escapeHTML(d.dental_concern)}</p>
         </div>
       ` : ''}
     `;
@@ -274,14 +284,18 @@ function populateFiles(files) {
   
   filesSection.style.display = 'block';
   
-  filesContainer.innerHTML = files.map(file => `
-    <a href="${file.url}" target="_blank" class="file-preview">
+  filesContainer.innerHTML = files.map(file => {
+    const rawUrl = String(file.url || '');
+    const safeUrl = /^https?:\/\//i.test(rawUrl) ? escapeHTML(rawUrl) : '#';
+    return `
+    <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="file-preview">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
       </svg>
-      ${file.filename || 'Document'}
+      ${escapeHTML(file.filename || 'Document')}
     </a>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // ============================================================================

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=4.9" />
+  <link rel="stylesheet" href="assets/css/app.css?v=5.0" />
   <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3.1" />
   <link rel="manifest" href="manifest.json?v=4.0" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
@@ -22,32 +22,6 @@
   <script>
     // Set platform class before page renders to prevent layout flash
     document.documentElement.className = window.innerWidth >= 900 ? 'is-desktop' : 'is-mobile';
-
-    // FORCE RELOAD if user has old cached version
-    const APP_VERSION = '20261124-2400';
-    const storedVersion = localStorage.getItem('app_version');
-    if (storedVersion && storedVersion !== APP_VERSION) {
-      localStorage.setItem('app_version', APP_VERSION);
-      // Clear all caches and reload
-      if ('caches' in window) {
-        caches.keys().then(keys => {
-          Promise.all(keys.map(k => caches.delete(k))).then(() => {
-            window.location.reload(true);
-          });
-        });
-      } else {
-        window.location.reload(true);
-      }
-    } else {
-      localStorage.setItem('app_version', APP_VERSION);
-    }
-
-    // Force service worker to update immediately
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        registrations.forEach(reg => reg.update());
-      });
-    }
   </script>
   <script type="application/ld+json">
   {
@@ -134,9 +108,9 @@
         </div>
         <div class="splash-programs">
           <p>Programs</p>
-          <img class="splash-prog-logo" src="assets/images/hw-logo.png" alt="Heart Warriors" />
-          <img class="splash-prog-logo" src="assets/images/wol-logo.png" alt="Wheels of Love" />
-          <img class="splash-prog-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago" />
+          <img class="splash-prog-logo" src="assets/images/hw-logo.png" alt="Heart Warriors" loading="lazy" decoding="async" />
+          <img class="splash-prog-logo" src="assets/images/wol-logo.png" alt="Wheels of Love" loading="lazy" decoding="async" />
+          <img class="splash-prog-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago" loading="lazy" decoding="async" />
         </div>
       </div>
       <!-- Right: CTA -->
@@ -185,7 +159,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.11-.504 1.11-1.124M18.75 18.75h-7.5M3.375 14.25V6.375a1.125 1.125 0 0 1 1.125-1.125h16.5A1.125 1.125 0 0 1 21.375 6.375v7.875m-18 0a1.125 1.125 0 0 0 1.125 1.125h16.5a1.125 1.125 0 0 0 1.125-1.125m-18 0L3.75 8.625"/></svg>
         Asenso Caravan
       </a>
-      <a class="sidebar-link" href="https://soca-website-five.vercel.app" class="external-link" rel="noopener noreferrer">
+      <a class="sidebar-link external-link" href="https://soca-website-five.vercel.app" rel="noopener noreferrer">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>
         SOCA
       </a>
@@ -338,7 +312,7 @@
           <p class="service-label">Asenso Caravan</p>
         </a>
 
-        <a class="service-item" href="https://soca-website-five.vercel.app" class="external-link" rel="noopener noreferrer">
+        <a class="service-item external-link" href="https://soca-website-five.vercel.app" rel="noopener noreferrer">
           <div class="service-icon" style="background:linear-gradient(135deg,#0A2E5C,#104682);">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0"/>
@@ -347,7 +321,7 @@
           <p class="service-label">SOCA</p>
         </a>
 
-        <a class="service-item" href="https://be-in-bago.vercel.app" class="external-link" rel="noopener noreferrer">
+        <a class="service-item external-link" href="https://be-in-bago.vercel.app" rel="noopener noreferrer">
           <div class="service-icon" style="background:linear-gradient(135deg,#0A2E5C,#104682);">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5"/>
@@ -478,7 +452,7 @@
       <div class="programs-list">
 
         <button class="program-chip" onclick="window.location.href='health-request.html'">
-          <img src="assets/images/hw-logo.png" alt="Heart Warriors" />
+          <img src="assets/images/hw-logo.png" alt="Heart Warriors" loading="lazy" decoding="async" />
           <span class="program-chip-name">Heart Warriors</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
@@ -486,7 +460,7 @@
         </button>
 
         <button class="program-chip" onclick="window.location.href='health-request.html'">
-          <img src="assets/images/wol-logo.png" alt="Wheels of Love" />
+          <img src="assets/images/wol-logo.png" alt="Wheels of Love" loading="lazy" decoding="async" />
           <span class="program-chip-name">Wheels of Love</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
@@ -494,7 +468,7 @@
         </button>
 
         <button class="program-chip" onclick="window.location.href='health-request.html'">
-          <img src="assets/images/sbb-logo.png" alt="Smile Bright Bago" />
+          <img src="assets/images/sbb-logo.png" alt="Smile Bright Bago" loading="lazy" decoding="async" />
           <span class="program-chip-name">Smile Bright Bago</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
@@ -528,21 +502,21 @@
           <!-- Program news cards -->
           <div class="desktop-news-stack">
             <div class="news-card" data-url="https://heart-warriors.vercel.app">
-              <img src="assets/images/hw-cover.png" alt="Heart Warriors" loading="lazy" />
+              <img src="assets/images/hw-cover.png" alt="Heart Warriors" loading="lazy" decoding="async" />
               <div class="news-card-body">
                 <p class="news-card-title">Heart Warriors Conducts Free Cardiac Screening</p>
                 <p class="news-card-date">May 14, 2026</p>
               </div>
             </div>
             <div class="news-card" data-url="https://wheels-of-love.vercel.app">
-              <img src="assets/images/wol-cover.png" alt="Wheels of Love" loading="lazy" />
+              <img src="assets/images/wol-cover.png" alt="Wheels of Love" loading="lazy" decoding="async" />
               <div class="news-card-body">
                 <p class="news-card-title">Wheels of Love Distributes 200 Wheelchairs</p>
                 <p class="news-card-date">May 10, 2026</p>
               </div>
             </div>
             <div class="news-card" data-url="https://smile-bright-bago.vercel.app">
-              <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago" loading="lazy" />
+              <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago" loading="lazy" decoding="async" />
               <div class="news-card-body">
                 <p class="news-card-title">Smile Bright Bago Reaches 5,000 Beneficiaries</p>
                 <p class="news-card-date">May 5, 2026</p>
@@ -567,9 +541,9 @@
       <div class="program-card">
         <!-- Heart Warriors Section -->
         <div class="program-cover">
-          <img src="assets/images/hw-cover.png" alt="Heart Warriors Cover" />
+          <img src="assets/images/hw-cover.png" alt="Heart Warriors Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(192,57,43,0.85) 100%);"></div>
-          <img class="program-logo" src="assets/images/hw-logo.png" alt="Heart Warriors Logo" />
+          <img class="program-logo" src="assets/images/hw-logo.png" alt="Heart Warriors Logo" loading="lazy" decoding="async" />
         </div>
         <div class="program-body">
           <span class="program-badge" style="background:rgba(192,57,43,0.12);color:#c0392b;">Cardiovascular Health</span>
@@ -586,9 +560,9 @@
 
         <!-- Wheels of Love Section -->
         <div class="program-cover" style="margin-top:24px;">
-          <img src="assets/images/wol-cover.png" alt="Wheels of Love Cover" />
+          <img src="assets/images/wol-cover.png" alt="Wheels of Love Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(224,92,0,0.85) 100%);"></div>
-          <img class="program-logo" src="assets/images/wol-logo.png" alt="Wheels of Love Logo" />
+          <img class="program-logo" src="assets/images/wol-logo.png" alt="Wheels of Love Logo" loading="lazy" decoding="async" />
         </div>
         <div class="program-body">
           <span class="program-badge" style="background:rgba(224,92,0,0.12);color:#e05c00;">PWD Mobility Program</span>
@@ -605,9 +579,9 @@
 
         <!-- Smile Bright Bago Section -->
         <div class="program-cover" style="margin-top:24px;">
-          <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago Cover" />
+          <img src="assets/images/sbb-cover.png" alt="Smile Bright Bago Cover" loading="lazy" decoding="async" />
           <div class="program-cover-overlay" style="background:linear-gradient(to bottom, transparent 40%, rgba(0,119,182,0.85) 100%);"></div>
-          <img class="program-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago Logo" />
+          <img class="program-logo" src="assets/images/sbb-logo.png" alt="Smile Bright Bago Logo" loading="lazy" decoding="async" />
         </div>
         <div class="program-body">
           <span class="program-badge" style="background:rgba(0,119,182,0.12);color:#0077b6;">Dental Health Program</span>
@@ -737,7 +711,7 @@
         </a>
 
         <!-- Be In Bago -->
-        <a class="service-card" href="https://be-in-bago.vercel.app" class="external-link" rel="noopener noreferrer" style="text-decoration: none;">
+        <a class="service-card external-link" href="https://be-in-bago.vercel.app" rel="noopener noreferrer" style="text-decoration: none;">
           <div class="service-card-icon" style="background:#0A2E5C;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12zm0 0h7.5"/>
@@ -913,7 +887,7 @@
         <div class="brgy-card" data-type="urban" data-name="Abuanan" data-search="abuanan urban northern bacolod border numancia ambrosio">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/abuanan-logo.png" alt="Abuanan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/abuanan-logo.png" alt="Abuanan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div>
               <h3>Abuanan</h3>
@@ -930,7 +904,7 @@
         <div class="brgy-card" data-type="rural" data-name="Alianza" data-search="alianza rural agricultural rice sugarcane alliance spanish">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/alianza-logo.png" alt="Alianza Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/alianza-logo.png" alt="Alianza Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Alianza</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -944,7 +918,7 @@
         <div class="brgy-card" data-type="urban" data-name="Atipuluan" data-search="atipuluan urban highway commercial residential ati bandits">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/atipuluan-logo.png" alt="Atipuluan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/atipuluan-logo.png" alt="Atipuluan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Atipuluan</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -958,7 +932,7 @@
         <div class="brgy-card" data-type="rural" data-name="Bacong" data-search="bacong rural largest land area agricultural forest murcia">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/bacong-logo.png" alt="Bacong Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/bacong-logo.png" alt="Bacong Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Bacong</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -973,7 +947,7 @@
         <div class="brgy-card" data-type="rural" data-name="Bagroy" data-search="bagroy rural coastal guimaras strait fishing waterfront">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/bagroy-logo.png" alt="Bagroy Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/bagroy-logo.png" alt="Bagroy Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Bagroy</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -988,7 +962,7 @@
         <div class="brgy-card" data-type="urban" data-name="Balingasag" data-search="balingasag urban center residential commercial closest">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/balingasag-logo.png" alt="Balingasag Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/balingasag-logo.png" alt="Balingasag Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Balingasag</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -1003,7 +977,7 @@
         <div class="brgy-card" data-type="rural" data-name="Binubuhan" data-search="binubuhan rural cluster rice production baptism river">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/binubuhan-logo.png" alt="Binubuhan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/binubuhan-logo.png" alt="Binubuhan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Binubuhan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1017,7 +991,7 @@
         <div class="brgy-card" data-type="rural" data-name="Busay" data-search="busay rural mountain waterfalls erosion" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/busay-logo.png" alt="Busay Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/busay-logo.png" alt="Busay Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Busay</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1031,7 +1005,7 @@
         <div class="brgy-card" data-type="rural" data-name="Calumangan" data-search="calumangan rural agricultural rice sugarcane muddy">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/calumangan-logo.png" alt="Calumangan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/calumangan-logo.png" alt="Calumangan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Calumangan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1045,7 +1019,7 @@
         <div class="brgy-card" data-type="urban" data-name="Caridad" data-search="caridad urban core schools churches businesses hospitable">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/caridad-logo.png" alt="Caridad Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/caridad-logo.png" alt="Caridad Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Caridad</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -1059,7 +1033,7 @@
         <div class="brgy-card" data-type="urban" data-name="Don Jorge L. Araneta" data-search="don jorge araneta urban historical sugar central" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/don-jorge-araneta-logo.png" alt="Don Jorge L. Araneta Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/don-jorge-araneta-logo.png" alt="Don Jorge L. Araneta Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Don Jorge L. Araneta</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -1073,7 +1047,7 @@
         <div class="brgy-card" data-type="rural" data-name="Dulao" data-search="dulao rural bacolod border mandulao tree healing">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/dulao-logo.png" alt="Dulao Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/dulao-logo.png" alt="Dulao Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Dulao</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1087,7 +1061,7 @@
         <div class="brgy-card" data-type="rural" data-name="Ilijan" data-search="ilijan rural coastal farthest buenos aires quezon wwii" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/ilijan-logo.png" alt="Ilijan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/ilijan-logo.png" alt="Ilijan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Ilijan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1109,7 +1083,7 @@
         <div class="brgy-card" data-type="rural" data-name="Lag-Asan" data-search="lag asan rural agricultural interior trading port robbers">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/lag-asan-logo.png" alt="Lag-Asan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/lag-asan-logo.png" alt="Lag-Asan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Lag-Asan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1123,7 +1097,7 @@
         <div class="brgy-card" data-type="urban" data-name="Ma-ao" data-search="ma ao maao urban populous sugar central heritage" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/ma-ao-logo.png" alt="Ma-ao Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/ma-ao-logo.png" alt="Ma-ao Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Ma-ao</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -1144,7 +1118,7 @@
         <div class="brgy-card" data-type="rural" data-name="Mailum" data-search="mailum rural kipot falls pataan resort kanlaon ecotourism" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/mailum-logo.png" alt="Mailum Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/mailum-logo.png" alt="Mailum Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Mailum</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1171,7 +1145,7 @@
         <div class="brgy-card" data-type="rural" data-name="Malingin" data-search="malingin rural farming agricultural landscape">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/malingin-logo.png" alt="Malingin Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/malingin-logo.png" alt="Malingin Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Malingin</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1184,7 +1158,7 @@
         <div class="brgy-card" data-type="rural" data-name="Napoles" data-search="napoles rural agricultural rice producer">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/napoles-logo.png" alt="Napoles Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/napoles-logo.png" alt="Napoles Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Napoles</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1197,7 +1171,7 @@
         <div class="brgy-card" data-type="rural" data-name="Pacol" data-search="pacol rural agricultural interior farming">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/pacol-logo.png" alt="Pacol Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/pacol-logo.png" alt="Pacol Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Pacol</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1210,7 +1184,7 @@
         <div class="brgy-card" data-type="urban" data-name="Poblacion" data-search="poblacion urban downtown city hall bantayan balay cathedral" data-tourist="true">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/poblacion-logo.png" alt="Poblacion Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/poblacion-logo.png" alt="Poblacion Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Poblacion</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -1245,7 +1219,7 @@
         <div class="brgy-card" data-type="rural" data-name="Sagasa" data-search="sagasa rural coastal guimaras fishing seaside">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/sagasa-logo.png" alt="Sagasa Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/sagasa-logo.png" alt="Sagasa Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Sagasa</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1258,7 +1232,7 @@
         <div class="brgy-card" data-type="rural" data-name="Sampinit" data-search="sampinit rural agricultural forest upland kanlaon">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/sampinit-logo.png" alt="Sampinit Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/sampinit-logo.png" alt="Sampinit Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Sampinit</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1271,7 +1245,7 @@
         <div class="brgy-card" data-type="rural" data-name="Tabunan" data-search="tabunan rural bacolod agricultural heritage">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/tabunan-logo.png" alt="Tabunan Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/tabunan-logo.png" alt="Tabunan Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Tabunan</h3><span class="brgy-badge rural-badge">Rural</span></div>
           </div>
@@ -1284,7 +1258,7 @@
         <div class="brgy-card" data-type="urban" data-name="Taloc" data-search="taloc urban cluster center residential commerce">
           <div class="brgy-card-header">
             <div class="brgy-logo-container">
-              <img src="assets/images/barangays/taloc-logo.png" alt="Taloc Barangay Logo" class="brgy-logo" />
+              <img src="assets/images/barangays/taloc-logo.png" alt="Taloc Barangay Logo" class="brgy-logo" loading="lazy" decoding="async" />
             </div>
             <div><h3>Taloc</h3><span class="brgy-badge urban-badge">Urban</span></div>
           </div>
@@ -2082,8 +2056,6 @@
     <button class="install-close" id="install-close">&times;</button>
   </div>
 
-</body>
-
 <script>
   // --- Platform detection  run immediately ----------------------------------
   const isDesktop = window.innerWidth >= 900;
@@ -2232,10 +2204,12 @@
       .then(registration => {
         console.log('[SW] Registered successfully');
         
-        // Check for updates every 60 seconds
-        setInterval(() => {
-          registration.update();
-        }, 60000);
+        // Check for updates when user returns to the app tab (no 60s polling)
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            registration.update().catch(() => {});
+          }
+        });
         
         // Detect when new service worker is waiting
         registration.addEventListener('updatefound', () => {
@@ -2530,9 +2504,8 @@
         case 'about':
           navigateTo('page-barangays');
           break;
-          break;
         default:
-          showToast('Coming soon! Check back for updates.');
+          if (typeof showToast === 'function') showToast('Coming soon! Check back for updates.');
       }
     });
   });
@@ -2586,44 +2559,34 @@
   function closeLaunch() { document.getElementById("launch-screen").style.display = "none"; }
 
   // --- Date and Time Display --------------------------------------------------
+  const manilaDateTimeFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Manila',
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+
   function updateDateTime() {
-    const now = new Date();
-    
-    // Philippine timezone options
-    const options = {
-      timeZone: 'Asia/Manila',
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    };
-    
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    const formattedDate = formatter.format(now);
-    
-    // Update both mobile and desktop displays
+    const formattedDate = manilaDateTimeFormatter.format(new Date());
     const mobileDisplay = document.getElementById('current-datetime');
     const desktopDisplay = document.getElementById('desktop-datetime');
-    
-    if (mobileDisplay) {
+    if (mobileDisplay && mobileDisplay.textContent !== formattedDate) {
       mobileDisplay.textContent = formattedDate;
     }
-    if (desktopDisplay) {
+    if (desktopDisplay && desktopDisplay.textContent !== formattedDate) {
       desktopDisplay.textContent = formattedDate;
     }
   }
-  
-  // Update immediately and then every second
-  updateDateTime();
-  setInterval(updateDateTime, 1000);
 
-  
+  // Update immediately and every 15s (seconds aren't displayed)
+  updateDateTime();
+  setInterval(updateDateTime, 15000);
 
   // --- PWA Install Prompt -----------------------------------------------------
-    function showToast(m){var t=document.getElementById("_t");if(!t){t=document.createElement("div");t.id="_t";t.style.cssText="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;";document.body.appendChild(t);}t.textContent=m;t.style.opacity="1";clearTimeout(t._);t._=setTimeout(function(){t.style.opacity="0";},2500);}
   let deferredPrompt = null;
   const installBanner = document.getElementById('install-banner');
   const installBtn = document.getElementById('install-btn');
@@ -2632,23 +2595,23 @@
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installBanner.style.display = 'flex';
+    if (installBanner) installBanner.style.display = 'flex';
   });
 
-  installBtn.addEventListener('click', async () => {
+  installBtn?.addEventListener('click', async () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    await deferredPrompt.userChoice;
     deferredPrompt = null;
-    installBanner.style.display = 'none';
+    if (installBanner) installBanner.style.display = 'none';
   });
 
-  installClose.addEventListener('click', () => {
-    installBanner.style.display = 'none';
+  installClose?.addEventListener('click', () => {
+    if (installBanner) installBanner.style.display = 'none';
   });
 
   window.addEventListener('appinstalled', () => {
-    installBanner.style.display = 'none';
+    if (installBanner) installBanner.style.display = 'none';
     deferredPrompt = null;
   });
 
@@ -2784,28 +2747,6 @@
     updateStatistics();
   }
 </script>
-
-<!-- Supabase Authentication (ES Module) -->
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-  
-  // Make Supabase available globally for auth integration
-  window.supabaseClient = createClient(
-    'https://esvbibxavfrxkkfujhmz.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdmJpYnhhdmZyeGtrZnVqaG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2NDgyMjIsImV4cCI6MjEwODIyNDIyMn0.8cbpFhsettaK9lXD7YKZLlQA3YG4o-9xvrx_jrY_Hro'
-  );
-  
-  // Load app-auth after Supabase is ready
-  import('./assets/js/app-auth-module.js');
-</script>
-
-</html>
-
-
-
-
-
-
 
 <!-- Barangay Card Click Handler -->
 <script>
@@ -3077,22 +3018,22 @@ document.addEventListener('DOMContentLoaded', function() {
    -->
   
   <!-- Utility Functions -->
-  <script src="assets/js/utils.js?v=2.0"></script>
+  <script src="assets/js/utils.js?v=2.1"></script>
   
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- Supabase Configuration -->
-  <script src="assets/js/supabase-config.js?v=2.0"></script>
+  <script src="assets/js/supabase-config.js?v=2.1"></script>
   
   <!-- Authentication Manager -->
-  <script src="assets/js/auth-manager.js?v=2.0"></script>
+  <script src="assets/js/auth-manager.js?v=2.1"></script>
   
   <!-- Profile Manager -->
-  <script src="assets/js/profile-manager.js?v=2.0"></script>
+  <script src="assets/js/profile-manager.js?v=2.1" defer></script>
 
   <!-- AI Chatbot -->
-  <script src="assets/js/chatbot.js?v=2.5&t=20261124-1800"></script>
+  <script src="assets/js/chatbot.js?v=2.6" defer></script>
 
   <script>
     // 
@@ -3141,32 +3082,11 @@ document.addEventListener('DOMContentLoaded', function() {
         window.profileManager.init();
       }
       
-      // Setup splash screen buttons
-      const getStartedBtn = document.getElementById('get-started-btn');
-      const getStartedBtnDesktop = document.getElementById('get-started-btn-desktop');
-      const signInLinks = document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link');
-      
-      if (getStartedBtn) {
-        getStartedBtn.addEventListener('click', () => {
-          document.getElementById('splash').style.display = 'none';
-          document.getElementById('main-app').style.display = 'flex';
-          document.getElementById('bottom-nav').style.display = 'flex';
-        });
-      }
-      
-      if (getStartedBtnDesktop) {
-        getStartedBtnDesktop.addEventListener('click', () => {
-          document.getElementById('splash').style.display = 'none';
-          document.getElementById('main-app').style.display = 'flex';
-          document.getElementById('bottom-nav').style.display = 'flex';
-        });
-      }
-      
       // Handle sign in links ONLY on splash screen - redirect to auth.html
+      const signInLinks = document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link');
       signInLinks.forEach(link => {
-        if (link.textContent.includes('Sign in')) {
+        if (link.textContent.includes('Sign in') && !link.onclick) {
           link.addEventListener('click', () => {
-            // Redirect to dedicated auth page for cleaner experience
             window.location.href = 'auth.html';
           });
         }
@@ -3178,17 +3098,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ctaBtn.addEventListener('click', () => {
           if (window.authManager) {
             window.authManager.showSignUpModal();
-          }
-        });
-      }
-      
-      // Setup profile sign in button - redirect to auth.html instead of modal
-      const profileSignInBtn = document.querySelector('.signin-btn');
-      if (profileSignInBtn) {
-        profileSignInBtn.addEventListener('click', () => {
-          if (window.authManager && !window.authManager.isAuthenticated()) {
-            // Redirect to dedicated auth page instead of showing modal
-            window.location.href = 'auth.html';
           }
         });
       }

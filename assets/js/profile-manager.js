@@ -69,22 +69,23 @@ class ProfileManager {
     const profile = await window.authManager.loadUserProfile();
     if (!profile) return;
 
+    const esc = (v) => (window.utils ? window.utils.escapeHTML(String(v ?? '')) : String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
     const modal = this.createModal('Edit Profile', `
       <form id="edit-profile-form" class="profile-form">
         <div class="form-group">
           <label for="profile-name">Full Name</label>
-          <input type="text" id="profile-name" class="form-input" value="${profile.full_name || ''}" required />
+          <input type="text" id="profile-name" class="form-input" value="${esc(profile.full_name)}" required />
         </div>
         
         <div class="form-group">
           <label for="profile-email">Email Address</label>
-          <input type="email" id="profile-email" class="form-input" value="${profile.email || ''}" disabled />
+          <input type="email" id="profile-email" class="form-input" value="${esc(profile.email)}" disabled />
           <small style="color: #6B7280; font-size: 12px;">Email cannot be changed</small>
         </div>
         
         <div class="form-group">
           <label for="profile-phone">Phone Number</label>
-          <input type="tel" id="profile-phone" class="form-input" value="${profile.phone_number || ''}" placeholder="09XX XXX XXXX" />
+          <input type="tel" id="profile-phone" class="form-input" value="${esc(profile.phone_number)}" placeholder="09XX XXX XXXX" />
         </div>
         
         <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">

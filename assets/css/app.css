@@ -3375,15 +3375,21 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 /* Filter Buttons */
 .brgy-filters-container {
-  display: flex;
+  display: flex !important;
   gap: 8px;
-  padding: 0 16px 16px;
-  overflow-x: auto;
+  padding: 8px 16px 16px;
+  overflow-x: scroll; /* scroll instead of auto - more reliable on iOS */
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  background: var(--color-bg-page); /* Solid background prevents overlap */
+  background: #F7F7F5;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  flex-wrap: nowrap;
+  /* Explicit height so iOS doesn't collapse it */
+  height: 68px;
+  align-items: center;
+  box-sizing: content-box;
 }
 
 .brgy-filters-container::-webkit-scrollbar {

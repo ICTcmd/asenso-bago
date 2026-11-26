@@ -96,25 +96,20 @@ async function loadUserInfo() {
 // ============================================================================
 async function loadDashboardStats() {
   try {
-    // Get all requests
-    const { data: allRequests, error } = await supabaseClient
-      .from('health_service_requests')
-      .select('status');
-    
-    if (error) throw error;
-    
-    // Calculate stats
-    const total = allRequests.length;
-    const pending = allRequests.filter(r => r.status === 'pending').length;
-    const approved = allRequests.filter(r => r.status === 'approved').length;
-    const completed = allRequests.filter(r => r.status === 'completed').length;
-    
-    // Update UI
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-pending').textContent = pending;
-    document.getElementById('stat-approved').textContent = approved;
-    document.getElementById('stat-completed').textContent = completed;
-    
+    // Use head:true count queries instead of downloading all rows
+    const [totalRes, pendingRes, approvedRes, completedRes] = await Promise.all([
+      supabaseClient.from('health_service_requests').select('*', { count: 'exact', head: true }),
+      supabaseClient.from('health_service_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabaseClient.from('health_service_requests').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+      supabaseClient.from('health_service_requests').select('*', { count: 'exact', head: true }).eq('status', 'completed')
+    ]);
+
+    if (totalRes.error) throw totalRes.error;
+
+    document.getElementById('stat-total').textContent = totalRes.count ?? 0;
+    document.getElementById('stat-pending').textContent = pendingRes.count ?? 0;
+    document.getElementById('stat-approved').textContent = approvedRes.count ?? 0;
+    document.getElementById('stat-completed').textContent = completedRes.count ?? 0;
   } catch (error) {
     console.error('Error loading stats:', error);
   }
@@ -159,28 +154,31 @@ async function loadRecentRequests() {
       return;
     }
     
-    // Populate table
-    tbody.innerHTML = requests.map(request => `
-      <tr onclick="viewRequest('${request.id}')">
+    // Populate table (escape all database strings)
+    tbody.innerHTML = requests.map(request => {
+      const safeId = encodeURIComponent(request.id);
+      const safeStatus = escapeHTML(request.status);
+      return `
+      <tr onclick="viewRequest('${safeId}')">
         <td>
-          <span class="request-ref">${request.reference_number}</span>
+          <span class="request-ref">${escapeHTML(request.reference_number)}</span>
         </td>
         <td>
-          <div class="request-name">${request.full_name}</div>
-          <div class="request-meta">${request.age} years old, ${request.gender}</div>
+          <div class="request-name">${escapeHTML(request.full_name)}</div>
+          <div class="request-meta">${escapeHTML(request.age)} years old, ${escapeHTML(request.gender)}</div>
         </td>
         <td>
           <span class="program-badge program-${getProgramClass(request.program)}">
-            ${getProgramIcon(request.program)} ${formatProgramName(request.program)}
+            ${getProgramIcon(request.program)} ${escapeHTML(formatProgramName(request.program))}
           </span>
         </td>
-        <td>${request.barangay}</td>
+        <td>${escapeHTML(request.barangay)}</td>
         <td>
-          <span class="status-badge status-${request.status}">${request.status}</span>
+          <span class="status-badge status-${safeStatus}">${safeStatus}</span>
         </td>
         <td>${formatDate(request.created_at)}</td>
         <td>
-          <button class="action-btn" onclick="viewRequest('${request.id}'); event.stopPropagation();">
+          <button class="action-btn" onclick="viewRequest('${safeId}'); event.stopPropagation();">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -189,7 +187,8 @@ async function loadRecentRequests() {
           </button>
         </td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
     
     tableContainer.style.display = 'block';
     
@@ -265,6 +264,15 @@ function updateDateTime() {
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
+function escapeHTML(val) {
+  return String(val ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   const options = { 

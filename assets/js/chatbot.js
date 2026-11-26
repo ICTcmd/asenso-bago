@@ -1018,15 +1018,24 @@ function toggleChat() {
 }
 
 // ── Add message bubble ─────────────────────────────────────
-function addMessage(text, role) {
+function escapeChatHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function addMessage(text, role, footerNote = '') {
   const messages = document.getElementById('chatbot-messages');
   const msg = document.createElement('div');
   msg.className = `chat-msg ${role}`;
 
-  // Render markdown for bot messages
-  let formatted = text;
+  // Escape HTML first to prevent XSS, then render safe markdown for bot messages
+  let formatted = escapeChatHTML(text);
   if (role === 'bot') {
-    formatted = text
+    formatted = formatted
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')   // **bold**
       .replace(/\*(.+?)\*/g, '<em>$1</em>')               // *italic*
       .replace(/^###\s+(.+)$/gm, '<strong>$1</strong>')   // ### heading
@@ -1037,7 +1046,11 @@ function addMessage(text, role) {
       .replace(/\n/g, '<br>');
   }
 
-  msg.innerHTML = `<div class="msg-bubble">${formatted}</div>`;
+  const noteHtml = footerNote
+    ? `<br><br><em style="font-size:11px;color:#9ca3af;">${escapeChatHTML(footerNote)}</em>`
+    : '';
+
+  msg.innerHTML = `<div class="msg-bubble">${formatted}${noteHtml}</div>`;
   messages.appendChild(msg);
   messages.scrollTop = messages.scrollHeight;
 }
@@ -1076,15 +1089,20 @@ async function sendMessage() {
   input.style.height = 'auto';
   document.getElementById('chatbot-suggestions').innerHTML = '';
   addMessage(text, 'user');
-  conversationHistory.push({ role: 'user', parts: [{ text }] });
 
   // ── Check cache first ──────────────────────────────────
   const cached = getCachedAnswer(text);
   if (cached) {
-    addMessage(cached + '\n\n<em style="font-size:11px;color:#9ca3af;">Instant answer from cache</em>', 'bot');
-    conversationHistory.push({ role: 'model', parts: [{ text: cached }] });
+    addMessage(cached, 'bot', 'Instant answer from cache');
+    conversationHistory.push({ role: 'user', content: text });
+    conversationHistory.push({ role: 'assistant', content: cached });
+    if (conversationHistory.length > 12) conversationHistory = conversationHistory.slice(-12);
     return;
   }
+
+  // Snapshot prior history BEFORE adding current user turn (api/chat.js appends current message)
+  const priorHistory = conversationHistory.slice(-10);
+  conversationHistory.push({ role: 'user', content: text });
 
   // ── Cache miss — call secure backend ───────────────────────
   isTyping = true;
@@ -1092,10 +1110,11 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await callSecureBackend(text);
+    const response = await callSecureBackend(text, 0, priorHistory);
     hideTyping();
     addMessage(response, 'bot');
     conversationHistory.push({ role: 'assistant', content: response });
+    if (conversationHistory.length > 12) conversationHistory = conversationHistory.slice(-12);
     // Save to cache for next time
     setCachedAnswer(text, response);
   } catch (err) {
@@ -1109,12 +1128,12 @@ async function sendMessage() {
 }
 
 // ── Call Secure Backend API ────────────────────────────────
-async function callSecureBackend(userMessage, retryCount = 0) {
+async function callSecureBackend(userMessage, retryCount = 0, priorHistory = []) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45000); // 45 seconds
 
   // Build conversation history in OpenAI format
-  const history = conversationHistory.map(msg => ({
+  const history = priorHistory.map(msg => ({
     role: msg.role === 'model' ? 'assistant' : msg.role,
     content: msg.parts ? msg.parts[0].text : msg.content
   }));
@@ -1144,7 +1163,7 @@ async function callSecureBackend(userMessage, retryCount = 0) {
     clearTimeout(timeout);
     // Retry once on timeout
     if (err.name === 'AbortError' && retryCount < 1) {
-      return callSecureBackend(userMessage, retryCount + 1);
+      return callSecureBackend(userMessage, retryCount + 1, priorHistory);
     }
     throw err;
   }

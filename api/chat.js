@@ -106,11 +106,34 @@ Always end responses with a follow-up prompt like:
 - "May iba pa ka questions? 🙋"
 - "Need more details about any of these? Just ask! 💬"`;
 
+    // Sanitize & cap conversation history to last 10 turns
+    const sanitizedHistory = Array.isArray(conversationHistory)
+      ? conversationHistory
+          .slice(-10)
+          .map(item => {
+            const role = item?.role === 'model' ? 'assistant' : item?.role;
+            const rawContent = item?.parts?.[0]?.text ?? item?.content;
+            if ((role !== 'user' && role !== 'assistant') || typeof rawContent !== 'string') {
+              return null;
+            }
+            const content = rawContent.trim().slice(0, 2000);
+            return content ? { role, content } : null;
+          })
+          .filter(Boolean)
+      : [];
+
+    // Avoid duplicating the current user message if client already appended it
+    const trimmedMessage = message.trim();
+    const lastMsg = sanitizedHistory[sanitizedHistory.length - 1];
+    if (lastMsg && lastMsg.role === 'user' && lastMsg.content === trimmedMessage) {
+      sanitizedHistory.pop();
+    }
+
     // Build messages array
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
-      ...(Array.isArray(conversationHistory) ? conversationHistory : []),
-      { role: 'user', content: message.trim() }
+      ...sanitizedHistory,
+      { role: 'user', content: trimmedMessage }
     ];
 
     // Call Groq API (server-side, secure)

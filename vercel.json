@@ -28,6 +28,42 @@
       ]
     },
     {
+      "source": "/assets/images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/assets/videos/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/css/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/assets/js/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/assets/data/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options",   "value": "nosniff" },
@@ -35,7 +71,7 @@
         { "key": "X-XSS-Protection",          "value": "1; mode=block" },
         { "key": "Referrer-Policy",           "value": "strict-origin-when-cross-origin" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()" },
+        { "key": "Permissions-Policy",        "value": "camera=(), microphone=(), geolocation=(self), payment=(), usb=(), bluetooth=()" },
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://connect.facebook.net https://api.mapbox.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://api.mapbox.com; font-src 'self' https://fonts.gstatic.com https://api.mapbox.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.tile.openstreetmap.org https://*.supabase.co https://heart-warriors.vercel.app https://wheels-of-love.vercel.app https://smile-bright-bago.vercel.app https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://*.facebook.net https://api.mapbox.com https://events.mapbox.com https://*.mapbox.com https://overpass-api.de https://api.groq.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; worker-src blob: 'self'; child-src blob: https://api.mapbox.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://staticxx.facebook.com https://www.instagram.com https://api.mapbox.com https://*.mapbox.com https://heart-warriors.vercel.app https://wheels-of-love.vercel.app https://smile-bright-bago.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;" }
       ]
     }

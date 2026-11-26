@@ -12,12 +12,16 @@
 function showToast(title, message, duration = 4000) {
   const container = document.getElementById('toast-container') || createToastContainer();
   
+  // Support 1-argument calls like showToast('Coming soon!')
+  const hasMessage = typeof message === 'string' && message.length > 0;
+  const safeTitle = escapeHTML(String(title || ''));
+  const safeMessage = hasMessage ? escapeHTML(String(message)) : '';
+
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `
-    <div class="toast-title">${title}</div>
-    <div class="toast-message">${message}</div>
-  `;
+  toast.innerHTML = hasMessage
+    ? `<div class="toast-title">${safeTitle}</div><div class="toast-message">${safeMessage}</div>`
+    : `<div class="toast-message">${safeTitle}</div>`;
   
   container.appendChild(toast);
   

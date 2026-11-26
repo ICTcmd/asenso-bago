@@ -119,8 +119,9 @@ async function loadRequests() {
   try {
     let query = supabaseClient
       .from('health_service_requests')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('id, reference_number, full_name, age, gender, program, barangay, status, created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
     
     // Apply status filter
     if (currentStatus !== 'all') {
@@ -131,54 +132,60 @@ async function loadRequests() {
     if (currentProgram !== 'all') {
       query = query.eq('program', currentProgram);
     }
+
+    // Apply server-side search filter when query is present
+    if (searchQuery) {
+      const safeQ = searchQuery.replace(/[,%()]/g, '');
+      if (safeQ) {
+        query = query.or(`full_name.ilike.%${safeQ}%,reference_number.ilike.%${safeQ}%`);
+      }
+    }
     
     const { data: requests, error } = await query;
     
     if (error) throw error;
     
-    // Filter by search query (client-side)
-    let filteredRequests = requests;
-    if (searchQuery) {
-      filteredRequests = requests.filter(r => 
-        r.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.reference_number.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
+    const filteredRequests = requests || [];
     
     // Hide loading
     loadingState.style.display = 'none';
     
     // Update results count
-    resultsCount.textContent = `Showing ${filteredRequests.length} request${filteredRequests.length !== 1 ? 's' : ''}`;
+    resultsCount.textContent = filteredRequests.length === 100
+      ? 'Showing latest 100 matching requests'
+      : `Showing ${filteredRequests.length} request${filteredRequests.length !== 1 ? 's' : ''}`;
     
     // Show empty state or table
-    if (!filteredRequests || filteredRequests.length === 0) {
+    if (filteredRequests.length === 0) {
       emptyState.style.display = 'block';
       return;
     }
     
-    // Populate table
-    tbody.innerHTML = filteredRequests.map(request => `
-      <tr onclick="viewRequest('${request.id}')">
+    // Populate table (escape all database strings)
+    tbody.innerHTML = filteredRequests.map(request => {
+      const safeId = encodeURIComponent(request.id);
+      const safeStatus = escapeHTML(request.status);
+      return `
+      <tr onclick="viewRequest('${safeId}')">
         <td>
-          <span class="request-ref">${request.reference_number}</span>
+          <span class="request-ref">${escapeHTML(request.reference_number)}</span>
         </td>
         <td>
-          <div class="request-name">${request.full_name}</div>
-          <div class="request-meta">${request.age} years old, ${request.gender}</div>
+          <div class="request-name">${escapeHTML(request.full_name)}</div>
+          <div class="request-meta">${escapeHTML(request.age)} years old, ${escapeHTML(request.gender)}</div>
         </td>
         <td>
           <span class="program-badge program-${getProgramClass(request.program)}">
-            ${getProgramIcon(request.program)} ${formatProgramName(request.program)}
+            ${getProgramIcon(request.program)} ${escapeHTML(formatProgramName(request.program))}
           </span>
         </td>
-        <td>${request.barangay}</td>
+        <td>${escapeHTML(request.barangay)}</td>
         <td>
-          <span class="status-badge status-${request.status}">${request.status}</span>
+          <span class="status-badge status-${safeStatus}">${safeStatus}</span>
         </td>
         <td>${formatDate(request.created_at)}</td>
         <td>
-          <button class="action-btn" onclick="viewRequest('${request.id}'); event.stopPropagation();">
+          <button class="action-btn" onclick="viewRequest('${safeId}'); event.stopPropagation();">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -187,7 +194,8 @@ async function loadRequests() {
           </button>
         </td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
     
     tableContainer.style.display = 'block';
     
@@ -263,6 +271,15 @@ async function handleLogout() {
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
+function escapeHTML(val) {
+  return String(val ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   const options = { 
