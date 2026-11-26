@@ -1969,20 +1969,28 @@ body {
   display: none;
   position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 32px); max-width: 398px;
-  background: linear-gradient(135deg, #0A2E5C 0%, #104682 100%);
+  background: linear-gradient(135deg, #A64608 0%, #D97732 100%);
   color: #fff;
   border-radius: 18px; padding: 16px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.25);
   z-index: 200;
   flex-direction: row; align-items: center; gap: 12px;
 }
+@media (min-width: 900px) {
+  #install-banner {
+    bottom: 24px;
+    left: auto;
+    right: 96px;
+    transform: none;
+  }
+}
 #install-banner.show { display: flex; animation: slideUp 0.3s ease; }
 #install-banner p { flex: 1; font-size: 13px; line-height: 1.4; }
 #install-banner p strong { display: block; font-size: 14px; margin-bottom: 2px; }
 .install-btn {
-  background: #c0392b; color: #fff; border: none;
+  background: #ffffff; color: #A64608; border: none;
   border-radius: 10px; padding: 9px 14px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-size: 13px; font-weight: 800; cursor: pointer;
   white-space: nowrap; font-family: inherit;
 }
 .install-close {
@@ -3165,34 +3173,34 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 /* ── Home Hero Banner ── */
 .home-hero {
   position: relative; overflow: hidden;
-  background: linear-gradient(135deg, #0A2E5C 0%, #0D3A6F 50%, #104682 100%);
+  background: linear-gradient(135deg, var(--color-navy-primary) 0%, var(--color-orange) 55%, var(--color-navy-light) 100%);
   padding: 0 20px 0;
 }
 .home-hero-bg {
   position: absolute; inset: 0;
   background: url('../images/bago-city-logo.png') right -30px center / 180px no-repeat;
-  opacity: 0.06; pointer-events: none;
+  opacity: 0.08; pointer-events: none;
 }
 .home-hero-content { position: relative; z-index: 1; }
 .home-hero-top {
   display: flex; align-items: flex-start; justify-content: space-between;
   padding-top: 20px;
 }
-.home-hero-label { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.home-hero-label { font-size: 10px; color: rgba(255,255,255,0.8); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
 .home-hero-greeting { font-size: 26px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 4px; }
-.home-hero-sub { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 500; }
+.home-hero-sub { font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500; }
 .home-hero-logo { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; margin-top: 4px; }
 
 /* Stats strip inside hero */
 .home-stats-strip {
   display: flex; align-items: center;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.16);
   border-radius: 14px; padding: 12px 16px;
   margin: 16px 0 20px; gap: 0;
 }
 .home-stat-item { flex: 1; text-align: center; }
-.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #E67E22; line-height: 1; }
-.home-stat-l { display: block; font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; font-weight: 600; }
+.home-stat-n { display: block; font-size: 22px; font-weight: 900; color: #ffffff; line-height: 1; }
+.home-stat-l { display: block; font-size: 11px; color: rgba(255,255,255,0.88); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; font-weight: 600; }
 .home-stat-div { width: 1px; height: 36px; background: rgba(255,255,255,0.2); }
 
 /* ═══════════════════════════════════════════════════════════
