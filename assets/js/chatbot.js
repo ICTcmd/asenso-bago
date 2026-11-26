@@ -1027,25 +1027,24 @@ function escapeChatHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
+function formatBotMarkdown(text) {
+  return escapeChatHTML(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^###\s+(.+)$/gm, '<strong>$1</strong>')
+    .replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #e5e7eb;margin:8px 0;">')
+    .replace(/^\d+\.\s/gm, '<br>$&')
+    .replace(/^[\*\-]\s/gm, '<br>• ')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
 function addMessage(text, role, footerNote = '') {
   const messages = document.getElementById('chatbot-messages');
   const msg = document.createElement('div');
   msg.className = `chat-msg ${role}`;
 
-  // Escape HTML first to prevent XSS, then render safe markdown for bot messages
-  let formatted = escapeChatHTML(text);
-  if (role === 'bot') {
-    formatted = formatted
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')   // **bold**
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')               // *italic*
-      .replace(/^###\s+(.+)$/gm, '<strong>$1</strong>')   // ### heading
-      .replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #e5e7eb;margin:8px 0;">')  // ---
-      .replace(/^\d+\.\s/gm, '<br>$&')                    // numbered lists
-      .replace(/^[\*\-]\s/gm, '<br>• ')                   // bullet lists
-      .replace(/\n\n/g, '<br><br>')
-      .replace(/\n/g, '<br>');
-  }
-
+  const formatted = role === 'bot' ? formatBotMarkdown(text) : escapeChatHTML(text);
   const noteHtml = footerNote
     ? `<br><br><em style="font-size:11px;color:#9ca3af;">${escapeChatHTML(footerNote)}</em>`
     : '';
@@ -1053,6 +1052,7 @@ function addMessage(text, role, footerNote = '') {
   msg.innerHTML = `<div class="msg-bubble">${formatted}${noteHtml}</div>`;
   messages.appendChild(msg);
   messages.scrollTop = messages.scrollHeight;
+  return msg;
 }
 
 // ── Typing indicator ───────────────────────────────────────
@@ -1110,9 +1110,24 @@ async function sendMessage() {
   showTyping();
 
   try {
-    const response = await callSecureBackend(text, 0, priorHistory);
+    let streamedBubble = null;
+    const response = await callSecureBackend(text, 0, priorHistory, (partialText) => {
+      if (!streamedBubble) {
+        hideTyping();
+        const msgEl = addMessage(partialText, 'bot');
+        streamedBubble = msgEl.querySelector('.msg-bubble');
+      } else {
+        streamedBubble.innerHTML = formatBotMarkdown(partialText);
+        const messages = document.getElementById('chatbot-messages');
+        messages.scrollTop = messages.scrollHeight;
+      }
+    });
     hideTyping();
-    addMessage(response, 'bot');
+    if (!streamedBubble) {
+      addMessage(response, 'bot');
+    } else {
+      streamedBubble.innerHTML = formatBotMarkdown(response);
+    }
     conversationHistory.push({ role: 'assistant', content: response });
     if (conversationHistory.length > 12) conversationHistory = conversationHistory.slice(-12);
     // Save to cache for next time
@@ -1127,8 +1142,8 @@ async function sendMessage() {
   }
 }
 
-// ── Call Secure Backend API ────────────────────────────────
-async function callSecureBackend(userMessage, retryCount = 0, priorHistory = []) {
+// ── Call Secure Backend API (with SSE streaming support) ─────
+async function callSecureBackend(userMessage, retryCount = 0, priorHistory = [], onDelta = null) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 45000); // 45 seconds
 
@@ -1144,7 +1159,8 @@ async function callSecureBackend(userMessage, retryCount = 0, priorHistory = [])
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: userMessage,
-        conversationHistory: history
+        conversationHistory: history,
+        stream: true
       }),
       signal: controller.signal
     });
@@ -1156,6 +1172,36 @@ async function callSecureBackend(userMessage, retryCount = 0, priorHistory = [])
       throw new Error(err?.error || `API error ${res.status}`);
     }
 
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('text/event-stream') && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) continue;
+          const payload = trimmed.slice(5).trim();
+          if (payload === '[DONE]') continue;
+          try {
+            const parsed = JSON.parse(payload);
+            if (parsed.delta) {
+              fullText += parsed.delta;
+              if (onDelta) onDelta(fullText);
+            }
+          } catch (_) {}
+        }
+      }
+      return fullText || 'I could not generate a response. Please try again.';
+    }
+
     const data = await res.json();
     return data?.answer || 'I could not generate a response. Please try again.';
 
@@ -1163,7 +1209,7 @@ async function callSecureBackend(userMessage, retryCount = 0, priorHistory = [])
     clearTimeout(timeout);
     // Retry once on timeout
     if (err.name === 'AbortError' && retryCount < 1) {
-      return callSecureBackend(userMessage, retryCount + 1, priorHistory);
+      return callSecureBackend(userMessage, retryCount + 1, priorHistory, onDelta);
     }
     throw err;
   }

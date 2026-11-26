@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="assets/css/app.css?v=5.2" />
+  <link rel="stylesheet" href="assets/css/app.css?v=5.3" />
   <link rel="stylesheet" href="assets/css/mobile-fixes.css?v=3.1" />
   <link rel="manifest" href="manifest.json?v=4.0" />
   <link rel="icon" type="image/png" href="assets/images/app-icon.png" />
@@ -266,18 +266,19 @@
       </div>
 
       <!-- -- SEARCH -- -->
-      <div class="search-row">
+      <div class="search-row" style="position: relative;">
         <div class="search-box">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
           </svg>
-          <input type="search" placeholder="Search coming soon..." disabled style="opacity: 0.6; cursor: not-allowed;" />
+          <input type="search" id="home-search-input" placeholder="Search services, barangays, health..." autocomplete="off" />
         </div>
-        <button class="notif-btn" aria-label="Notifications" disabled style="opacity: 0.6; cursor: not-allowed;">
+        <button class="notif-btn" id="home-notif-btn" aria-label="Notifications">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 0 0-5-5.917V4a1 1 0 1 0-2 0v1.083A6 6 0 0 0 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 1 1-6 0v-1m6 0H9"/>
           </svg>
         </button>
+        <div id="home-search-results" class="home-search-results" style="display: none;"></div>
       </div>
 
       <!-- -- QUICK SERVICES -- -->
@@ -388,6 +389,23 @@
         </button>
 
         </div>
+      </div>
+
+      <!-- -- EMERGENCY & CITY HOTLINES -- -->
+      <div class="hotlines-strip">
+        <a href="tel:+63344730043" class="hotline-pill hotline-emergency">
+          <span class="hotline-dot"></span>
+          <div>
+            <div class="hotline-label">DRRMO 24/7 Emergency</div>
+            <div class="hotline-num">(034) 473-0043</div>
+          </div>
+        </a>
+        <a href="tel:+63344461319" class="hotline-pill hotline-city">
+          <div>
+            <div class="hotline-label">Bago City Hall</div>
+            <div class="hotline-num">(034) 446-1319</div>
+          </div>
+        </a>
       </div>
 
       <!-- -- MAYOR'S MESSAGE -- -->
@@ -3365,13 +3383,13 @@ document.addEventListener('DOMContentLoaded', function() {
   <script src="assets/js/auth-manager.js?v=2.1"></script>
   
   <!-- Profile Manager -->
-  <script src="assets/js/profile-manager.js?v=2.1" defer></script>
+  <script src="assets/js/profile-manager.js?v=2.2" defer></script>
 
   <!-- Health Services Form -->
   <script src="assets/js/health-request.js?v=2.0" defer></script>
 
   <!-- AI Chatbot -->
-  <script src="assets/js/chatbot.js?v=2.6" defer></script>
+  <script src="assets/js/chatbot.js?v=2.7" defer></script>
 
   <script>
     function openHealthProgram(program) {
@@ -3384,6 +3402,127 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = `health-request.html?program=${encodeURIComponent(program)}`;
       }
     }
+
+    // Unified Home Search & Notification Bell
+    document.addEventListener('DOMContentLoaded', () => {
+      const notifBtn = document.getElementById('home-notif-btn');
+      if (notifBtn) {
+        notifBtn.addEventListener('click', () => {
+          if (window.profileManager && window.authManager?.isAuthenticated()) {
+            window.profileManager.showNotifications();
+          } else if (window.profileManager) {
+            window.profileManager.createModal('City Updates', `
+              <div class="notifications-list">
+                <div class="notification-item">
+                  <div class="notification-icon" style="background: linear-gradient(135deg, #059669, #10b981);">🏥</div>
+                  <div class="notification-content">
+                    <h4>Online Health Services</h4>
+                    <p>Request Heart Warriors, Wheels of Love, or Smile Bright Bago directly in the app.</p>
+                  </div>
+                </div>
+                <div class="notification-item">
+                  <div class="notification-icon" style="background: linear-gradient(135deg, #D97732, #F3A65A);">🔍</div>
+                  <div class="notification-content">
+                    <h4>Track Your Health Request</h4>
+                    <p><a href="health-track.html" style="color:#0A2E5C;font-weight:700;">Open Health Request Tracker →</a></p>
+                  </div>
+                </div>
+              </div>
+            `);
+          }
+        });
+      }
+
+      const searchInput = document.getElementById('home-search-input');
+      const desktopSearch = document.querySelector('.desktop-search input');
+      const resultsBox = document.getElementById('home-search-results');
+
+      const searchItems = [
+        { title: 'Health Services', sub: 'Heart Warriors, Wheels of Love, Smile Bright', action: () => navigateTo('page-programs') },
+        { title: 'Heart Warriors', sub: 'Free cardiac screening & meds', action: () => openHealthProgram('heart_warriors') },
+        { title: 'Wheels of Love', sub: 'Free wheelchairs & mobility aids', action: () => openHealthProgram('wheels_of_love') },
+        { title: 'Smile Bright Bago', sub: 'Free dental care services', action: () => openHealthProgram('smile_bright') },
+        { title: 'Track Health Request', sub: 'Check request status by reference number', action: () => { window.location.href = 'health-track.html'; } },
+        { title: 'E-Services', sub: 'Online city payments & portal', action: () => window.open('https://eservices.bagocity.gov.ph/WebPortal/Register.aspx', '_blank', 'noopener,noreferrer') },
+        { title: 'Asenso Caravan', sub: 'Mobile government services in barangays', action: () => window.open('https://caravan-blond.vercel.app', '_blank', 'noopener,noreferrer') },
+        { title: 'Bago Safe', sub: 'Report incidents & safety concerns', action: () => window.open('https://bago-reporting.vercel.app', '_blank', 'noopener,noreferrer') },
+        { title: 'Resolutions & Ordinances', sub: 'Legislative documents archive', action: () => { window.location.href = 'legislative.html'; } },
+        { title: 'City Map', sub: 'Interactive map of Bago City', action: () => { window.location.href = 'map.html'; } },
+        { title: 'Tourism', sub: 'Tourist spots, festivals & videos', action: () => navigateTo('page-tourism') },
+        { title: 'Barangays', sub: 'Explore all 24 barangays & officials', action: () => navigateTo('page-barangays') },
+        { title: 'City News', sub: 'Live updates from The Citybridge', action: () => navigateTo('page-news') },
+        { title: 'SOCA 2026', sub: 'State of the City Address', action: () => window.open('https://soca-website-five.vercel.app', '_blank', 'noopener,noreferrer') },
+        { title: 'Be In Bago', sub: 'Community events & happenings', action: () => window.open('https://be-in-bago.vercel.app', '_blank', 'noopener,noreferrer') }
+      ];
+
+      // Add all 24 barangays to search index
+      document.querySelectorAll('.brgy-card[data-name]').forEach(card => {
+        const name = card.getAttribute('data-name');
+        const slug = name.toLowerCase().replace(/\./g, '').replace(/\s+/g, '-');
+        searchItems.push({
+          title: `Barangay ${name}`,
+          sub: 'Barangay profile & officials',
+          action: () => { window.location.href = `barangay-profile.html?id=${encodeURIComponent(slug)}`; }
+        });
+      });
+
+      function runHomeSearch(q) {
+        if (!resultsBox) return;
+        const term = q.trim().toLowerCase();
+        if (!term) {
+          resultsBox.style.display = 'none';
+          resultsBox.innerHTML = '';
+          return;
+        }
+        const matches = searchItems.filter(it =>
+          it.title.toLowerCase().includes(term) || it.sub.toLowerCase().includes(term)
+        ).slice(0, 8);
+
+        resultsBox.innerHTML = '';
+        if (matches.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'home-search-empty';
+          empty.textContent = 'No matching services or barangays found.';
+          resultsBox.appendChild(empty);
+        } else {
+          matches.forEach(item => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'home-search-item';
+            const t = document.createElement('div');
+            t.className = 'home-search-item-title';
+            t.textContent = item.title;
+            const s = document.createElement('div');
+            s.className = 'home-search-item-sub';
+            s.textContent = item.sub;
+            btn.appendChild(t);
+            btn.appendChild(s);
+            btn.addEventListener('click', () => {
+              resultsBox.style.display = 'none';
+              item.action();
+            });
+            resultsBox.appendChild(btn);
+          });
+        }
+        resultsBox.style.display = 'block';
+      }
+
+      if (searchInput && resultsBox) {
+        searchInput.addEventListener('input', (e) => runHomeSearch(e.target.value));
+        document.addEventListener('click', (e) => {
+          if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+            resultsBox.style.display = 'none';
+          }
+        });
+      }
+
+      if (desktopSearch && searchInput) {
+        desktopSearch.addEventListener('input', (e) => {
+          searchInput.value = e.target.value;
+          runHomeSearch(e.target.value);
+        });
+      }
+    });
     // 
     // AUTHENTICATION HANDLERS
     // 

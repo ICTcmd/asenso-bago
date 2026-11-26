@@ -136,6 +136,8 @@ Always end responses with a follow-up prompt like:
       { role: 'user', content: trimmedMessage }
     ];
 
+    const wantStream = Boolean(req.body?.stream);
+
     // Call Groq API (server-side, secure)
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -148,7 +150,8 @@ Always end responses with a follow-up prompt like:
         messages,
         temperature: 0.4,
         max_tokens: 2048,
-        top_p: 0.9
+        top_p: 0.9,
+        stream: wantStream
       })
     });
 
@@ -156,6 +159,43 @@ Always end responses with a follow-up prompt like:
       const errorData = await response.json().catch(() => ({}));
       console.error('Groq API error:', response.status, errorData);
       return res.status(502).json({ error: 'AI service temporarily unavailable' });
+    }
+
+    if (wantStream && response.body) {
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'Connection': 'keep-alive'
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed.startsWith('data:')) continue;
+          const payload = trimmed.slice(5).trim();
+          if (payload === '[DONE]') {
+            res.write('data: [DONE]\n\n');
+            continue;
+          }
+          try {
+            const parsed = JSON.parse(payload);
+            const delta = parsed?.choices?.[0]?.delta?.content;
+            if (delta) {
+              res.write(`data: ${JSON.stringify({ delta })}\n\n`);
+            }
+          } catch (_) {}
+        }
+      }
+      return res.end();
     }
 
     const data = await response.json();

@@ -112,27 +112,84 @@ class ProfileManager {
     };
   }
 
-  // Show My Applications page
-  showMyApplications() {
+  // Show My Applications page (fetches saved local references via secure RPC)
+  async showMyApplications() {
     if (!this.checkAuth()) return;
 
-    this.createModal('My Applications', `
-      <div class="applications-list">
-        <p style="text-align: center; color: #6B7280; padding: 40px 20px;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 64px; height: 64px; margin: 0 auto 16px; color: #D97732;">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z"/>
-          </svg>
-          <br>
-          <strong style="font-size: 16px; display: block; margin-bottom: 8px;">No Applications Yet</strong>
-          You haven't submitted any applications for government services.
-        </p>
-        <div style="padding: 0 20px;">
-          <button class="btn-primary" onclick="document.querySelector('.page.active').classList.remove('active'); document.getElementById('page-home').classList.add('active');" style="width: 100%;">
-            Browse Services
-          </button>
-        </div>
+    const modal = this.createModal('My Applications', `
+      <div id="my-apps-body" style="padding: 24px 16px; text-align: center; color: #6B7280;">
+        Loading your submitted requests...
       </div>
     `);
+
+    const container = modal.querySelector('#my-apps-body');
+    let refs = [];
+    try {
+      refs = JSON.parse(localStorage.getItem('healthServiceRefs') || '[]');
+    } catch (_) {
+      refs = [];
+    }
+
+    if (!Array.isArray(refs) || refs.length === 0) {
+      container.innerHTML = `
+        <p style="text-align: center; color: #6B7280; padding: 20px 10px;">
+          <strong style="font-size: 16px; display: block; margin-bottom: 8px; color: #1f2937;">No Applications Found on This Device</strong>
+          Submit a health service request or track an existing reference number.
+        </p>
+        <div style="display:flex; gap:10px; flex-direction:column; margin-top:12px;">
+          <button class="btn-primary" onclick="document.getElementById('profile-modal').remove(); document.body.style.overflow=''; navigateTo('page-programs');" style="width: 100%;">
+            Browse Health Services
+          </button>
+          <a href="health-track.html" class="btn-secondary" style="width: 100%; text-align:center; text-decoration:none; display:block; padding:12px; border-radius:10px;">
+            Track by Reference Number
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    const esc = (v) => (window.utils ? window.utils.escapeHTML(String(v ?? '')) : String(v ?? ''));
+    const client = window.authManager?.supabase || window.supabaseClient;
+    const rows = [];
+
+    if (client) {
+      const results = await Promise.all(
+        refs.slice(0, 10).map(ref =>
+          client.rpc('track_health_request', { p_reference_number: String(ref) })
+            .then(r => (Array.isArray(r.data) ? r.data[0] : r.data))
+            .catch(() => null)
+        )
+      );
+      results.forEach(item => { if (item) rows.push(item); });
+    }
+
+    if (rows.length === 0) {
+      container.innerHTML = `
+        <p style="font-size:14px;color:#4b5563;margin-bottom:14px;">Recent Reference Numbers:</p>
+        ${refs.map(r => `<div style="padding:10px;background:#f3f4f6;border-radius:8px;margin-bottom:8px;font-family:monospace;font-weight:700;">${esc(r)}</div>`).join('')}
+        <a href="health-track.html" class="btn-primary" style="display:block;text-align:center;text-decoration:none;margin-top:12px;">Open Tracker</a>
+      `;
+      return;
+    }
+
+    const programNames = {
+      heart_warriors: 'Heart Warriors',
+      wheels_of_love: 'Wheels of Love',
+      smile_bright: 'Smile Bright Bago'
+    };
+
+    container.style.textAlign = 'left';
+    container.style.padding = '8px 0';
+    container.innerHTML = rows.map(r => `
+      <div style="border:1.5px solid #e5e7eb;border-radius:12px;padding:12px;margin-bottom:10px;background:#fff;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-family:monospace;font-weight:800;color:#0A2E5C;font-size:13px;">${esc(r.reference_number)}</span>
+          <span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#eff6ff;color:#1e40af;text-transform:uppercase;">${esc(String(r.status || '').replace('_', ' '))}</span>
+        </div>
+        <div style="font-size:14px;font-weight:700;color:#1f2937;">${esc(programNames[r.program] || r.program)}</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px;">${esc(r.barangay)} • ${new Date(r.created_at).toLocaleDateString()}</div>
+      </div>
+    `).join('') + `<a href="health-track.html" class="btn-primary" style="display:block;text-align:center;text-decoration:none;margin-top:12px;">Open Full Tracker</a>`;
   }
 
   // Show Notifications page
@@ -213,15 +270,53 @@ class ProfileManager {
         
         <div class="setting-divider"></div>
         
-        <button class="btn-secondary" onclick="alert('Password change functionality coming soon!')" style="width: 100%; margin-top: 16px;">
+        <button class="btn-secondary" onclick="window.profileManager.showChangePassword()" style="width: 100%; margin-top: 16px;">
           Change Password
         </button>
         
-        <button class="btn-secondary" onclick="if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) { alert('Account deletion functionality coming soon!'); }" style="width: 100%; margin-top: 12px; background: #fee2e2; color: #dc2626; border-color: #fecaca;">
-          Delete Account
+        <button class="btn-secondary" onclick="if(confirm('To delete your account and personal data, please contact City Hall ICT at info@bagocity.gov.ph.')) { window.location.href='mailto:info@bagocity.gov.ph?subject=Account%20Deletion%20Request'; }" style="width: 100%; margin-top: 12px; background: #fee2e2; color: #dc2626; border-color: #fecaca;">
+          Request Account Deletion
         </button>
       </div>
     `);
+  }
+
+  async showChangePassword() {
+    if (!this.checkAuth()) return;
+    const modal = this.createModal('Change Password', `
+      <form id="change-password-form" class="profile-form">
+        <div class="form-group">
+          <label for="new-password">New Password</label>
+          <input type="password" id="new-password" class="form-input" minlength="6" required placeholder="At least 6 characters" />
+        </div>
+        <div class="form-group">
+          <label for="confirm-new-password">Confirm New Password</label>
+          <input type="password" id="confirm-new-password" class="form-input" minlength="6" required placeholder="Re-enter new password" />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 12px;">Update Password</button>
+      </form>
+    `);
+
+    const form = modal.querySelector('#change-password-form');
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const pw = document.getElementById('new-password').value;
+      const pw2 = document.getElementById('confirm-new-password').value;
+      if (pw !== pw2) {
+        showToast('Password Mismatch', 'Passwords do not match.');
+        return;
+      }
+      try {
+        const client = window.authManager?.supabase || window.supabaseClient;
+        const { error } = await client.auth.updateUser({ password: pw });
+        if (error) throw error;
+        modal.remove();
+        document.body.style.overflow = '';
+        showToast('Password Updated', 'Your password has been changed.');
+      } catch (err) {
+        showToast('Update Failed', err.message || 'Could not update password.');
+      }
+    };
   }
 
   // Show Help & Support

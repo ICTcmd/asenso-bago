@@ -1,0 +1,19 @@
+# Exclude documentation, tests, scripts, and backup files from Vercel deployments
+*.md
+*.py
+*.ps1
+*.bat
+*.sql
+performance-tests/
+barangays/
+map-mapbox-backup.html
+map-new.html
+map-editor.html
+test-logos.html
+test-videos.html
+barangay-profile-icons-fallback.html
+contrast-verification.js
+orange-adjusted.js
+orange-contrast-check.js
+gen-map.js
+benchmark-results.json

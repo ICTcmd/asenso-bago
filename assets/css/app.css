@@ -5408,3 +5408,118 @@ input:checked + .toggle-slider:before {
     padding: 8px 28px 40px;
   }
 }
+
+
+/* Home Search Dropdown & Emergency Hotlines */
+.home-search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 16px;
+  right: 16px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(10, 46, 92, 0.16);
+  border: 1px solid #e5e7eb;
+  z-index: 250;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.home-search-item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: block;
+  font-family: inherit;
+}
+
+.home-search-item:last-child {
+  border-bottom: none;
+}
+
+.home-search-item:hover {
+  background: #f8fafc;
+}
+
+.home-search-item-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0A2E5C;
+}
+
+.home-search-item-sub {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.home-search-empty {
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.hotlines-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 16px 14px;
+}
+
+.hotline-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s;
+}
+
+.hotline-pill:active {
+  transform: scale(0.98);
+}
+
+.hotline-emergency {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  color: #991b1b;
+}
+
+.hotline-city {
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  color: #0A2E5C;
+}
+
+.hotline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+}
+
+.hotline-label {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.hotline-num {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (min-width: 900px) {
+  .hotlines-strip {
+    margin: 0;
+  }
+}
