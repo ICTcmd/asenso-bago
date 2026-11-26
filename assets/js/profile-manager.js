@@ -130,10 +130,48 @@ class ProfileManager {
       refs = [];
     }
 
-    if (!Array.isArray(refs) || refs.length === 0) {
+    const esc = (v) => (window.utils ? window.utils.escapeHTML(String(v ?? '')) : String(v ?? ''));
+    const client = window.authManager?.supabase || window.supabaseClient;
+    const user = window.authManager?.getCurrentUser?.();
+    const rowMap = new Map();
+
+    if (client && user?.id) {
+      try {
+        const { data: ownRows, error: ownErr } = await client
+          .from('health_service_requests')
+          .select('reference_number, program, status, barangay, created_at, scheduled_date')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(20);
+        if (!ownErr && Array.isArray(ownRows)) {
+          ownRows.forEach(item => {
+            if (item?.reference_number) rowMap.set(item.reference_number, item);
+          });
+        }
+      } catch (_) {}
+    }
+
+    if (client && Array.isArray(refs) && refs.length > 0) {
+      const results = await Promise.all(
+        refs.slice(0, 10).map(ref =>
+          client.rpc('track_health_request', { p_reference_number: String(ref) })
+            .then(r => (Array.isArray(r.data) ? r.data[0] : r.data))
+            .catch(() => null)
+        )
+      );
+      results.forEach(item => {
+        if (item?.reference_number && !rowMap.has(item.reference_number)) {
+          rowMap.set(item.reference_number, item);
+        }
+      });
+    }
+
+    const rows = Array.from(rowMap.values());
+
+    if (rows.length === 0 && (!Array.isArray(refs) || refs.length === 0)) {
       container.innerHTML = `
         <p style="text-align: center; color: #6B7280; padding: 20px 10px;">
-          <strong style="font-size: 16px; display: block; margin-bottom: 8px; color: #1f2937;">No Applications Found on This Device</strong>
+          <strong style="font-size: 16px; display: block; margin-bottom: 8px; color: #1f2937;">No Applications Found</strong>
           Submit a health service request or track an existing reference number.
         </p>
         <div style="display:flex; gap:10px; flex-direction:column; margin-top:12px;">
@@ -146,21 +184,6 @@ class ProfileManager {
         </div>
       `;
       return;
-    }
-
-    const esc = (v) => (window.utils ? window.utils.escapeHTML(String(v ?? '')) : String(v ?? ''));
-    const client = window.authManager?.supabase || window.supabaseClient;
-    const rows = [];
-
-    if (client) {
-      const results = await Promise.all(
-        refs.slice(0, 10).map(ref =>
-          client.rpc('track_health_request', { p_reference_number: String(ref) })
-            .then(r => (Array.isArray(r.data) ? r.data[0] : r.data))
-            .catch(() => null)
-        )
-      );
-      results.forEach(item => { if (item) rows.push(item); });
     }
 
     if (rows.length === 0) {

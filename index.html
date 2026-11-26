@@ -198,6 +198,9 @@
        MAIN APP
   ----------------------------------------------------------- -->
   <div id="main-app" style="display:none; flex:1; flex-direction:column;">
+    <div id="offline-banner" style="display:none; background:#991b1b; color:#fff; text-align:center; padding:8px 12px; font-size:12px; font-weight:700; z-index:999;">
+      You are currently offline — live tracking, chatbot, and form submissions require an internet connection.
+    </div>
 
     <!-- --- PAGE: HOME --- -->
     <div class="page active" id="page-home">
@@ -1099,7 +1102,7 @@
         </a>
 
         <!-- Transparency -->
-        <div class="service-card">
+        <div class="service-card" onclick="openTransparencyModal()" style="cursor: pointer;">
           <div class="service-card-icon" style="background:#0A2E5C;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
@@ -1107,8 +1110,7 @@
             </svg>
           </div>
           <h3>Transparency</h3>
-          <p>View city budget, projects, and financial reports.</p>
-          <span class="coming-soon-badge">Coming Soon</span>
+          <p>View city budget highlights, DILG Good Financial Housekeeping &amp; public reports.</p>
         </div>
 
         <!-- Resolutions & Ordinances -->
@@ -2857,6 +2859,9 @@
         case 'about':
           navigateTo('page-barangays');
           break;
+        case 'transparency':
+          openTransparencyModal();
+          break;
         default:
           if (typeof showToast === 'function') showToast('Coming soon! Check back for updates.');
       }
@@ -3386,12 +3391,41 @@ document.addEventListener('DOMContentLoaded', function() {
   <script src="assets/js/profile-manager.js?v=2.2" defer></script>
 
   <!-- Health Services Form -->
-  <script src="assets/js/health-request.js?v=2.0" defer></script>
+  <script src="assets/js/health-request.js?v=2.1" defer></script>
 
   <!-- AI Chatbot -->
-  <script src="assets/js/chatbot.js?v=2.7" defer></script>
+  <script src="assets/js/chatbot.js?v=2.8" defer></script>
 
   <script>
+    function openTransparencyModal() {
+      if (!window.profileManager) return;
+      window.profileManager.createModal('Transparency & Public Reports', `
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;color:#374151;line-height:1.55;">
+          <div style="padding:12px;border-radius:12px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;">
+            <strong>DILG 2025 Good Financial Housekeeping Passer</strong><br>
+            Bago City continues full public disclosure of city revenues, infrastructure, social, and health budgets.
+          </div>
+          <a href="legislative.html" class="btn-primary" style="text-align:center;text-decoration:none;display:block;padding:12px;border-radius:10px;">
+            📜 Browse City Ordinances &amp; Resolutions
+          </a>
+          <a href="https://soca-website-five.vercel.app" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="text-align:center;text-decoration:none;display:block;padding:12px;border-radius:10px;">
+            📊 View SOCA 2026 Financial &amp; Project Highlights
+          </a>
+          <div style="font-size:12px;color:#6b7280;padding-top:6px;">
+            For Freedom of Information (FOI) or official public document requests, contact Bago City Hall at <strong>(034) 446-1319</strong> or <a href="mailto:info@bagocity.gov.ph">info@bagocity.gov.ph</a>.
+          </div>
+        </div>
+      `);
+    }
+
+    // Offline / Online Banner
+    function syncOfflineBanner() {
+      const banner = document.getElementById('offline-banner');
+      if (banner) banner.style.display = navigator.onLine ? 'none' : 'block';
+    }
+    window.addEventListener('online', syncOfflineBanner);
+    window.addEventListener('offline', syncOfflineBanner);
+    document.addEventListener('DOMContentLoaded', syncOfflineBanner);
     function openHealthProgram(program) {
       if (typeof navigateTo === 'function') {
         navigateTo('page-programs');

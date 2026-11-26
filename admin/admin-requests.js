@@ -9,6 +9,11 @@ let currentUser = null;
 let currentStatus = 'all';
 let currentProgram = 'all';
 let searchQuery = '';
+let dateFrom = '';
+let dateTo = '';
+let currentPage = 0;
+const PAGE_SIZE = 50;
+let totalCount = 0;
 
 // ============================================================================
 // INITIALIZATION
@@ -38,6 +43,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Setup search
   setupSearch();
+  
+  // Setup date filters, pagination & CSV export
+  setupDateAndPagination();
   
   // Setup logout
   document.getElementById('logout-btn').addEventListener('click', handleLogout);
@@ -117,11 +125,14 @@ async function loadRequests() {
   tableContainer.style.display = 'none';
   
   try {
+    const from = currentPage * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
     let query = supabaseClient
       .from('health_service_requests')
-      .select('id, reference_number, full_name, age, gender, program, barangay, status, created_at')
+      .select('id, reference_number, full_name, age, gender, program, barangay, status, created_at', { count: 'exact' })
       .order('created_at', { ascending: false })
-      .limit(100);
+      .range(from, to);
     
     // Apply status filter
     if (currentStatus !== 'all') {
@@ -133,6 +144,13 @@ async function loadRequests() {
       query = query.eq('program', currentProgram);
     }
 
+    if (dateFrom) {
+      query = query.gte('created_at', `${dateFrom}T00:00:00`);
+    }
+    if (dateTo) {
+      query = query.lte('created_at', `${dateTo}T23:59:59`);
+    }
+
     // Apply server-side search filter when query is present
     if (searchQuery) {
       const safeQ = searchQuery.replace(/[,%()]/g, '');
@@ -141,19 +159,23 @@ async function loadRequests() {
       }
     }
     
-    const { data: requests, error } = await query;
+    const { data: requests, count, error } = await query;
     
     if (error) throw error;
     
     const filteredRequests = requests || [];
+    totalCount = count ?? filteredRequests.length;
     
     // Hide loading
     loadingState.style.display = 'none';
     
-    // Update results count
-    resultsCount.textContent = filteredRequests.length === 100
-      ? 'Showing latest 100 matching requests'
-      : `Showing ${filteredRequests.length} request${filteredRequests.length !== 1 ? 's' : ''}`;
+    // Update results count & pagination
+    const startNum = totalCount === 0 ? 0 : from + 1;
+    const endNum = from + filteredRequests.length;
+    resultsCount.textContent = totalCount === 0
+      ? 'Showing 0 requests'
+      : `Showing ${startNum}–${endNum} of ${totalCount} request${totalCount !== 1 ? 's' : ''}`;
+    updatePaginationUI();
     
     // Show empty state or table
     if (filteredRequests.length === 0) {
@@ -217,6 +239,7 @@ function setupFilters() {
       statusBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentStatus = btn.dataset.status;
+      currentPage = 0;
       loadRequests();
     });
   });
@@ -228,9 +251,113 @@ function setupFilters() {
       programBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentProgram = btn.dataset.program;
+      currentPage = 0;
       loadRequests();
     });
   });
+}
+
+function setupDateAndPagination() {
+  const fromEl = document.getElementById('date-from');
+  const toEl = document.getElementById('date-to');
+  const prevBtn = document.getElementById('prev-page-btn');
+  const nextBtn = document.getElementById('next-page-btn');
+  const exportBtn = document.getElementById('export-csv-btn');
+
+  fromEl?.addEventListener('change', (e) => {
+    dateFrom = e.target.value;
+    currentPage = 0;
+    loadRequests();
+  });
+  toEl?.addEventListener('change', (e) => {
+    dateTo = e.target.value;
+    currentPage = 0;
+    loadRequests();
+  });
+  prevBtn?.addEventListener('click', () => {
+    if (currentPage > 0) {
+      currentPage--;
+      loadRequests();
+    }
+  });
+  nextBtn?.addEventListener('click', () => {
+    if ((currentPage + 1) * PAGE_SIZE < totalCount) {
+      currentPage++;
+      loadRequests();
+    }
+  });
+  exportBtn?.addEventListener('click', exportRequestsCSV);
+}
+
+function updatePaginationUI() {
+  const controls = document.getElementById('pagination-controls');
+  const indicator = document.getElementById('page-indicator');
+  const prevBtn = document.getElementById('prev-page-btn');
+  const nextBtn = document.getElementById('next-page-btn');
+  if (!controls) return;
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  controls.style.display = totalCount > PAGE_SIZE ? 'flex' : 'none';
+  if (indicator) indicator.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+  if (prevBtn) prevBtn.disabled = currentPage === 0;
+  if (nextBtn) nextBtn.disabled = (currentPage + 1) >= totalPages;
+}
+
+function csvSafeCell(val) {
+  let s = String(val ?? '').replace(/"/g, '""');
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
+  return `"${s}"`;
+}
+
+async function exportRequestsCSV() {
+  const exportBtn = document.getElementById('export-csv-btn');
+  if (exportBtn) {
+    exportBtn.disabled = true;
+    exportBtn.textContent = 'Exporting...';
+  }
+  try {
+    let query = supabaseClient
+      .from('health_service_requests')
+      .select('reference_number, full_name, age, gender, contact_number, barangay, program, status, created_at, scheduled_date')
+      .order('created_at', { ascending: false })
+      .limit(1000);
+
+    if (currentStatus !== 'all') query = query.eq('status', currentStatus);
+    if (currentProgram !== 'all') query = query.eq('program', currentProgram);
+    if (dateFrom) query = query.gte('created_at', `${dateFrom}T00:00:00`);
+    if (dateTo) query = query.lte('created_at', `${dateTo}T23:59:59`);
+    if (searchQuery) {
+      const safeQ = searchQuery.replace(/[,%()]/g, '');
+      if (safeQ) query = query.or(`full_name.ilike.%${safeQ}%,reference_number.ilike.%${safeQ}%`);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    const rows = data || [];
+    const headers = ['Reference #', 'Full Name', 'Age', 'Gender', 'Contact #', 'Barangay', 'Program', 'Status', 'Submitted At', 'Scheduled Date'];
+    const csvLines = [
+      headers.map(csvSafeCell).join(','),
+      ...rows.map(r => [
+        r.reference_number, r.full_name, r.age, r.gender, r.contact_number,
+        r.barangay, formatProgramName(r.program), r.status, r.created_at, r.scheduled_date || ''
+      ].map(csvSafeCell).join(','))
+    ];
+    const blob = new Blob([csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `health-requests-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('CSV export error:', err);
+    alert('Failed to export CSV. Please try again.');
+  } finally {
+    if (exportBtn) {
+      exportBtn.disabled = false;
+      exportBtn.textContent = 'Export CSV';
+    }
+  }
 }
 
 // ============================================================================
@@ -244,6 +371,7 @@ function setupSearch() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
       searchQuery = e.target.value.trim();
+      currentPage = 0;
       loadRequests();
     }, 300); // Debounce 300ms
   });

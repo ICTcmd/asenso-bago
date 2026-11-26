@@ -3,6 +3,48 @@
 // Handles AI requests server-side to protect API keys
 // ═══════════════════════════════════════════════════════════
 
+// Fast, non-blocking Supabase Knowledge Base lookup (Bago Buddy 2.0 RAG)
+async function fetchKnowledgeContext(queryText) {
+  const supabaseUrl = process.env.SUPABASE_URL || 'https://esvbibxavfrxkkfujhmz.supabase.co';
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY ||
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzdmJpYnhhdmZyeGtrZnVqaG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2NDgyMjIsImV4cCI6MjEwODIyNDIyMn0.8cbpFhsettaK9lXD7YKZLlQA3YG4o-9xvrx_jrY_Hro';
+
+  const keywords = String(queryText || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length >= 4)
+    .slice(0, 3);
+
+  if (!keywords.length) return '';
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 1500);
+
+  try {
+    const orFilter = keywords.map(k => `title.ilike.*${k}*,full_text.ilike.*${k}*`).join(',');
+    const url = `${supabaseUrl}/rest/v1/knowledge_base_documents?select=title,responsible_office,full_text&status=eq.published&or=(${encodeURIComponent(orFilter)})&limit=3`;
+    const res = await fetch(url, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`
+      },
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!res.ok) return '';
+    const docs = await res.json();
+    if (!Array.isArray(docs) || docs.length === 0) return '';
+
+    return docs.map(d =>
+      `[${d.title}${d.responsible_office ? ` — ${d.responsible_office}` : ''}]\n${String(d.full_text || '').slice(0, 800)}`
+    ).join('\n\n');
+  } catch {
+    clearTimeout(timer);
+    return '';
+  }
+}
+
 export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -122,16 +164,20 @@ Always end responses with a follow-up prompt like:
           .filter(Boolean)
       : [];
 
-    // Avoid duplicating the current user message if client already appended it
+    // Build messages array (optionally enriched with Supabase Knowledge Base)
     const trimmedMessage = message.trim();
+    const kbContext = await fetchKnowledgeContext(trimmedMessage);
+    const systemPrompt = kbContext
+      ? `${SYSTEM_PROMPT}\n\n**VERIFIED KNOWLEDGE BASE REFERENCES:**\n${kbContext}`
+      : SYSTEM_PROMPT;
+
     const lastMsg = sanitizedHistory[sanitizedHistory.length - 1];
     if (lastMsg && lastMsg.role === 'user' && lastMsg.content === trimmedMessage) {
       sanitizedHistory.pop();
     }
 
-    // Build messages array
     const messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: systemPrompt },
       ...sanitizedHistory,
       { role: 'user', content: trimmedMessage }
     ];

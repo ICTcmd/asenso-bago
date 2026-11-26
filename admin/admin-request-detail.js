@@ -141,9 +141,9 @@ async function loadRequestDetails() {
     // Populate program-specific details
     populateProgramDetails(data.program, data.program_details);
     
-    // Show uploaded files if any
+    // Show uploaded files if any (using signed URLs for private bucket)
     if (data.uploaded_files && data.uploaded_files.length > 0) {
-      populateFiles(data.uploaded_files);
+      await populateFiles(data.uploaded_files);
     }
     
     // Populate staff notes
@@ -278,14 +278,33 @@ function populateProgramDetails(program, details) {
 // ============================================================================
 // POPULATE FILES
 // ============================================================================
-function populateFiles(files) {
+async function populateFiles(files) {
   const filesSection = document.getElementById('files-section');
   const filesContainer = document.getElementById('files-container');
   
   filesSection.style.display = 'block';
+
+  const resolvedFiles = await Promise.all(files.map(async (file) => {
+    let storagePath = file.path || '';
+    if (!storagePath && typeof file.url === 'string' && file.url.includes('/health-documents/')) {
+      storagePath = decodeURIComponent(file.url.split('/health-documents/')[1].split('?')[0]);
+    }
+    let resolvedUrl = file.url || '';
+    if (storagePath) {
+      try {
+        const { data, error } = await supabaseClient.storage
+          .from('health-documents')
+          .createSignedUrl(storagePath, 3600);
+        if (!error && data?.signedUrl) {
+          resolvedUrl = data.signedUrl;
+        }
+      } catch (_) {}
+    }
+    return { ...file, resolvedUrl };
+  }));
   
-  filesContainer.innerHTML = files.map(file => {
-    const rawUrl = String(file.url || '');
+  filesContainer.innerHTML = resolvedFiles.map(file => {
+    const rawUrl = String(file.resolvedUrl || '');
     const safeUrl = /^https?:\/\//i.test(rawUrl) ? escapeHTML(rawUrl) : '#';
     return `
     <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="file-preview">

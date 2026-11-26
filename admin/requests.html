@@ -115,16 +115,29 @@
             <button class="filter-btn" data-status="completed">Completed</button>
           </div>
           
-          <div class="requests-filters" style="margin-top: 12px;">
+          <div class="requests-filters" style="margin-top: 12px; align-items: center;">
             <button class="filter-btn active" data-program="all">All Programs</button>
             <button class="filter-btn" data-program="heart_warriors">Heart Warriors</button>
             <button class="filter-btn" data-program="wheels_of_love">Wheels of Love</button>
             <button class="filter-btn" data-program="smile_bright">Smile Bright</button>
+            <div style="display:flex; gap:8px; align-items:center; margin-left:auto; flex-wrap:wrap;">
+              <input type="date" id="date-from" class="form-input" style="padding:8px 10px; font-size:13px; border:1px solid #d1d5db; border-radius:8px;" title="From date" />
+              <span style="font-size:12px; color:#6b7280;">to</span>
+              <input type="date" id="date-to" class="form-input" style="padding:8px 10px; font-size:13px; border:1px solid #d1d5db; border-radius:8px;" title="To date" />
+              <button type="button" id="export-csv-btn" class="filter-btn" style="background:#059669; color:#fff; border-color:#059669;">
+                Export CSV
+              </button>
+            </div>
           </div>
           
           <!-- Summary -->
-          <div style="padding: 16px 0; color: var(--color-text-secondary); font-size: 14px;">
+          <div style="padding: 16px 0; color: var(--color-text-secondary); font-size: 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <span id="results-count">Showing 0 requests</span>
+            <div id="pagination-controls" style="display:none; gap:8px; align-items:center;">
+              <button type="button" id="prev-page-btn" class="filter-btn">← Prev</button>
+              <span id="page-indicator" style="font-size:13px; font-weight:600;">Page 1</span>
+              <button type="button" id="next-page-btn" class="filter-btn">Next →</button>
+            </div>
           </div>
           
           <!-- Loading State -->

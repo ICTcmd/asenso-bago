@@ -308,20 +308,39 @@ async function handleFormSubmit(e) {
     const fileUrls = await uploadFiles(client);
     const programDetails = collectProgramDetails(formData);
 
-    const { data, error } = await client
+    const payload = {
+      program: selectedProgram,
+      full_name: formData.full_name.trim(),
+      age: parseInt(formData.age, 10),
+      gender: formData.gender,
+      contact_number: formData.contact_number.replace(/\s+/g, ''),
+      barangay: formData.barangay,
+      program_details: programDetails,
+      uploaded_files: fileUrls
+    };
+
+    try {
+      const { data: { session } } = await client.auth.getSession();
+      if (session?.user?.id) {
+        payload.user_id = session.user.id;
+      }
+    } catch (_) {}
+
+    let { data, error } = await client
       .from('health_service_requests')
-      .insert([{
-        program: selectedProgram,
-        full_name: formData.full_name.trim(),
-        age: parseInt(formData.age, 10),
-        gender: formData.gender,
-        contact_number: formData.contact_number.replace(/\s+/g, ''),
-        barangay: formData.barangay,
-        program_details: programDetails,
-        uploaded_files: fileUrls
-      }])
+      .insert([payload])
       .select('reference_number')
       .single();
+
+    // Fallback if user_id column hasn't been added via SQL migration yet
+    if (error && payload.user_id && /user_id/i.test(error.message || '')) {
+      delete payload.user_id;
+      ({ data, error } = await client
+        .from('health_service_requests')
+        .insert([payload])
+        .select('reference_number')
+        .single());
+    }
 
     if (error) throw error;
 
@@ -415,6 +434,7 @@ async function uploadFiles(client) {
       files.push({
         type: 'pwd_id',
         filename: uploadedFiles.pwdId.name,
+        path: fileName,
         url: publicUrl,
         uploaded_at: new Date().toISOString()
       });
@@ -436,6 +456,7 @@ async function uploadFiles(client) {
       files.push({
         type: 'medical_certificate',
         filename: uploadedFiles.medicalCert.name,
+        path: fileName,
         url: publicUrl,
         uploaded_at: new Date().toISOString()
       });
