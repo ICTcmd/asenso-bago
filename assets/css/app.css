@@ -342,6 +342,9 @@ body {
   display: flex;
   animation: pageFadeIn 0.2s ease-out;
 }
+.page > * {
+  flex-shrink: 0;
+}
 
 @keyframes pageFadeIn {
   from { opacity: 0; transform: translateY(6px); }
@@ -556,10 +559,8 @@ body {
   color: #6B7280;
   line-height: 1.6;
   max-width: 280px;
-  margin: 0;
-  font-weight: var(--font-medium);
-}
   margin: 0 auto;
+  font-weight: var(--font-medium);
 }
 
 /* Footer buttons */
@@ -3376,20 +3377,21 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 /* Filter Buttons */
 .brgy-filters-container {
   display: flex !important;
+  flex-shrink: 0;
   gap: 8px;
-  padding: 8px 16px 16px;
-  overflow-x: scroll; /* scroll instead of auto - more reliable on iOS */
-  overflow-y: visible;
+  padding: 6px 16px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  background: #F7F7F5;
+  background: var(--bg-secondary, #F7F7F5);
   position: relative;
   z-index: 10;
   flex-wrap: nowrap;
-  /* Explicit height so iOS doesn't collapse it */
-  height: 68px;
+  height: auto;
+  min-height: 66px;
   align-items: center;
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 
 .brgy-filters-container::-webkit-scrollbar {
@@ -3398,6 +3400,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
 
 .brgy-filter-btn {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 6px;
   padding: 11px 18px;
@@ -3786,7 +3789,7 @@ html.is-desktop #page-home > .news-scroll    { display: none !important; }
   }
 
   .brgy-filters-container {
-    padding: 0 28px 20px;
+    padding: 6px 28px 20px;
   }
 
   .brgy-results-info {
