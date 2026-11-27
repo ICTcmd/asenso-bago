@@ -2789,12 +2789,25 @@
     }, 400);
   }
 
-  // Auto-skip splash if already passed (e.g. returning from external site)
-  if (sessionStorage.getItem('splashDone') === '1') {
+  // Auto-skip splash if already passed OR if returning to a specific section hash (e.g. #barangays)
+  const initialHash = window.location.hash.replace('#', '').replace(/^page-/, '');
+  const hashRouteMap = {
+    home: 'page-home',
+    programs: 'page-programs',
+    tourism: 'page-tourism',
+    news: 'page-news',
+    services: 'page-services',
+    profile: 'page-profile',
+    barangays: 'page-barangays'
+  };
+  const hashTargetPage = hashRouteMap[initialHash] || null;
+
+  if (sessionStorage.getItem('splashDone') === '1' || hashTargetPage) {
     const splash    = document.getElementById('splash');
     const mainApp   = document.getElementById('main-app');
     const bottomNav = document.getElementById('bottom-nav');
     const sidebar   = document.querySelector('.desktop-sidebar');
+    sessionStorage.setItem('splashDone', '1');
     if (splash)    { splash.style.display = 'none'; }
     if (mainApp)   { mainApp.style.display = 'flex'; }
     if (isDesktop) { 
@@ -2803,9 +2816,19 @@
     } else {
       if (bottomNav) bottomNav.style.display = 'flex'; // Show on mobile
     }
+    if (hashTargetPage) {
+      navigateTo(hashTargetPage);
+    }
     updateGreeting();
     animateCounters();
   }
+
+  window.addEventListener('hashchange', () => {
+    const key = window.location.hash.replace('#', '').replace(/^page-/, '');
+    if (hashRouteMap[key]) {
+      navigateTo(hashRouteMap[key]);
+    }
+  });
 
   // On page load, hide bottom nav on splash
   window.addEventListener('DOMContentLoaded', () => {
