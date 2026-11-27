@@ -5,7 +5,7 @@
 *.bat
 *.sql
 performance-tests/
-barangays/
+/barangays/
 map-mapbox-backup.html
 map-new.html
 map-editor.html
