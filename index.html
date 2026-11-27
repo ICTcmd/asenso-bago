@@ -3656,29 +3656,60 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function handleSignIn(event) {
       event.preventDefault();
-      
-      const email = document.getElementById('signin-email').value;
+
+      const email = document.getElementById('signin-email').value.trim();
       const password = document.getElementById('signin-password').value;
-      
-      await window.authManager.signIn(email, password);
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : 'Sign In';
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+      }
+
+      try {
+        await window.authManager.signIn(email, password);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
     }
-    
+
     async function handleSignUp(event) {
       event.preventDefault();
-      
-      const fullName = document.getElementById('signup-name').value;
-      const email = document.getElementById('signup-email').value;
-      const phone = document.getElementById('signup-phone').value;
+
+      const fullName = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const phone = document.getElementById('signup-phone').value.trim();
       const password = document.getElementById('signup-password').value;
       const passwordConfirm = document.getElementById('signup-password-confirm').value;
-      
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : 'Create Account';
+
       // Validate passwords match
       if (password !== passwordConfirm) {
         showToast('Password Mismatch', 'Passwords do not match. Please try again.');
         return;
       }
-      
-      await window.authManager.signUp(email, password, fullName, phone);
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+      }
+
+      try {
+        const res = await window.authManager.signUp(email, password, fullName, phone);
+        if (res?.success) {
+          event.target.reset();
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
     }
     
     // 
@@ -3696,12 +3727,37 @@ document.addEventListener('DOMContentLoaded', function() {
         window.profileManager.init();
       }
       
-      // Handle sign in links ONLY on splash screen - redirect to auth.html
+      // Ensure Profile Sign In button always opens the Sign In modal
+      const profileSignInBtn = document.querySelector('.profile-card .signin-btn');
+      if (profileSignInBtn && !profileSignInBtn.onclick) {
+        profileSignInBtn.addEventListener('click', () => {
+          if (window.authManager) {
+            window.authManager.showSignInModal();
+          } else {
+            window.location.href = 'auth.html';
+          }
+        });
+      }
+
+      // Close auth modal when clicking overlay or pressing Escape
+      const authModalOverlay = document.querySelector('#auth-modal .auth-modal-overlay');
+      if (authModalOverlay) {
+        authModalOverlay.addEventListener('click', () => {
+          window.authManager?.closeAuthModal();
+        });
+      }
+
+      // Handle sign in links on splash screen - open in-app modal
       const signInLinks = document.querySelectorAll('#splash .btn-link, #splash .splash-signin-link');
       signInLinks.forEach(link => {
         if (link.textContent.includes('Sign in') && !link.onclick) {
-          link.addEventListener('click', () => {
-            window.location.href = 'auth.html';
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.authManager) {
+              window.authManager.showSignInModal();
+            } else {
+              window.location.href = 'auth.html';
+            }
           });
         }
       });

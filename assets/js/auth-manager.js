@@ -34,6 +34,8 @@ class AuthManager {
         this.currentUser = session.user;
         await this.loadUserProfile();
         this.updateUIForAuthenticatedUser();
+      } else {
+        this.updateUIForGuestUser();
       }
 
       // Listen for auth state changes
@@ -71,7 +73,12 @@ class AuthManager {
 
       if (error) throw error;
 
-      showToast('Success', 'Account created! Please check your email to verify your account.');
+      if (data?.user && !data?.session) {
+        showToast('Account Created', 'Please check your email to verify your account, then sign in.');
+        this.showSignInModal();
+      } else {
+        showToast('Welcome to Asenso Bago!', 'Your account has been created and signed in.');
+      }
       return { success: true, data };
     } catch (error) {
       console.error('Sign up error:', error);
@@ -202,7 +209,10 @@ class AuthManager {
   // Update UI for authenticated user
   async updateUIForAuthenticatedUser() {
     const profile = await this.loadUserProfile();
-    const displayName = profile?.full_name || this.currentUser.email.split('@')[0];
+    const displayName =
+      profile?.full_name ||
+      this.currentUser.user_metadata?.full_name ||
+      this.currentUser.email.split('@')[0];
     
     // Update profile card
     const profileCard = document.querySelector('.profile-card');
@@ -268,10 +278,10 @@ class AuthManager {
         `;
       }
 
-      // Reset button - redirect to auth.html
+      // Reset button - open in-app Sign In modal
       if (signInBtn) {
         signInBtn.textContent = 'Sign In';
-        signInBtn.onclick = () => { window.location.href = 'auth.html'; };
+        signInBtn.onclick = () => this.showSignInModal();
       }
     }
 
@@ -279,7 +289,7 @@ class AuthManager {
       link.innerHTML = 'Already have an Account? <span>Sign in</span>';
       link.onclick = (e) => {
         e.preventDefault();
-        window.location.href = 'auth.html';
+        this.showSignInModal();
       };
     });
   }
