@@ -2563,12 +2563,15 @@
   // Detects new versions and prompts user to update
   // ═══════════════════════════════════════════════════════════
   if ('serviceWorker' in navigator) {
-    // Register service worker
-    navigator.serviceWorker.register('/sw.js')
+    // Register service worker with updateViaCache: 'none' so mobile browsers always check for new sw.js
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
       .then(registration => {
         console.log('[SW] Registered successfully');
-        
-        // Check for updates when user returns to the app tab (no 60s polling)
+
+        // Immediately check for a newer version whenever the app opens
+        registration.update().catch(() => {});
+
+        // Also check for updates when user returns to the app tab
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
             registration.update().catch(() => {});

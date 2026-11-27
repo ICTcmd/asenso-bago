@@ -1,6 +1,6 @@
 ﻿// Asenso Bago Service Worker (__CACHE_VERSION__ replaced by build.js on Vercel deploy)
 const CACHE = 'bago-pwa-__CACHE_VERSION__';
-const IMAGE_CACHE = 'bago-images-v1';
+const IMAGE_CACHE = 'bago-images-v2';
 
 const CORE_ASSETS = [
   '/',
