@@ -3235,8 +3235,24 @@ document.addEventListener('DOMContentLoaded', function() {
       position: static !important;
     }
     
+    #auth-modal .auth-modal-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+    }
+
     #auth-modal .auth-modal-content {
       position: relative !important;
+      max-height: 90dvh !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    #auth-modal .auth-modal-close {
+      position: absolute !important;
+      top: 14px !important;
+      right: 14px !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
     }
     
     #auth-modal .auth-header {
