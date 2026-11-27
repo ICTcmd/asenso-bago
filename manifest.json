@@ -8,8 +8,30 @@
   "background_color": "#ffffff",
   "theme_color": "#D97732",
   "icons": [
-    { "src": "assets/images/app-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "assets/images/app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "/assets/images/bago-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/bago-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/images/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "categories": ["government", "health", "utilities"],
   "lang": "en-PH",

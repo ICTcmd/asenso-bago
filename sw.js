@@ -25,6 +25,7 @@ const CORE_ASSETS = [
   '/health-success.html',
   '/assets/data/bible-verses.json',
   '/assets/images/app-icon.png',
+  '/assets/images/bago-icon.png',
   '/assets/images/bago-city-logo.png',
   '/assets/images/May%20Gugma%20Nga%20Panghimanwa%20Logo%20Final.png'
 ];
